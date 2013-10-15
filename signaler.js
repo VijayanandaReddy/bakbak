@@ -1,14 +1,10 @@
-// 2013, Muaz Khan - https://github.com/muaz-khan
-// MIT License     - https://www.webrtc-experiment.com/licence/
-// Documentation   - https://github.com/muaz-khan/WebRTC-Experiment/blob/master/socketio-over-nodejs
-
 var app = require('express')(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server);
 
 var port = process.env.PORT || 5000;
 server.listen(port);
-
+console.log("Connected on port " + port);
 // ----------------------------------socket.io
 
 var channels = {};
@@ -53,7 +49,11 @@ function onNewNamespace(channel, sender) {
 // ----------------------------------extras
 
 app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/static/video-conferencing/index.html');
+    res.sendfile(__dirname + '/static/call/index.html');
+});
+
+app.get('/admin', function (req, res) {
+    res.sendfile(__dirname + '/static/call/admin.html');
 });
 
 app.get('/conference.js', function (req, res) {
@@ -77,4 +77,9 @@ app.get('/RTCMultiConnection', function (req, res) {
 app.get('/socketio.js', function (req, res) {
     res.setHeader('Content-Type', 'application/javascript');
     res.sendfile(__dirname + '/static/socket.io.js');
+});
+
+app.get('/call.js', function (req, res) {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.sendfile(__dirname + '/static/RTCall.js');
 });
