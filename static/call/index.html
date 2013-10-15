@@ -1,0 +1,199 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	        <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="https://www.webrtc-experiment.com/style.css">
+		        <style>
+            audio {
+                -moz-transition: all 1s ease;
+                -ms-transition: all 1s ease;
+                
+                -o-transition: all 1s ease;
+                -webkit-transition: all 1s ease;
+                transition: all 1s ease;
+                vertical-align: top;
+            }
+
+            input {
+                border: 1px solid #d9d9d9;
+                border-radius: 1px;
+                font-size: 2em;
+                margin: .2em;
+                width: 30%;
+            }
+
+            .setup {
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+                font-size: 102%;
+                height: 47px;
+                margin-left: -9px;
+                margin-top: 8px;
+                position: absolute;
+            }
+
+            p { padding: 1em; }
+
+            li {
+                border-bottom: 1px solid rgb(189, 189, 189);
+                border-left: 1px solid rgb(189, 189, 189);
+                padding: .5em;
+            }
+        </style>
+        <script>
+            document.createElement('article');
+        </script>
+        
+        <!-- scripts used for broadcasting -->
+        <script src="/call.js"> </script>
+	<script src="/socketio.js"></script>
+
+	</head>
+	<body>
+	            <section class="experiment" style="padding: 3em 0;">
+                <div id="customers-list"></div>
+                <div id="audios-container"></div>
+                <div id="call-admin-box" style="display: none;">
+                    <h2>Want to call admin?</h2>
+                    <button id="call-admin">Call Admin</button>
+                </div>
+            </section>
+
+	<script>
+	function $(selector) {
+                    return document.querySelector(selector);
+                }
+
+                HTMLElement.prototype.hide = function() {
+                    this.style.display = 'none';
+                };
+
+                HTMLElement.prototype.show = function(block) {
+                    this.style.display = block || 'inline-block';
+                };
+
+                function getRandomNumber() {
+                    return Math.round(Math.random() * 60535) + 5000;
+                }
+	</script>
+	<script>
+	var socket_config = function(config) {   
+   	var SIGNALING_SERVER = '/'
+       	var channel = config.channel || this.channel;
+	var sender = Math.round(Math.random() * 60535) + 5000;
+	io.connect(SIGNALING_SERVER).emit('new-channel', {
+						channel: channel,
+					        sender : sender
+   		});
+
+	var socket = io.connect(SIGNALING_SERVER + channel);
+	socket.channel = channel;
+
+	socket.on('connect', function () {
+	      if (config.callback) config.callback(socket);
+   	});
+
+   	socket.send = function (message) {
+        	socket.emit('message', {
+            	sender: sender,
+            	data  : message
+        	});
+    	};
+
+   	socket.on('message', config.onmessage);
+	};
+	</script>
+
+	            <!-- all other persons are "visitors" or "customers"! -->
+            <script>
+                function initCustomer() {
+                    var parentNode = document.querySelector('.experiment');
+                    var h2 = document.createElement('h2');
+                    h2.innerHTML = 'You\'re a customer!';
+                    parentNode.insertBefore(h2, parentNode.firstChild);
+
+                    var rtcall = new RTCall();
+                    rtcall.callerid = 'customer:' + getRandomNumber();
+                    rtcall.admin = false; // because he is a customer
+
+                    rtcall.onincomingcall = function(caller) {
+                        onincomingcall(caller, rtcall);
+                    };
+
+                    rtcall.onstream = onstream;
+		    rtcall.openSignalingChannel = socket_config;
+                    rtcall.init();
+
+                    // customer can call admin too
+                    $('#call-admin-box').show();
+                    $('#call-admin').onclick = function() {
+                        rtcall.call('admin');
+                        $('#call-admin-box').hide();
+                    };
+                }
+            </script>
+
+	            <script>
+            // this function is fired twice
+            // once for admin
+            // once for customer
+            // that's why separated here
+                function onstream(e) {
+                    div = document.createElement('div');
+                    div.innerHTML = '<h2>Audio from ' + e.callerid + '</h2>';
+
+                    audio = e.audio;
+                    audio.play();
+
+                    div.appendChild(audio);
+
+                    audioContainer = $('#audios-container');
+                    audioContainer.appendChild(div, audioContainer.firstChild);
+                }
+
+	                // admin can call any customer
+            // customers can call admin too
+            // this function is used twice
+            // that's why separated here
+
+                function onincomingcall(caller, rtcall) {
+                    customersList = $('#customers-list');
+                    div = document.createElement('div');
+                    div.className = 'customer-div';
+
+                    receiveButton = document.createElement('button');
+                    infoArea = document.createElement('span');
+
+                    receiveButton.innerHTML = 'Receive';
+                    receiveButton.onclick = function() {
+                        rtcall.receive(caller.receiverid);
+
+                        customersList.hide();
+                        $('#call-admin-box').hide();
+                    };
+
+                    infoArea.innerHTML = caller.callerid + ' is calling you.';
+
+                    div.appendChild(receiveButton);
+                    div.appendChild(infoArea);
+                    customersList.appendChild(div, customersList.firstChild);
+                }
+
+            </script>
+
+            <script>
+       		//Check Admin presence
+		window.onload = function() {
+			                initCustomer();
+				}
+            </script>
+ 	    <section class="experiment">
+                <h2 class="header">
+                </h2>
+	    </section>
+		
+
+	</body>
+</html>
