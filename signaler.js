@@ -99,10 +99,7 @@ app.get('/jquery.js', function (req, res) {
 });
 
 app.get('/location', function(req, res) {
-    var ip = req.headers['X-Forwarded-For'];
-    if(!ip) {
-    	ip = req.connection.remoteAddress;
-    }
+    var ip = req.connection.remoteAddress;
     var url = "http://www.geoplugin.net/json.gp?ip="+ip;
     if(ip == '127.0.0.1') {
     	url = "http://www.geoplugin.net/json.gp";

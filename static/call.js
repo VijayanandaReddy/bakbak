@@ -1,8 +1,8 @@
 (function() {
  	var socket;
-	var CUSTOMER_HEARTBEAT = 1000;
-	var VISITOR_HEARTBEAT = 3000;
-	var CUSTOMER_MONITOR = 2000;
+	var CUSTOMER_HEARTBEAT = 10000;
+	var VISITOR_HEARTBEAT = 30000;
+	var CUSTOMER_MONITOR = 20000;
 
  	window.Visitor = function(customerId) {
 		this.adminOnline = false;
