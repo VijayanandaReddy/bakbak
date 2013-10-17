@@ -103,7 +103,7 @@ app.get('/jquery.js', function (req, res) {
 app.get('/location', function(req, res) {
     console.log(req.ip);
     console.log(req.ips);
-    var ip = req.connection.remoteAddress;
+    var ip = req.ip;
     var url = "http://www.geoplugin.net/json.gp?ip="+ip;
     if(ip == '127.0.0.1') {
     	url = "http://www.geoplugin.net/json.gp";
