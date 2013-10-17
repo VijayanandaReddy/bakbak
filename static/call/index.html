@@ -80,7 +80,8 @@
 	</script>
 	<script>
 	var socket_config = function(config) {   
-   	var SIGNALING_SERVER = '/'
+	console.log("Signalling channel!");	
+	var SIGNALING_SERVER = '/'
        	var channel = config.channel || this.channel;
 	var sender = Math.round(Math.random() * 60535) + 5000;
 	io.connect(SIGNALING_SERVER).emit('new-channel', {

@@ -1,6 +1,7 @@
 var app = require('express')(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
+    io = require('socket.io').listen(server),
+    http  = require('http');
 
 var port = process.env.PORT || 5000;
 server.listen(port);
@@ -41,7 +42,11 @@ function onNewNamespace(channel, sender) {
 
         socket.on('message', function (data) {
             if (data.sender == sender)
-                socket.broadcast.emit('message', data.data);
+                socket.broadcast.emit('message', data);
+        });
+	socket.on('presence', function (data) {
+            if (data.sender == sender)
+                socket.broadcast.emit('presence', data);
         });
     });
 }
@@ -49,11 +54,11 @@ function onNewNamespace(channel, sender) {
 // ----------------------------------extras
 
 app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/static/call/index.html');
+    res.sendfile(__dirname + '/static/call/index1.html');
 });
 
 app.get('/admin', function (req, res) {
-    res.sendfile(__dirname + '/static/call/admin.html');
+    res.sendfile(__dirname + '/static/call/admin1.html');
 });
 
 app.get('/conference.js', function (req, res) {
@@ -81,5 +86,39 @@ app.get('/socketio.js', function (req, res) {
 
 app.get('/call.js', function (req, res) {
     res.setHeader('Content-Type', 'application/javascript');
-    res.sendfile(__dirname + '/static/RTCall.js');
+    res.sendfile(__dirname + '/static/call.js');
+});
+
+app.get('/webrtcsupport.js', function (req, res) {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.sendfile(__dirname + '/static/webrtcsupport.js');
+});
+app.get('/jquery.js', function (req, res) {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.sendfile(__dirname + '/static/jquery-2.0.3.min.js');
+});
+
+app.get('/location', function(req, res) {
+    var ip = req.headers['X-Forwarded-For'];
+    if(!ip) {
+    	ip = req.connection.remoteAddress;
+    }
+    var url = "http://www.geoplugin.net/json.gp?ip="+ip;
+    if(ip == '127.0.0.1') {
+    	url = "http://www.geoplugin.net/json.gp";
+    }
+    console.log("Making a request to fetch location data. for " + url);
+    http.get(url, function(response) {
+	      	console.log("Got location response status code: " + response.statusCode);
+	      	res.setHeader('Content-Type','application/json');
+		response.on('data', function (body) {
+			    	console.log('location response : ' + body);
+			    	res.send(body);
+			      	});
+	      }).on('error', function(e) {
+		console.log("Got error: " + e.message);
+		res.setHeader('Content-Type','application/json');
+	      	res.send(e.message);
+	});
+
 });

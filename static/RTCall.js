@@ -1,7 +1,3 @@
-// Muaz Khan     - https://github.com/muaz-khan
-// MIT License   - https://www.webrtc-experiment.com/licence/
-// Documentation - https://github.com/muaz-khan/WebRTC-Experiment/tree/master/RTCall
-
 (function() {
     window.RTCall = function(channel) {
         this.channel = channel || document.domain.replace( /\/|:|#|%|\.|\[|\]/g , '');
@@ -23,6 +19,7 @@
         };
 
         this.onstream = function(e) {
+	    console.log("Got stream.")
             audio = e.audio;
             audio.play();
             document.documentElement.appendChild(audio, document.documentElement.firstChild);
@@ -62,10 +59,12 @@
         });
 
         this.receive = function(receiverid) {
+	    console.log("Receiving Call!!" + receiverid);
             var peer;
             root.openSignalingChannel({
                 channel: receiverid,
                 onmessage: function(response) {
+		    console.log("Signalling channel opened!");
                     if (response.callerid == root.callerid) return;
 
                     if (response.sdp) {
@@ -250,6 +249,7 @@
         };
 
         function createOffer() {
+	    console.log("Creating offer.");
             if (!options.onOfferSDP) return;
 
             peerConnection.createOffer(function(sessionDescription) {
@@ -259,6 +259,7 @@
         }
 
         function createAnswer() {
+	    console.log("Creating answer");
             if (!options.onAnswerSDP) return;
 
             peerConnection.setRemoteDescription(new SessionDescription(options.offerSDP), onSdpSuccess, onSdpError);
