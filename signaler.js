@@ -52,6 +52,8 @@ function onNewNamespace(channel, sender) {
 }
 
 // ----------------------------------extras
+//
+app.enable('trust proxy');
 
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/static/call/index1.html');
@@ -99,6 +101,8 @@ app.get('/jquery.js', function (req, res) {
 });
 
 app.get('/location', function(req, res) {
+    console.log(req.ip);
+    console.log(req.ips);
     var ip = req.connection.remoteAddress;
     var url = "http://www.geoplugin.net/json.gp?ip="+ip;
     if(ip == '127.0.0.1') {
