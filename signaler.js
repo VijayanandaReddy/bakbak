@@ -100,6 +100,17 @@ app.get('/jquery.js', function (req, res) {
     res.sendfile(__dirname + '/static/jquery-2.0.3.min.js');
 });
 
+app.get('/tour', function (req, res) {
+    res.sendfile(__dirname + '/static/tour.html');
+});
+
+app.get('/tour.js', function (req, res) {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.sendfile(__dirname + '/static/tour.js');
+});
+
+
+
 app.get('/location', function(req, res) {
     console.log(req.ip);
     console.log(req.ips);
