@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+		<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js'></script>
+		<script src="/socketio.js"></script>
+		<script src = 'call.js'></script>
+		<script>
+			var customer = new Customer("admin");
+			customer.init();
+		</script>
+	</head>
+	<body ng-app>
+		<div id='currentOnlineUsers' ng-controller="adminServices">
+			<p>Logged in users.</p>
+			<li ng-repeat="user in users">
+				<div id='userId' class='userListing'>
+					<div class='userName'>user.visitorId</div>
+					<div class='actionPanel'>
+						<div class='webRtcSupport'>user.webrtc</div>
+						<div class='googleAnalytics'>user.gAData</div>
+						<div class='locationDetails'>user.locationData<div>
+						<div class='browserDetails'>user.navigator</div>
+						<div class='osDetails'>user.customerId</div>
+					</div>
+					<div class='chatPanel'>
+						<div class='chatMessages'></div>
+						<div class='chatText'></div>
+						<div class='chatAction'>
+							<div class='chatSend'></div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</div>
+	</body>
+</html>

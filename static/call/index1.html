@@ -1,12 +1,47 @@
-<html>
+<!DOCTYPE html>
+<html lang='en'>
 	<head>
-		<script src="/socketio.js"></script>
-		<script src = 'jquery.js'></script>
-		<script src = 'call.js'></script>
+		<meta charset="utf-8">
+    	<title>Bakbak Client</title>
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="">
+    	<meta name="author" content="">
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+		<script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+		<script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-tooltip.js"></script>
+		<script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-popover.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
 		<script src = 'webrtcsupport.js'></script>
+		<script src="/js/call.js"></script>
+		<script src="/socketio.js"></script>
+		<script src="/js/utils.js"></script>
+		<script src="/js/visitor.js"></script>
 		<script>
 			var visitor = new Visitor("admin");
 			visitor.init();
 		</script>
+				<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css" rel="stylesheet">
+		<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="/css/base.css" rel="stylesheet">
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    	<!--[if lt IE 9]>
+      		<script src="http://getbootstrap.com/2.3.2/assets/js/html5shiv.js"></script>
+    	<![endif]-->
+    	<!-- Fav and touch icons -->
+    	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://getbootstrap.com/2.3.2/assets/ico/apple-touch-icon-144-precomposed.png">
+    	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://getbootstrap.com/2.3.2/assets/ico/apple-touch-icon-114-precomposed.png">
+      	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://getbootstrap.com/2.3.2/assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="http://getbootstrap.com/2.3.2/assets/ico/apple-touch-icon-57-precomposed.png">
+        <link rel="shortcut icon" href="http://getbootstrap.com/2.3.2/assets/ico/favicon.png">
 	</head>
+	<body>
+		<div class='chatPanel'>
+			<div id='chatMsgBox' class='chatMessages maxHeight100 scrollbar backgroundWhite'></div>
+			<div class='chatText input-append'>
+  				<input class="input-block-level" id="chatMsg" type="text" placeholder="Chat" onkeydown="if (event.keyCode == 13) visitor.sendChatMessage($('#chatMsg').val());">
+  				<button class="btn btn-success" type="button" onClick='visitor.sendChatMessage($("#chatMsg").val());'>Chat</button>
+			</div>
+		</div>
+	</body>
 </html>

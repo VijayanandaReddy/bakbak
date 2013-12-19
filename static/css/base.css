@@ -1,0 +1,26 @@
+.imageIconMedium {
+	width:20px;
+	height:20px;
+}
+
+.maxHeight100 {
+	max-height:100px;
+ 	height:auto !important;
+  	height:100px;
+  	min-height:50px;
+}
+
+.backgroundWhite {
+	background: #ffffff;
+}
+
+.scrollbar {
+	display:block;
+    padding:5px;
+    margin-top:5px;
+    overflow:scroll;
+}
+
+.chatMessages {
+
+}

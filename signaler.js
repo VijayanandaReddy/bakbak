@@ -1,4 +1,6 @@
-var app = require('express')(),
+var express = require('express'),
+    path = require('path'),
+    app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     http  = require('http');
@@ -9,6 +11,7 @@ console.log("Connected on port " + port);
 // ----------------------------------socket.io
 
 var channels = {};
+var senders={};
 
 io.sockets.on('connection', function (socket) {
     var initiatorChannel = '';
@@ -16,8 +19,12 @@ io.sockets.on('connection', function (socket) {
         io.isConnected = true;
 
     socket.on('new-channel', function (data) {
+        console.log('CREATING NEW CHANNEL:: ' + data.channel);
         channels[data.channel] = data.channel;
-        onNewNamespace(data.channel, data.sender);
+        if(senders[data.sender] == undefined) {
+            onNewNamespace(data.channel, data.sender);
+            senders[data.sender] = data.sender;
+        }
     });
 
     socket.on('presence', function (channel) {
@@ -39,21 +46,44 @@ function onNewNamespace(channel, sender) {
             io.isConnected = false;
             socket.emit('connect', true);
         }
+        var socketid = socket.id;
+    	//socket.join(socket.handshake.sessionID);
 
         socket.on('message', function (data) {
             if (data.sender == sender)
                 socket.broadcast.emit('message', data);
         });
-	socket.on('presence', function (data) {
+	   socket.on('presence', function (data) {
             if (data.sender == sender)
                 socket.broadcast.emit('presence', data);
         });
+	   socket.on('chat',function (data) {
+		  console.log('GOT CHAT msg for ' + data.reciever + ' for id ' +socketid);
+		  socketId = data.reciever;
+          if(data.sender == sender) {
+		      io.of('/' + channel).socket(socketId).emit('chat',data);
+          } else {
+            console.log('CHAT DROPPED ' +data.sender + ' ' + sender);
+          }
+	   });
+        socket.on('call',function (data) {
+          console.log('GOT CALL for for ' + data.reciever + ' for id ' +socketid);
+          socketId = data.reciever;
+          data.senderId = socketid;
+          if(data.sender == sender) {
+              io.of('/' + channel).socket(socketId).emit('call',data);
+          } else {
+            console.log('CALL DROPPED ' +data.sender + ' ' + sender);
+          }
+       });
     });
 }
 
 // ----------------------------------extras
 //
 app.enable('trust proxy');
+
+app.use(express.compress());
 
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/static/call/index1.html');
@@ -109,8 +139,6 @@ app.get('/tour.js', function (req, res) {
     res.sendfile(__dirname + '/static/tour.js');
 });
 
-
-
 app.get('/location', function(req, res) {
     console.log(req.ip);
     console.log(req.ips);
@@ -134,3 +162,8 @@ app.get('/location', function(req, res) {
 	});
 
 });
+
+app.use('/img',express.static(path.join(__dirname, 'static/img')));
+app.use('/css',express.static(path.join(__dirname, 'static/css')));
+app.use('/js',express.static(path.join(__dirname, 'static/js')));
+
