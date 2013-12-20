@@ -38,6 +38,9 @@
 						$("#flagIcon"+presenceUser.visitorId).tooltip();
 						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
+					if(self.users[i].id == null) {
+						self.users[i].id = presenceUser.id;
+					}
 					return;
 				}
 			}
@@ -65,7 +68,7 @@
 
 		this.init = function() {
 			initializeSocket(self);
-			self.presenceIndicator();
+			//self.presenceIndicator();
 			self.visitorMonitor();
 			//initialize_calling();
 		}

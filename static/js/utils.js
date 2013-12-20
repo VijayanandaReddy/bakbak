@@ -28,6 +28,8 @@ var socket;
 			console.log('Setting id ' + socket.socket.sessionid);
 			console.log(socket);
 			config.id = socket.socket.sessionid;
+			console.log("Got session " + config.id);
+			config.presenceIndicator();
    		});
 
    		socket.send = function (message) { //Make it channel specific
