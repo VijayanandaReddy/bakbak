@@ -56,6 +56,9 @@
 			if(presenceUser.location != null ) {
 				$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geolugin_longitude)});
 			}
+			customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"We are launching beta on 1/1/14.");
+			customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"To be part of beta launch mail to biplav.saraf@gmail.com");
+			 
 		};
 
 		this.onCall = function(message) {
