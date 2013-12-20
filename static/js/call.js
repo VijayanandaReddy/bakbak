@@ -74,7 +74,7 @@
             gainNode.gain.value = 0.9;
         }
 
-        initNoiseCancellation();
+        //initNoiseCancellation();
 
 
         // run start(true) to initiate a call
