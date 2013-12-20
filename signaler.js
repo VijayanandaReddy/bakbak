@@ -6,6 +6,7 @@ var express = require('express'),
     http  = require('http');
 
 var port = process.env.PORT || 5000;
+var visitor_count=0;
 server.listen(port);
 console.log("Connected on port " + port);
 // ----------------------------------socket.io
@@ -47,6 +48,7 @@ function onNewNamespace(channel, sender) {
             socket.emit('connect', true);
         }
         var socketid = socket.id;
+        console.error("VISITOR NUMBER " + ++visitor_count/3);
     	//socket.join(socket.handshake.sessionID);
 
         socket.on('message', function (data) {
