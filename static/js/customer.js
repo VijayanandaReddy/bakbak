@@ -40,6 +40,10 @@
 					}
 					if(self.users[i].id == null) {
 						self.users[i].id = presenceUser.id;
+						$('#'+presenceUser.visitorId).detach();
+						$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
+						$("#flagIcon"+presenceUser.visitorId).tooltip();
+						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
 					return;
 				}

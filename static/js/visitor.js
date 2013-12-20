@@ -54,7 +54,7 @@
 			initializeLocationData(self);
 			initializeGoogleAnalyticsData(self);
 			initializeSocket(self);
-			self.presenceIndicator();
+			//self.presenceIndicator();
 			self.adminMonitor();
 			//console.log(self.navigator);
 			//initialize_calling();

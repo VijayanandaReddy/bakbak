@@ -112,14 +112,14 @@
 									 [${location.geoplugin_currencySymbol} ${location.geoplugin_currencyConverter} = $1]
 								<div>
 					{{else}}
-						<div class='locationDetails alert'>Location</div>
+						<div class='locationDetails alert'>Location fetching...</div>
 					{{/if}}
 					</td>
 					<td>
 						<div class='browserDetails alert'><img class='imageIconMedium' src='/img/browsers/png/${browser.toLowerCase()}.png' title='${browser}'/> ${version}
 						<img class='imageIconMedium' src='/img/os/png/${os.toLowerCase()}.png' title='${os}'> ${os}</img></div>
 					</td>
-					<td>
+					<td> {{if visitorId}}
 						<div class='chatPanel'>
 									<div id='chatMsgBox${visitorId}' class='chatMessages maxHeight100 scrollbar backgroundWhite'></div>
 									<div class='chatText input-append'>
@@ -127,6 +127,9 @@
   										<button class="btn btn-success" type="button" onClick='customer.sendChatMessage("${id}",${visitorId},$("#chatMsg${visitorId}").val());'>Chat</button>
 									</div>
 						</div>
+						{{else}}
+						<div class='chatPanel'> Intializing...</div>
+						{{/if}}
 					</td>
 				</tr>
 			</div>
