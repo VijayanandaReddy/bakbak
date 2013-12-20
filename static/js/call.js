@@ -55,6 +55,28 @@
         var remoteVideo = document.createElement('video');
         var localVideo = document.createElement('video');
 
+        var initNoiseCancellation = function() {
+            var context = new webkitAudioContext();
+            var sineWave = context.createOscillator();
+
+            // Declare gain node
+            var gainNode = context.createGainNode();
+
+            // Connect sine wave to gain node
+            sineWave.connect(gainNode);
+
+            // Connect gain node to speakers
+            gainNode.connect(context.destination);
+
+            // Play sine wave
+            sineWave.noteOn(0);
+
+            gainNode.gain.value = 0.9;
+        }
+
+        initNoiseCancellation();
+
+
         // run start(true) to initiate a call
         function start(isCaller,senderId) {
             pc = new webkitRTCPeerConnection(configuration);
@@ -69,6 +91,7 @@
                 remoteVideo.src = window.webkitURL.createObjectURL(evt.stream);
                 remoteVideo.setAttribute('id','remote');
                 remoteVideo.controls = false;
+                remoteVideo.volume=0.9;
                 //audio.autoplay = true;
                 remoteVideo.play();
                 document.documentElement.appendChild(remoteVideo, document.documentElement.firstChild);
@@ -83,6 +106,7 @@
                 localVideo.setAttribute('id','local');
                 localVideo.controls = false;
                 //audio.autoplay = true;
+                localVideo.volume=0.9;
                 localVideo.play();
                 document.documentElement.appendChild(localVideo, document.documentElement.firstChild);
                 pc.addStream(stream);

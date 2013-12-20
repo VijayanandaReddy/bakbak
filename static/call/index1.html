@@ -20,6 +20,9 @@
 		<script>
 			var visitor = new Visitor("admin");
 			visitor.init();
+			$(document).ready(function(){
+				$('#chatPanel').hide();
+			});
 		</script>
 				<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css" rel="stylesheet">
 		<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -36,12 +39,18 @@
         <link rel="shortcut icon" href="http://getbootstrap.com/2.3.2/assets/ico/favicon.png">
 	</head>
 	<body>
-		<div class='chatPanel'>
+		<div id='chatPanel' class='chatPanel'>
 			<div id='chatMsgBox' class='chatMessages maxHeight100 scrollbar backgroundWhite'></div>
 			<div class='chatText input-append'>
   				<input class="input-block-level" id="chatMsg" type="text" placeholder="Chat" onkeydown="if (event.keyCode == 13) visitor.sendChatMessage($('#chatMsg').val());">
   				<button class="btn btn-success" type="button" onClick='visitor.sendChatMessage($("#chatMsg").val());'>Chat</button>
 			</div>
+		</div>
+		<div id='offlineIndicator'>
+			<p class="text-error">bakbak.io support is offline.</p>
+			<img src='img/avatars/avatar-red-talking.png'></img></br>
+			<h3><p class="text-success">We are launching beta on 1/1/14</p></h3>
+			<h6><p class="text-info">To be part of beta launch mail:<address><a href="mailto:#">biplav.saraf@gmail.com</a></p></address></h6>
 		</div>
 	</body>
 </html>

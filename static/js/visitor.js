@@ -21,6 +21,15 @@
 			setTimeout(self.presenceIndicator,VISITOR_HEARTBEAT);
 		}
 		var self = this;
+		function setAdminStatus(status) {
+			if(status) {
+				$('#chatPanel').show();
+				$('#offlineIndicator').hide();
+			}else {
+				$('#chatPanel').hide();
+				$('#offlineIndicator').show();
+			}
+		}
 		this.adminMonitor = function() {
 					if(self.lastOnline == null || !self.adminOnline) {
 						//First time check or offline customer
@@ -29,29 +38,34 @@
 					}
 					var now = new Date().getTime();
 					var timeDiff = now - self.lastOnline;
-					console.log("Last online at "+ self.lastOnline);
+					//console.log("Last online at "+ self.lastOnline);
 					if(timeDiff > CUSTOMER_MONITOR) {
 						console.log("Customer is offline at " + now);
 						self.adminOnline = false;
+						setAdminStatus(false);
+
 					}
 					setTimeout(self.adminMonitor, CUSTOMER_MONITOR);
 		};
 		this.init = function() {
+			$('#chatPanel').hide();
+			$('#offlineIndicator').show();
 			initializeWebRTCSupport(self);
 			initializeLocationData(self);
 			initializeGoogleAnalyticsData(self);
 			initializeSocket(self);
 			self.presenceIndicator();
 			self.adminMonitor();
-			console.log(self.navigator);
+			//console.log(self.navigator);
 			//initialize_calling();
 		}
 		this.onPresence = function (message) {
 			console.log("Customer Id is " + self.customerId + " while sender is " + message.sender);
 			if(message.sender == self.customerId) {
 				self.lastOnline = new Date().getTime();
-				console.log("Customer is online " + self.lastOnline);
+				//console.log("Customer is online " + self.lastOnline);
 				self.adminOnline = true;
+				setAdminStatus(true);
 				self.adminSocketId = message.data.id;
 				}
 		};
@@ -60,7 +74,7 @@
 		};	
 
 		this.onChat = function(message) {
-			console.log(message);
+			//console.log(message);
 			addToChatMessageBox(null,message.sender,message.message);
 		};
 
