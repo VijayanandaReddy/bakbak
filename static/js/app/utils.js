@@ -6,7 +6,7 @@ var socket;
 
 	initializeSocket = function(config) {
 		console.log("Initializing socket");
-		var SIGNALING_SERVER = '/'
+		var SIGNALING_SERVER = bakbakUrl +'/';
        	var channel = config.customerId;
 		var sender = config.visitorId;
 
@@ -117,7 +117,7 @@ var socket;
 	}
 
 	initializeLocationData = function(self) {
-		$.getJSON( "/location", function(data) {
+		$.getJSON( bakbakUrl + "/location", function(data) {
 					console.log(data);
 					self.location = data;
 					});
