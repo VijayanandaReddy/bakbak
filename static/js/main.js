@@ -1,5 +1,5 @@
 require.config({
-	baseUrl: 'http://cryptic-thicket-3838.herokuapp.com/js/lib',
+	baseUrl: bakbakUrl + 'js/lib',
 	paths: {
         app: '../app',
         jquery: 'jquery-2.0.3.min',
@@ -16,7 +16,7 @@ function loadCss(url) {
     var link = document.createElement("link");
     link.type = "text/css";
     link.rel = "stylesheet";
-    link.href = "http://cryptic-thicket-3838.herokuapp.com/"+url;
+    link.href = bakbakUrl+url;
     document.getElementsByTagName("head")[0].appendChild(link);
 }
 

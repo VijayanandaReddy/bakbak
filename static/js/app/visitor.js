@@ -78,7 +78,7 @@
 
 		addStatusCheckLabel = function() {
 			$('#bakbakchat').empty();
-			$('#bakbakchat').append("<p id='offlineCheck' class='alert alert-info' style='margin:0px'>Support<img src='img/actions/png/spinner.gif'/></p>");
+			$('#bakbakchat').append("<p id='offlineCheck' class='alert alert-info' style='margin:0px'>Support<img src="+bakbakUrl+"'img/actions/png/spinner.gif'/></p>");
 		}
 
 		showChatBar = function(showByDefault) {
@@ -118,7 +118,7 @@
 			console.log('Adding online label');
 			$('#onlineConfirm').unbind('click');
 			$('#bakbakchat').empty();
-			$('#bakbakchat').append("<p id='onlineConfirm' class='alert alert-success' style='margin:0px'>Support<img src='img/avatars/avatar-green-talking20x20.png'></img></p>");
+			$('#bakbakchat').append("<p id='onlineConfirm' class='alert alert-success' style='margin:0px'>Support<img src="+bakbakUrl+"'img/avatars/avatar-green-talking20x20.png'></img></p>");
 			$('#onlineConfirm').click(function() {
 				showChatBar();
 			});
@@ -129,7 +129,7 @@
 			if($('#offlineConfirm').length) return;
 			console.log('Adding offline label');
 			$('#bakbakchat').empty();
-			$('#bakbakchat').append("<p id='offlineConfirm' class='alert alert-danger' style='margin:0px'>Support<img src='img/avatars/avatar-red-talking20x20.png'></img></p>");
+			$('#bakbakchat').append("<p id='offlineConfirm' class='alert alert-danger' style='margin:0px'>Support<img src="+bakbakUrl+"'img/avatars/avatar-red-talking20x20.png'></img></p>");
 		}
 
 		this.onPresence = function (message) {
