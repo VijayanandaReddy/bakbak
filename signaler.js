@@ -14,6 +14,12 @@ console.log("Connected on port " + port);
 var channels = {};
 var senders={};
 
+//Only because we have one dynamo
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+
 io.sockets.on('connection', function (socket) {
     var initiatorChannel = '';
     if (!io.isConnected)

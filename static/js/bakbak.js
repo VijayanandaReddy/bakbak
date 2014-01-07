@@ -1,4 +1,4 @@
-  var bakbakUrl = window.location.host != 'localhost' ? 'http://cryptic-thicket-3838.herokuapp.com/':'';
+  var bakbakUrl = window.location.hostname != 'localhost' ? 'http://cryptic-thicket-3838.herokuapp.com/':'';
   var fileref=document.createElement('script');
   fileref.setAttribute("type","text/javascript");
   fileref.setAttribute("src", bakbakUrl + 'js/lib/require.js');
