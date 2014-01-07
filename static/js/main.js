@@ -1,5 +1,5 @@
 require.config({
-	baseUrl: 'js/lib',
+	baseUrl: 'http://cryptic-thicket-3838.herokuapp.com/js/lib',
 	paths: {
         app: '../app',
         jquery: 'jquery-2.0.3.min',
