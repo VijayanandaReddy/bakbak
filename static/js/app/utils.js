@@ -117,7 +117,7 @@ var socket;
 	}
 
 	initializeLocationData = function(self) {
-		$.getJSON( bakbakUrl + "/location", function(data) {
+		$.getJSON( bakbakUrl + "location", function(data) {
 					console.log(data);
 					self.location = data;
 					});
