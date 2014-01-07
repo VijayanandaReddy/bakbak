@@ -130,6 +130,7 @@ app.get('/tour.js', function (req, res) {
 app.get('/location', function(req, res) {
     console.log(req.ip);
     console.log(req.ips);
+    res.header("Access-Control-Allow-Origin", "*");
     var ip = req.ip;
     var url = "http://www.geoplugin.net/json.gp?ip="+ip;
     if(ip == '127.0.0.1') {
