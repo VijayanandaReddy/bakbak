@@ -59,6 +59,11 @@
 			//console.log(self.navigator);
 			//initialize_calling();
 		}
+
+		initializeFooter = function() {
+			
+		};
+		
 		this.onPresence = function (message) {
 			console.log("Customer Id is " + self.customerId + " while sender is " + message.sender);
 			if(message.sender == self.customerId) {

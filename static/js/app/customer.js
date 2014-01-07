@@ -56,8 +56,9 @@
 			if(presenceUser.location != null ) {
 				$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geolugin_longitude)});
 			}
-			
-			
+			setTimeout(function() {
+				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page.");
+			},3000);
 			 
 		};
 

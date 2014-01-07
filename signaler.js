@@ -113,23 +113,9 @@ app.get('/RTCMultiConnection', function (req, res) {
     res.sendfile(__dirname + '/static/RTCMultiConnection/index.html');
 });
 
-app.get('/socketio.js', function (req, res) {
-    res.setHeader('Content-Type', 'application/javascript');
-    res.sendfile(__dirname + '/static/socket.io.js');
-});
-
 app.get('/call.js', function (req, res) {
     res.setHeader('Content-Type', 'application/javascript');
     res.sendfile(__dirname + '/static/call.js');
-});
-
-app.get('/webrtcsupport.js', function (req, res) {
-    res.setHeader('Content-Type', 'application/javascript');
-    res.sendfile(__dirname + '/static/webrtcsupport.js');
-});
-app.get('/jquery.js', function (req, res) {
-    res.setHeader('Content-Type', 'application/javascript');
-    res.sendfile(__dirname + '/static/jquery-2.0.3.min.js');
 });
 
 app.get('/tour', function (req, res) {
@@ -168,4 +154,4 @@ app.get('/location', function(req, res) {
 app.use('/img',express.static(path.join(__dirname, 'static/img')));
 app.use('/css',express.static(path.join(__dirname, 'static/css')));
 app.use('/js',express.static(path.join(__dirname, 'static/js')));
-
+app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));

@@ -106,11 +106,12 @@ var socket;
 		if(visitorId) {
 			chatBox = $('#chatMsgBox'+visitorId);
 		}
-		chatBox.append('<br>'+senderName+': '+chatText);
+		chatBox.append('<small><br>'+senderName+': '+chatText+'</small>');
   		chatBox.scrollTop(9999999999);
 	}
 
 	initializeWebRTCSupport = function(data) {
+				var webrtcsupport = require('webrtcsupport');
 				console.log(webrtcsupport);
 				data.webrtc=webrtcsupport;
 	}
@@ -140,7 +141,7 @@ var socket;
 
 
 /* Contants */
-var CUSTOMER_HEARTBEAT = 10000;
+var CUSTOMER_HEARTBEAT = 1000;
 var VISITOR_HEARTBEAT = 10000;
 var CUSTOMER_MONITOR = 20000;
 var VISITOR_MONITOR = 15000;
