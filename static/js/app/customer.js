@@ -1,3 +1,4 @@
+var bakbakUrl ='';
 (function() {
 	window.Customer = function(customerId) {
 		this.customerId = customerId;
