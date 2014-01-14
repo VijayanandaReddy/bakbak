@@ -62,10 +62,12 @@ function onNewNamespace(channel, sender) {
                 socket.broadcast.emit('message', data);
         });
 	   socket.on('presence', function (data) {
-            if (data.sender == sender)
+            if (data.sender == sender) {
+                console.log('Got PRESENCE--> ' + data);
                 socket.broadcast.emit('presence', data);
+            }
         });
-	   socket.on('chat',function (data) {
+	   socket.on('chat',funcion (data) {
 		  console.log('GOT CHAT msg for ' + data.reciever + ' for id ' +socketid);
 		  socketId = data.reciever;
           if(data.sender == sender) {
