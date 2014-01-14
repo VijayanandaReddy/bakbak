@@ -1,12 +1,26 @@
 /*common utils for the app */
 
+/*
+Stuffing into natives
+*/
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
+
 /* Gloabls */
 
 var socket;
 
 	initializeSocket = function(config) {
 		console.log("Initializing socket");
-		var SIGNALING_SERVER = bakbakUrl +'/';
+		var SIGNALING_SERVER='';
+		if(bakbakUrl.endsWith('/')) {
+			SIGNALING_SERVER = bakbakUrl;
+		} else {
+			SIGNALING_SERVER = bakbakUrl +'/';
+		}
        	var channel = config.customerId;
 		var sender = config.visitorId;
 
