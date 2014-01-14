@@ -63,7 +63,7 @@ function onNewNamespace(channel, sender) {
         });
 	   socket.on('presence', function (data) {
             if (data.sender == sender) {
-                console.log('PRESENCE --> ' +data);
+                console.log('PRESENCE --> ' +data.sender);
                 socket.broadcast.emit('presence', data);
             }
         });
