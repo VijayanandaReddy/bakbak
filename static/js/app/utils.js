@@ -141,10 +141,10 @@ var socket;
 
 
 /* Contants */
-var CUSTOMER_HEARTBEAT = 1000;
-var VISITOR_HEARTBEAT = 10000;
+var CUSTOMER_HEARTBEAT = 10000;
+var VISITOR_HEARTBEAT = 15000;
 var CUSTOMER_MONITOR = 20000;
-var VISITOR_MONITOR = 15000;
+var VISITOR_MONITOR = 20000;
 
 /* Browser Detects starts here */
 var BrowserDetect = {
