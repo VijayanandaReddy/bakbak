@@ -24,7 +24,9 @@ function loadCss(url) {
 
 requirejs(['webrtcsupport','jquery','socket.io','app/call','app/utils','app/visitor'],function(webrtc,$,socketio,call,util,visitor) {
   		console.log('lib is loaded');
-  		var customerId = $('#bakbakscript').attr('src').replace(bakbakUrl+'/js/bakbak.js?id=','');
+      var src = $('#bakbakscript').attr('src');
+  		var customerId = src.substring(src.indexOf('=')+1);
+      console.log('Customer Id is ' + customerId);
   		var visitor = new Visitor(customerId);
 		visitor.init();
 		//Cannot afford bootstrap css need to use custom css. Remove it post demo
