@@ -67,7 +67,7 @@
 		}
 
 		initializeStatusUi = function() {
-			$("body").append("<footer id='bakbakchat' style='width:125px;z-index:99999;margin:0' class='table-bordered'></footer>");
+			$("body").append("<footer id='bakbakchat' style='width:125px;z-index:99999;margin:0;position:fixed;background:white' class='table-bordered'></footer>");
 			addStatusCheckLabel();
 			setTimeout(function() {
 					if(!this.adminOnline){
