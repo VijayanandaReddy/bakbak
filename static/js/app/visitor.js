@@ -99,7 +99,7 @@
 			<div id='chatMsgBox' class='chatMessages maxHeight100 scrollbar backgroundWhite'></div> \
 			<div class='chatText input-append' style='margin:0;width:100%'> \
   				<input class='input-block-level' id='chatMsg' type='text' placeholder='Chat'> \
-  				<button class='btn btn-success btn-default' id='chatSendButton' type='button'>S</button>\
+  				<!--<button class='btn btn-success btn-default' id='chatSendButton' type='button'>S</button> -->\
 			</div> \
 		</div>");
 			$('#chatMsg').keydown(function(event) {
