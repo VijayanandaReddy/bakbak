@@ -23,6 +23,8 @@ var socket;
 		}
        	var channel = config.customerId;
 		var sender = config.visitorId;
+		var connectOn = SIGNALING_SERVER + channel;
+		console.log("Will Connect on --> " + connectOn);
 
 		console.log('Declaring a new channel');
 		io.connect(SIGNALING_SERVER).emit('new-channel', {
@@ -31,8 +33,7 @@ var socket;
    		});
 
 
-   		socket = io.connect(SIGNALING_SERVER + channel);
-
+   		socket = io.connect(connectOn);
 		
 		socket.channel = channel;
 		socket.on('connect', function () {
