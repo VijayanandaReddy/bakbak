@@ -109,6 +109,7 @@ var bakbakUrl ='';
 			$(element).focus();
 			$(element).keypress(function(event) {
 				if (event.keyCode == 13) {
+					event.preventDefault();
 					var newVisitorId = $(element).text()
 					console.log(newVisitorId);
 					socket.setCookie('bakbakUserId',newVisitorId,id);
