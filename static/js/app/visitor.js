@@ -31,17 +31,19 @@
 		this.adminMonitor = function() {
 					if(self.lastOnline == null || !self.adminOnline) {
 						//First time check or offline customer
+						self.lastOnline = new Date().getTime()-5; //dont want to wait 2 cycles!
+						self.adminOnline=true;
 						setTimeout(self.adminMonitor, CUSTOMER_MONITOR);
 						return;
 					}
 					var now = new Date().getTime();
 					var timeDiff = now - self.lastOnline;
-					//console.log("Last online at "+ self.lastOnline);
 					if(timeDiff > CUSTOMER_MONITOR) {
 						console.log("Customer is offline at " + now);
-						self.adminOnline = false;
-						setAdminStatus(false);
-
+						if(self.adminOnline) {
+							self.adminOnline = false;
+							setAdminStatus(false);
+						}
 					}
 					setTimeout(self.adminMonitor, CUSTOMER_MONITOR);
 		};
