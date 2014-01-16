@@ -39,7 +39,7 @@ var bakbakUrl ='';
 						$("#flagIcon"+presenceUser.visitorId).tooltip();
 						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
-					if(self.users[i].id == null) {
+					if(self.users[i].id == null || self.users[i].id != presenceUser.id) {
 						self.users[i].id = presenceUser.id;
 						$('#'+presenceUser.visitorId).detach();
 						$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
@@ -69,7 +69,9 @@ var bakbakUrl ='';
 		};
 
 		this.sendChatMessage = function(id,visitorId, chatText) {
+			if(chatText == null || chatText == '') return;
 			socket.chat(chatText,id);
+			console.log(visitorId);
 			console.log('sending chat message to ' + visitorId +' with message ' + chatText);
 			$('#chatMsg'+visitorId).val('');
 			addToChatMessageBox(visitorId,customerId,chatText);
@@ -113,6 +115,7 @@ var bakbakUrl ='';
 					$(element).blur();
 					$(element).unbind('key');
 					element.contentEditable = 'false';
+					$(element).text(visitorId + ' ('+newVisitorId +')');
 				}
 			});
 		}

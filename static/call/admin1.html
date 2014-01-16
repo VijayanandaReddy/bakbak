@@ -123,8 +123,8 @@
 						<div class='chatPanel'>
 									<div id='chatMsgBox${visitorId}' class='chatMessages maxHeight100 scrollbar backgroundWhite'></div>
 									<div class='chatText input-append'>
-  										<input class="input-block-level" id="chatMsg${visitorId}" type="text" placeholder="Chat" onkeydown="if (event.keyCode == 13) customer.sendChatMessage('${id}',${visitorId},$('#chatMsg${visitorId}').val());">
-  										<button class="btn btn-success" type="button" onClick='customer.sendChatMessage("${id}",${visitorId},$("#chatMsg${visitorId}").val());'>Chat</button>
+  										<input class="input-block-level" id="chatMsg${visitorId}" type="text" placeholder="Chat" onkeydown="if (event.keyCode == 13) customer.sendChatMessage('${id}','${visitorId}',$('#chatMsg${visitorId}').val());">
+  										<button class="btn btn-success" type="button" onClick='customer.sendChatMessage("${id}",'${visitorId}',$("#chatMsg${visitorId}").val());'>Chat</button>
 									</div>
 						</div>
 						{{else}}

@@ -170,6 +170,7 @@
 		};
 
 		sendChatMessage = function(chatText) {
+			if(chatText == null || chatText == '') return;
 			socket.chat(chatText,self.adminSocketId);
 			$('#chatMsg').val('');
 			console.log('sending chat message to ' + self.adminSocketId +' with message ' + chatText);
