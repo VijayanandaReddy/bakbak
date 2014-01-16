@@ -76,6 +76,17 @@ function onNewNamespace(channel, sender) {
             console.log('CHAT DROPPED ' +data.sender + ' ' + sender);
           }
 	   });
+
+        socket.on('setCookie',function (data) {
+          console.log('GOT SET COOKIE msg for ' + data.reciever + ' for id ' +socketid);
+          socketId = data.reciever;
+          if(data.sender == sender) {
+              io.of('/' + channel).socket(socketId).emit('setCookie',data);
+          } else {
+            console.log('SET COOKIE ' +data.sender + ' ' + sender);
+          }
+       });
+
         socket.on('call',function (data) {
           console.log('GOT CALL for for ' + data.reciever + ' for id ' +socketid);
           socketId = data.reciever;

@@ -100,5 +100,21 @@ var bakbakUrl ='';
 		this.audioCall = function(id) {
 			self.webrtcCall.call(id,true);
 		}
+
+		this.editUserId = function(visitorId,element,id) {
+			console.log(visitorId);
+			element.contentEditable = 'true';
+			$(element).focus();
+			$(element).keypress(function(event) {
+				if (event.keyCode == 13) {
+					var newVisitorId = $(element).text()
+					console.log(newVisitorId);
+					socket.setCookie('bakbakUserId',newVisitorId,id);
+					$(element).blur();
+					$(element).unbind('key');
+					element.contentEditable = 'false';
+				}
+			});
+		}
 	};
 })();

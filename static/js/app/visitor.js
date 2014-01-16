@@ -8,7 +8,7 @@
 			}
 			return userId;
 		}
-		
+
 		this.adminOnline = false;
 		this.lastOnline = null;
 		this.adminId = null;
@@ -23,7 +23,6 @@
 		this.gAData = null;
 		this.id = null; //socketid will be stored here.
 		this.call = new Call(customerId);
-		//Generate this later.
 		this.visitorId = getUserId();
 		this.presenceIndicator = function () {
 			heartbeat(self);
@@ -176,5 +175,10 @@
 			console.log('sending chat message to ' + self.adminSocketId +' with message ' + chatText);
 			addToChatMessageBox(null,'me',chatText);
 		}
+
+		this.setCookie = function(data) {
+			console.log('Got set cookie meesage!');
+			createCookie(data.cookieName,data.cookieValue);
+		} 
 	};
 	})();

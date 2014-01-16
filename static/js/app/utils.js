@@ -64,6 +64,17 @@ var socket;
 			socket.emit('chat',data);
 		};
 
+		socket.setCookie = function(cookieName,cookieValue,id) {
+			var data = {};
+			data.type = 'setCookie';
+			data.cookieName = cookieName;
+			data.cookieValue = cookieValue;
+			data.reciever = id;
+			data.sender = sender;
+			console.log('Sending setCookie to ' +  id);
+			socket.emit('setCookie',data);
+		};
+
 		socket.call = function(video,id,request,data) {
 			if(!data)
 				data = {};
@@ -87,6 +98,7 @@ var socket;
 		socket.on('presence',config.onPresence);
 		socket.on('chat',config.onChat);
 		socket.on('call',config.onCall);
+		socket.on('setCookie',config.setCookie);
 	};
 	
 	heartbeat = function(data) {
