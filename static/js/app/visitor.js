@@ -1,5 +1,14 @@
 (function() {
  	window.Visitor = function(customerId) { //CustomerId is the admin with whom this guy is connected to.
+ 		getUserId = function() {
+			var userId = readCookie('bakbakUserId');
+			if(userId == null) {
+				userId = getRandom();
+				createCookie('bakbakUserId',userId,999);
+			}
+			return userId;
+		}
+		
 		this.adminOnline = false;
 		this.lastOnline = null;
 		this.adminId = null;
@@ -15,7 +24,7 @@
 		this.id = null; //socketid will be stored here.
 		this.call = new Call(customerId);
 		//Generate this later.
-		this.visitorId = Math.round(Math.random() * 60535) + 5000;
+		this.visitorId = getUserId();
 		this.presenceIndicator = function () {
 			heartbeat(self);
 			setTimeout(self.presenceIndicator,VISITOR_HEARTBEAT);
