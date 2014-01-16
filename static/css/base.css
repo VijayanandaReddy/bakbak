@@ -14,6 +14,10 @@
 	background: #ffffff;
 }
 
+.backgroundGray {
+	background: #edeff4;
+}
+
 .scrollbar {
 	display:block;
     padding:5px;

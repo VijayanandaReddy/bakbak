@@ -67,7 +67,7 @@
 		}
 
 		initializeStatusUi = function() {
-			$("body").append("<footer id='bakbakchat' style='width:125px;z-index:99999;margin:0;position:fixed;background:white;bottom:0px' class='table-bordered'></footer>");
+			$("body").append("<footer id='bakbakchat' style='width:150px;z-index:99999;margin:0;position:fixed;bottom:0px' class='table-bordered backgroundGray'></footer>");
 			addStatusCheckLabel();
 			setTimeout(function() {
 					if(!this.adminOnline){
@@ -78,6 +78,7 @@
 
 		addStatusCheckLabel = function() {
 			$('#bakbakchat').empty();
+			$('#bakbakchat').width('150px');
 			$('#bakbakchat').append("<p id='offlineCheck' class='alert alert-info' style='margin:0px'>Support<img src='"+bakbakUrl+"img/actions/png/spinner.gif'/></p>");
 		}
 
@@ -86,17 +87,20 @@
 				if($('#chatPanel').is(':visible') && 
 					(showByDefault == undefined || !showByDefault)) {
 					console.log("Hiding chat bar!");
+					$('#chatMsg').blur();
 					$('#chatPanel').hide();
+					$('#bakbakchat').width('150px');
 				} else {
 					console.log("Showing chat bar!");
 					$('#chatPanel').show();
 					$('#chatMsg').focus();
+					$('#bakbakchat').width('260px');
 				}
 				return;
 			}
 			console.log("Showing chat bar!");
-			$('#bakbakchat').prepend("<div id='chatPanel' class='chatPanel'> \
-			<div id='chatMsgBox' class='chatMessages maxHeight100 scrollbar backgroundWhite'></div> \
+			$('#bakbakchat').append("<div id='chatPanel' class='chatPanel'> \
+			<div id='chatMsgBox' class='chatMessages maxHeight100 scrollbar'></div> \
 			<div class='chatText input-append' style='margin:0;width:100%'> \
   				<input class='input-block-level' id='chatMsg' type='text' placeholder='Chat'> \
 			</div> \
@@ -109,11 +113,13 @@
 			$('#chatSendButton').click(function() {
 				sendChatMessage($('#chatMsg').val());
 			});
-
+			$('#bakbakchat').width('260px');
+			$('#chatMsg').focus();
 		}
 
 		addOnlineLabel = function() {
 			if($('#onlineConfirm').length) return;
+			$('#bakbakchat').width('150px');
 			console.log('Adding online label');
 			$('#onlineConfirm').unbind('click');
 			$('#bakbakchat').empty();
@@ -126,6 +132,7 @@
 
 		addOfflineLabel = function() {
 			if($('#offlineConfirm').length) return;
+			$('#bakbakchat').width('150px');
 			console.log('Adding offline label');
 			$('#bakbakchat').empty();
 			$('#bakbakchat').append("<p id='offlineConfirm' class='alert alert-danger' style='margin:0px'>Support<img src='"+bakbakUrl+"img/avatars/avatar-red-talking20x20.png'></img></p>");
