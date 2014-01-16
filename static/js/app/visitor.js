@@ -69,11 +69,6 @@
 		initializeStatusUi = function() {
 			$("body").append("<footer id='bakbakchat' style='width:150px;z-index:99999;margin:0;position:fixed;bottom:0px' class='table-bordered backgroundGray'></footer>");
 			addStatusCheckLabel();
-			setTimeout(function() {
-					if(!this.adminOnline){
-						addOfflineLabel();
-					}
-				},CUSTOMER_MONITOR);
 		};
 
 		addStatusCheckLabel = function() {
