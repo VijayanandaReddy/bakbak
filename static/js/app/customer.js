@@ -39,12 +39,19 @@ var bakbakUrl ='';
 						$("#flagIcon"+presenceUser.visitorId).tooltip();
 						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
-					if(self.users[i].id == null || self.users[i].id != presenceUser.id) {
+					console.log('The userId is ' + self.users[i].id + ' while presence userId is ' + presenceUser.id);
+					if(self.users[i].id == null  || ((self.users[i].id != presenceUser.id) && presenceUser.id)) {
 						self.users[i].id = presenceUser.id;
+						var text = $('#chatMsgBox'+presenceUser.visitorId).html();
+						console.log("Chat text is " +text);
 						$('#'+presenceUser.visitorId).detach();
 						$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
 						$("#flagIcon"+presenceUser.visitorId).tooltip();
 						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
+						$('#chatMsgBox'+presenceUser.visitorId).html(text);
+					} else if(presenceUser.id == null) {
+						$('#chatMsg'+presenceUser.visitorId).attr('disabled', 'disabled');
+						$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
 					}
 					return;
 				}
@@ -56,6 +63,10 @@ var bakbakUrl ='';
 			$("#flagIcon"+presenceUser.visitorId).tooltip();
 			if(presenceUser.location != null ) {
 				$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geolugin_longitude)});
+			}
+			if(!presenceUser.id) {
+				$('#chatMsg'+presenceUser.visitorId).attr('disabled', 'disabled');
+				$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
 			}
 			setTimeout(function() {
 				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page.");
@@ -91,6 +102,10 @@ var bakbakUrl ='';
 				var timeDiff = now - user.lastOnline;
 				//Give a lag in timeDiff for production
 				if(timeDiff > VISITOR_MONITOR) {
+
+
+
+
 						console.log("Visitor went offline " + user.visitorId + " at " + now);
 						$('#'+user.visitorId).detach();
 						self.users.splice(i,1);

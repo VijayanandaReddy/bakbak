@@ -3,7 +3,7 @@
  		getUserId = function() {
 			var userId = readCookie('bakbakUserId');
 			if(userId == null) {
-				userId = getRandom();
+				userId = getGUID();
 				createCookie('bakbakUserId',userId,999);
 			}
 			return userId;
@@ -26,7 +26,6 @@
 		this.visitorId = getUserId();
 		this.presenceIndicator = function () {
 			heartbeat(self);
-			setTimeout(self.presenceIndicator,VISITOR_HEARTBEAT);
 		}
 		var self = this;
 		function setAdminStatus(status) {
@@ -63,7 +62,7 @@
 			initializeLocationData(self);
 			initializeGoogleAnalyticsData(self);
 			initializeSocket(self);
-			//self.presenceIndicator();
+			heartbeat(self);
 			self.adminMonitor();
 			//console.log(self.navigator);
 			//initialize_calling();
@@ -78,7 +77,12 @@
 
 		initializeStatusUi = function() {
 			$("body").append("<footer id='bakbakchat' style='width:150px;z-index:99999;margin:0;position:fixed;bottom:0px' class='table-bordered backgroundGray'></footer>");
-			addStatusCheckLabel();
+			if(readCookie('bakbakchatOnline')) {
+				//addOnlineLabel();
+				setAdminStatus(true);
+			} else {
+				addStatusCheckLabel();
+			}
 		};
 
 		addStatusCheckLabel = function() {
@@ -151,6 +155,8 @@
 				self.adminOnline = true;
 				setAdminStatus(true);
 				self.adminSocketId = message.data.id;
+				heartbeat(self);
+				createCookie('bakbakchatOnline','true',0,CUSTOMER_HEARTBEAT);
 				}
 		};
 		this.onMessage = function (message) {
