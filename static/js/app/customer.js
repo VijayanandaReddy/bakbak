@@ -130,9 +130,9 @@ var bakbakUrl ='';
 			$(element).keypress(function(event) {
 				if (event.keyCode == 13) {
 					event.preventDefault();
-					var newVisitorId = $(element).text()
-					console.log(newVisitorId);
-					socket.setCookie('bakbakUserId',newVisitorId,id);
+					var newVisitorName = $(element).text()
+					console.log(newVisitorName);
+					socket.setCookie('bakbakchatVisitorName',newVisitorName,id);
 					$(element).blur();
 					$(element).unbind('key');
 					element.contentEditable = 'false';

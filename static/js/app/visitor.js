@@ -8,7 +8,8 @@
 			}
 			return userId;
 		}
-
+		//Extract a method
+		this.visitorName = readCookie('bakbakchatVisitorName') ? readCookie('bakbakchatVisitorName') : 'Unknown';
 		this.adminOnline = false;
 		this.lastOnline = null;
 		this.adminId = null;

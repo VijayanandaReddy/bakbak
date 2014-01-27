@@ -326,8 +326,9 @@ function getMapContent(locationName,latitude,longitude) {
 }
 
 function createCookie(name,value,days,timeout) {
+	days = typeof days !== 'undefined' ? days : 999;
 	var date = new Date();
-	var expires = date.toGMTString();
+	var expires = "; expires="+date.toGMTString();
 	if (days && !timeout) {
 		date.setTime(date.getTime()+(days*24*60*60*1000));
 		expires = "; expires="+date.toGMTString();
