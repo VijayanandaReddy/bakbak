@@ -144,6 +144,7 @@ var socket;
 		if(visitorId) {
 			chatBox = $('#chatMsgBox'+visitorId);
 		}
+		chatText = chatText.replace(myName,'me');
 		chatBox.append(chatText);
   		chatBox.scrollTop(9999999999);
 	}
