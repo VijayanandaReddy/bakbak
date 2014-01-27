@@ -40,19 +40,22 @@ var bakbakUrl ='';
 						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
 					console.log('The userId is ' + self.users[i].id + ' while presence userId is ' + presenceUser.id);
-					if(self.users[i].id == null  || ((self.users[i].id != presenceUser.id) && presenceUser.id)) {
+					if((self.users[i].id == null)  || ((self.users[i].id != presenceUser.id) && presenceUser.id)) {
 						self.users[i].id = presenceUser.id;
 						var text = $('#chatMsgBox'+presenceUser.visitorId).html();
 						console.log("Chat text is " +text);
 						$('#'+presenceUser.visitorId).detach();
 						$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
 						$("#flagIcon"+presenceUser.visitorId).tooltip();
-						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 						$('#chatMsgBox'+presenceUser.visitorId).html(text);
+						self.sendChatMessage(presenceUser.id,presenceUser.visitorId,text,false);
+
 					} else if(presenceUser.id == null) {
 						$('#chatMsg'+presenceUser.visitorId).attr('disabled', 'disabled');
 						$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
 					}
+					if(presenceUser.location != null) //And check if popover is not there!
+						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					return;
 				}
 			}
@@ -79,13 +82,15 @@ var bakbakUrl ='';
 			self.webrtcCall.onCall(message);
 		};
 
-		this.sendChatMessage = function(id,visitorId, chatText) {
+		this.sendChatMessage = function(id,visitorId, chatText,shouldAdd) {
 			if(chatText == null || chatText == '') return;
-			socket.chat(chatText,id);
-			console.log(visitorId);
+			shouldAdd = typeof shouldAdd !== 'undefined' ? shouldAdd : true;
+			socket.chat(chatText,id,!shouldAdd);
 			console.log('sending chat message to ' + visitorId +' with message ' + chatText);
 			$('#chatMsg'+visitorId).val('');
-			addToChatMessageBox(visitorId,customerId,chatText);
+			if(shouldAdd) {
+				addToChatMessageBox(visitorId,customerId,chatText);
+			}
 		};
 
 		this.init = function() {

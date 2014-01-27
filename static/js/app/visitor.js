@@ -104,6 +104,11 @@
 					$('#chatPanel').show();
 					$('#chatMsg').focus();
 					$('#bakbakchat').width('260px');
+					console.log('Admin socjet id is ' + self.adminSocketId);
+					if(!self.adminSocketId) {
+						$('#chatMsg').attr('disabled', 'disabled');
+						$('#chatSendButton').attr('disabled', 'disabled');
+					}
 				}
 				return;
 			}
@@ -124,6 +129,10 @@
 			});
 			$('#bakbakchat').width('260px');
 			$('#chatMsg').focus();
+			if(!self.adminSocketId) {
+						$('#chatMsg').attr('disabled', 'disabled');
+						$('#chatSendButton').attr('disabled', 'disabled');
+					}
 		}
 
 		addOnlineLabel = function() {
@@ -148,7 +157,7 @@
 		}
 
 		this.onPresence = function (message) {
-			console.log("Customer Id is " + self.customerId + " while sender is " + message.sender);
+			console.log("Customer Id is " + self.customerId + " while sender is " + message.sender + " socketid is " + message.data.id);
 			if(message.sender == self.customerId) {
 				self.lastOnline = new Date().getTime();
 				//console.log("Customer is online " + self.lastOnline);
@@ -156,7 +165,8 @@
 				setAdminStatus(true);
 				self.adminSocketId = message.data.id;
 				heartbeat(self);
-				createCookie('bakbakchatOnline','true',0,CUSTOMER_HEARTBEAT);
+				createCookie('bakbakchatOnline','true',0,CUSTOMER_HEARTBEAT+5000);
+				$('#chatMsg').removeAttr('disabled');
 				}
 		};
 		this.onMessage = function (message) {
@@ -167,7 +177,11 @@
 			//console.log(message);
 			addOnlineLabel();
 			showChatBar(true);
-			addToChatMessageBox(null,message.sender,message.message);
+			if(message.html) {
+				addToChatMessageBoxHtml(null,self.visitorId,message.message);
+			} else {
+				addToChatMessageBox(null,message.sender,message.message);
+			}
 		};
 
 		this.onCall = function(message) {

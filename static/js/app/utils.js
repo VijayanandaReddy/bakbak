@@ -54,12 +54,14 @@ var socket;
         		});
     		};
     	//id should be the socketId to chat with
-		socket.chat = function(message,id) {
+		socket.chat = function(message,id,html) {
+			html = typeof html !== 'undefined' ? html : false;
 			var data = {};
 			data.type = 'chat';
 			data.message = message;
 			data.reciever = id;
 			data.sender = sender;
+			data.html = html;
 			console.log('Sending chat to ' +  id);
 			socket.emit('chat',data);
 		};
@@ -134,6 +136,15 @@ var socket;
 			chatBox = $('#chatMsgBox'+visitorId);
 		}
 		chatBox.append('<small><br>'+senderName+': '+chatText+'</small>');
+  		chatBox.scrollTop(9999999999);
+	}
+
+	addToChatMessageBoxHtml = function(visitorId,myName,chatText) {
+		var chatBox = $('#chatMsgBox'); 
+		if(visitorId) {
+			chatBox = $('#chatMsgBox'+visitorId);
+		}
+		chatBox.append(chatText);
   		chatBox.scrollTop(9999999999);
 	}
 
