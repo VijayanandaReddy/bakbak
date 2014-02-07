@@ -177,7 +177,7 @@ app.get('/location', function(req, res) {
 });
 
 app.post('/email', function(req, resp) {
-    res.header("Access-Control-Allow-Origin", "*");
+    resp.header("Access-Control-Allow-Origin", "*");
     var visitor = req.body;
     locals = {
         visitor : visitor,
