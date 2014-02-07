@@ -252,6 +252,7 @@
 		}
 
 		sendContactUsForm = function(data) {
+			$('#contactUsButton').attr('disabled',true);
 			html2canvas(document.body, {
   					onrendered: function(canvas) {
     					var imageDataUrl = canvas.toDataURL();
@@ -268,9 +269,14 @@
     							console.log("Attempted to send email");
 								if(response == "OK") {
 									console.log('Email sent SUCCESS!');
-									$('#contactUsForm')[0].reset();
 									$('#contactUsForm').append("<p>Thanks for contacting us!</p>");
+									$('#contactUsForm')[0].reset();
+									$('#contactUsButton').removeAttr('disabled');
+								} else {
+									$('#contactUsForm').append("<p>Error Contacting the Server!</p>");
+									$('#contactUsButton').removeAttr('disabled');
 								}
+
 							});
   					},
   					width: 900,
