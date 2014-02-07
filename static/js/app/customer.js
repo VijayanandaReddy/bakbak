@@ -140,5 +140,22 @@ var bakbakUrl ='';
 				}
 			});
 		}
+
+		this.emailVisitorDetails = function(visitorId) {
+			console.log('Sending email!');
+			for(i in self.users) {
+				if(self.users[i].visitorId == visitorId) {
+					toPost = self.users[i];
+					toPost['email'] = 'biplav.saraf@gmail.com';
+					toPost['template'] = 'chatScript';
+					toPost['chatScript'] = $('#chatMsgBox'+visitorId).html();
+					$.post( bakbakUrl + "email",toPost, 'json').done(function(data) {
+						if(data == "OK") {
+							console.log('Email sent SUCCESS!');
+						}
+					});
+				}
+			}
+		}
 	};
 })();

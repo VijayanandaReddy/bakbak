@@ -3,7 +3,11 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
-    http  = require('http');
+    http  = require('http'),
+    path           = require('path'), 
+    templatesDir   = path.resolve(__dirname, 'templates'), 
+    emailTemplates = require('email-templates'), 
+    nodemailer     = require('nodemailer');
 
 var port = process.env.PORT || 5000;
 var visitor_count=0;
@@ -105,6 +109,7 @@ function onNewNamespace(channel, sender) {
 app.enable('trust proxy');
 
 app.use(express.compress());
+app.use(express.bodyParser());
 
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/static/call/index1.html');
@@ -171,10 +176,77 @@ app.get('/location', function(req, res) {
 
 });
 
+app.post('/email', function(req, resp) {
+    var visitor = req.body;
+    locals = {
+        visitor : visitor,
+        email : visitor.email
+    };
+    console.log(locals);
+   emailTemplates(templatesDir, function(err, template) {
+
+    if (err) {
+        console.log(err);
+        resp.send(err.message);
+    } else {
+
+        // ## Send a single email
+        // Prepare nodemailer transport object
+        var transport = nodemailer.createTransport("SMTP", {
+            service: "Gmail",
+            auth: {
+                user: "biplav.saraf@gmail.com",
+                pass: "www.biplav.in"
+            }
+        });
+
+        var templateName = visitor['template'];
+         var buf = undefined;
+
+        if(visitor['image']) {
+            var b64string = visitor['image'];
+            b64string = b64string.replace('data:image/png;base64,','');
+            buf = new Buffer(b64string, 'base64');
+            
+        }
+
+
+        // Send a single email
+        template(templateName, locals, function(err, html, text) {
+            if (err) {
+                console.log(err);
+                resp.send(err.message);
+            } else {
+                console.log(html);
+                console.log(text);
+                transport.sendMail({
+                    from: 'BakBak.io <biplav.sarf@gmail.com>',
+                    to: locals.email,
+                    subject: 'Chat Script',
+                    html: html,
+                    // generateTextFromHTML: true,
+                    text: text,
+                    attachments : (buf != undefined ? [{'filename' : 'screenshot.jpg' , 'contents' : buf}] : [])
+                    }, function(err, responseStatus) {
+                    if (err) {
+                        console.log(err);
+                        resp.send(err.message);
+                    } else {
+                        console.log(responseStatus.message);
+                        resp.send("OK");
+                    }
+                });
+            }
+        });
+    }
+    });
+});
+
 app.use('/img',express.static(path.join(__dirname, 'static/img')));
 app.use('/css',express.static(path.join(__dirname, 'static/css')));
 app.use('/js',express.static(path.join(__dirname, 'static/js')));
 app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
+
 
 app.use(function (req, res, next) {
 

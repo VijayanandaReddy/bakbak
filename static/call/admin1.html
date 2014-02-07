@@ -48,6 +48,7 @@
 						{{else}}
 							<img class='imageIconMedium' src='/img/actions/png/dnd.png' title='No WebRTC'></img>
 						{{/if}}
+							<img class='imageIconMedium' src='/img/actions/png/email.png' title='Email' onClick = customer.emailVisitorDetails('${visitorId}')></img>
 						</div>
 					</td>
 					<td>
@@ -61,7 +62,7 @@
 									<td>Medium:</td><td>${gAData.__utmcmd}</td>
 								</tr>
 							{{/if}}
-							{{if gAData.__utmcmd != null }}
+							{{if gAData.__utmcsr != null }}
 								<tr>
 									<td>Source:</td><td>${gAData.__utmcsr}</td>
 								</tr>

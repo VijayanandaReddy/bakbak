@@ -82,7 +82,8 @@
 				//addOnlineLabel();
 				setAdminStatus(true);
 			} else {
-				addStatusCheckLabel();
+				//addStatusCheckLabel();
+				addOfflineLabel();
 			}
 		};
 
@@ -91,6 +92,51 @@
 			$('#bakbakchat').width('150px');
 			$('#bakbakchat').append("<p id='offlineCheck' class='alert alert-info' style='margin:0px'>Support<img src='"+bakbakUrl+"img/actions/png/spinner.gif'/></p>");
 		}
+
+		showContactUsBar = function () {
+			if($('#contactUsPanel').length) {
+				if($('#contactUsPanel').is(':visible')) {
+					console.log("Hiding Contact Us bar!");
+					//$('#chatMsg').blur();
+					$('#contactUsPanel').hide();
+					$('#bakbakchat').width('150px');
+				} else {
+					console.log("Showing chat bar!");
+					$('#contactUsPanel').show();
+					//$('#chatMsg').focus();
+					$('#bakbakchat').width('260px');
+				}
+				return;
+			}
+			console.log("Showing chat bar!");
+			$('#bakbakchat').append("<div id='contactUsPanel' class='contactUsPanel'> \
+				<form id='contactUsForm' data-toggle='validator' role='form'> \
+				<div class='form-horizontal'> \
+  					<div class='control-group'> \
+    					<input name='email' type='email' id='inputEmail' placeholder='Email' required> \
+    				 </div> \
+  					<div class='control-group'> \
+    					<input name='number' pattern='^([+0-9]){3,}$' type='text' placeholder='Contact Number'> \
+    				</div> \
+  					<div class='control-group'> \
+    					<textarea  name='message' rows='3' placeholder='Message' required/> \
+    				</div> \
+  					<button id='contactUsButton' type='submit' class='btn'>Send</button> \
+    			</div> \
+    			</form> \
+		</div>");
+			$('#contactUsForm').on( 'submit' ,function(event) {
+				event.preventDefault();
+				sendContactUsForm($(this).serialize());
+			});
+			$('#bakbakchat').width('260px');
+			$('#chatMsg').focus();
+			if(!self.adminSocketId) {
+						$('#chatMsg').attr('disabled', 'disabled');
+						$('#chatSendButton').attr('disabled', 'disabled');
+					}
+		}
+
 
 		showChatBar = function(showByDefault) {
 			if($('#chatPanel').length) {
@@ -105,7 +151,7 @@
 					$('#chatPanel').show();
 					$('#chatMsg').focus();
 					$('#bakbakchat').width('260px');
-					console.log('Admin socjet id is ' + self.adminSocketId);
+					console.log('Admin socket id is ' + self.adminSocketId);
 					if(!self.adminSocketId) {
 						$('#chatMsg').attr('disabled', 'disabled');
 						$('#chatSendButton').attr('disabled', 'disabled');
@@ -123,6 +169,7 @@
 			$('#chatMsg').keydown(function(event) {
 				if (event.keyCode == 13) {
 					sendChatMessage($('#chatMsg').val());
+					event.preventDefault();
 				}
 			});
 			$('#chatSendButton').click(function() {
@@ -143,8 +190,9 @@
 			$('#onlineConfirm').unbind('click');
 			$('#bakbakchat').empty();
 			$('#bakbakchat').append("<p id='onlineConfirm' class='alert alert-success' style='margin:0px'>Support<img src='"+bakbakUrl+"img/avatars/avatar-green-talking20x20.png'></img></p>");
-			$('#onlineConfirm').click(function() {
+			$('#onlineConfirm').click(function(event) {
 				showChatBar();
+				event.preventDefault();
 			});
 		}
 
@@ -154,7 +202,12 @@
 			$('#bakbakchat').width('150px');
 			console.log('Adding offline label');
 			$('#bakbakchat').empty();
+			$('#offlineConfirm').unbind('click');
 			$('#bakbakchat').append("<p id='offlineConfirm' class='alert alert-danger' style='margin:0px'>Support<img src='"+bakbakUrl+"img/avatars/avatar-red-talking20x20.png'></img></p>");
+			$('#offlineConfirm').click(function(event) {
+				showContactUsBar();
+				event.preventDefault();
+			});
 		}
 
 		this.onPresence = function (message) {
@@ -196,6 +249,34 @@
 			$('#chatMsg').val('');
 			console.log('sending chat message to ' + self.adminSocketId +' with message ' + chatText);
 			addToChatMessageBox(null,'me',chatText);
+		}
+
+		sendContactUsForm = function(data) {
+			html2canvas(document.body, {
+  					onrendered: function(canvas) {
+    					var imageDataUrl = canvas.toDataURL();
+    					console.log(imageDataUrl);
+    					console.log(data);
+    					console.log(JSON.stringify(self));
+    					toSend = JSON.parse(JSON.stringify(self));
+    					toSend['email'] = 'biplav.saraf@gmail.com';
+    					toSend['template'] = 'contactUs';
+    					toSend['image'] = imageDataUrl;
+    					toSend['contactUs'] = data;
+    					$.post( bakbakUrl + "email",toSend,'json')
+    						.done(function(response) {
+    							console.log("Attempted to send email");
+								if(response == "OK") {
+									console.log('Email sent SUCCESS!');
+									$('#contactUsForm')[0].reset();
+									$('#contactUsForm').append("<p>Thanks for contacting us!</p>");
+								}
+							});
+  					},
+  					width: 900,
+  					height: 900
+			});
+			
 		}
 
 		this.setCookie = function(data) {
