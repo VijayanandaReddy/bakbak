@@ -4,7 +4,7 @@ require.config({
         app: '../app',
         jquery: 'jquery-2.0.3.min',
         css: '../../css',
-        socketio: '/socket.io/socket.io.js'
+        socketio: '../../socket.io/socket.io.js'
     },
     shim: {
         'webrtcsupport': {
