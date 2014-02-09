@@ -118,6 +118,7 @@ var bakbakUrl ='';
 			//self.presenceIndicator();
 			self.visitorMonitor();
 			//initialize_calling();
+			initializeByeBye(self);
 		}
 		this.visitorMonitor = function() {
 			console.log('VISITOR MONITOR');

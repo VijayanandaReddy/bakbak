@@ -221,15 +221,24 @@
 		this.onPresence = function (message) {
 			console.log("Customer Id is " + self.customerId + " while sender is " + message.sender + " socketid is " + message.data.id);
 			if(message.sender == self.customerId) {
-				self.lastOnline = new Date().getTime();
-				//console.log("Customer is online " + self.lastOnline);
-				self.adminOnline = true;
-				setAdminStatus(true);
-				self.adminSocketId = message.data.id;
-				heartbeat(self);
-				createCookie('bakbakchatOnline','true',0,CUSTOMER_HEARTBEAT+5000);
-				$('#chatMsg').removeAttr('disabled');
+				console.log(message);
+				if(!message.data.state) {
+					console.log("Will add offline label");
+					addOfflineLabel();
+				} else {
+					self.lastOnline = new Date().getTime();
+					console.log("Customer is online " + self.lastOnline);
+					if(!self.adminOnline) {
+						addOnlineLabel();
+					}
+					self.adminOnline = true;
+					setAdminStatus(true);
+					self.adminSocketId = message.data.id;
+					heartbeat(self);
+					createCookie('bakbakchatOnline','true',0,CUSTOMER_HEARTBEAT+5000);
+					enableChatBar();
 				}
+			}
 		};
 		this.onMessage = function (message) {
 			console.log(message);
