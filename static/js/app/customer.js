@@ -89,10 +89,10 @@ var bakbakUrl ='';
 				$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
 			}
 			setTimeout(function() {
-				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page.");/* \
+				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page. \
 					<iframe src='//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.donateoldspectacles.org%2F&amp;width&amp;layout=button&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=35&amp;appId=163796550478024' \
 					 scrolling='no' frameborder='0' style='border:none; overflow:hidden; height:35px;' allowTransparency='true'></iframe> \
-					");*/
+					");
 			},3000);
 			 
 		};
@@ -128,10 +128,6 @@ var bakbakUrl ='';
 				var timeDiff = now - user.lastOnline;
 				//Give a lag in timeDiff for production
 				if(timeDiff > VISITOR_MONITOR) {
-
-
-
-
 						console.log("Visitor went offline " + user.visitorId + " at " + now);
 						$('#'+user.visitorId).detach();
 						self.users.splice(i,1);
