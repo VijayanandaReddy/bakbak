@@ -23,7 +23,8 @@ function loadCss(url) {
 
 
 
-requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visitor','validator','html2canvas'],function(webrtc,$,socketio,call,util,visitor) {
+requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visitor','validator','html2canvas'],
+  function(webrtc,$,socketio,call,util,visitor,validator,html2canvas) {
   		console.log('lib is loaded');
       var src = $('#bakbakscript').attr('src');
   		var customerId = src.substring(src.indexOf('=')+1);
