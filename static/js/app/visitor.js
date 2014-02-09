@@ -138,6 +138,15 @@
 					}
 		}
 
+		disableChatBar = function() {
+			$('#chatMsg').attr('disabled', 'disabled');
+			$('#chatSendButton').attr('disabled', 'disabled');
+		}
+
+		enableChatBar = function() {
+			$('#chatMsg').removeAttr('disabled');
+			$('#chatSendButton').removeAttr('disabled');
+		}
 
 		showChatBar = function(showByDefault) {
 			if($('#chatPanel').length) {
@@ -154,8 +163,7 @@
 					$('#bakbakchat').width('260px');
 					console.log('Admin socket id is ' + self.adminSocketId);
 					if(!self.adminSocketId) {
-						$('#chatMsg').attr('disabled', 'disabled');
-						$('#chatSendButton').attr('disabled', 'disabled');
+						disableChatBar();
 					}
 				}
 				return;
@@ -179,9 +187,8 @@
 			$('#bakbakchat').width('260px');
 			$('#chatMsg').focus();
 			if(!self.adminSocketId) {
-						$('#chatMsg').attr('disabled', 'disabled');
-						$('#chatSendButton').attr('disabled', 'disabled');
-					}
+				disableChatBar();		
+			}
 		}
 
 		addOnlineLabel = function() {
@@ -231,6 +238,8 @@
 		this.onChat = function(message) {
 			//console.log(message);
 			addOnlineLabel();
+			self.adminSocketId = message.senderId;
+			enableChatBar();
 			showChatBar(true);
 			if(message.html) {
 				addToChatMessageBoxHtml(null,self.visitorId,message.message);

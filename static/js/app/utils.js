@@ -61,6 +61,7 @@ var socket;
 			data.message = message;
 			data.reciever = id;
 			data.sender = sender;
+			data.senderId = socket.socket.sessionid;
 			data.html = html;
 			console.log('Sending chat to ' +  id);
 			socket.emit('chat',data);
