@@ -64,6 +64,7 @@
 			initializeGoogleAnalyticsData(self);
 			initializeSocket(self);
 			heartbeat(self);
+			initializeByeBye(self);
 			self.adminMonitor();
 			//console.log(self.navigator);
 			//initialize_calling();
@@ -203,7 +204,7 @@
 			console.log('Adding offline label');
 			$('#bakbakchat').empty();
 			$('#offlineConfirm').unbind('click');
-			$('#bakbakchat').append("<p id='offlineConfirm' class='alert alert-danger' style='margin:0px'>Support<img src='"+bakbakUrl+"img/avatars/avatar-red-talking20x20.png'></img></p>");
+			$('#bakbakchat').append("<p id='offlineConfirm' class='alert alert-danger' style='margin:0px'>Feedback<img src='"+bakbakUrl+"img/avatars/avatar-red-talking20x20.png'></img></p>");
 			$('#offlineConfirm').click(function(event) {
 				showContactUsBar();
 				event.preventDefault();

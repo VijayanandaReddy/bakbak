@@ -3,7 +3,8 @@ require.config({
 	paths: {
         app: '../app',
         jquery: 'jquery-2.0.3.min',
-        css: '../../css'
+        css: '../../css',
+        socketio: '/socket.io/socket.io.js'
     },
     shim: {
         'webrtcsupport': {
@@ -22,7 +23,7 @@ function loadCss(url) {
 
 
 
-requirejs(['webrtcsupport','jquery','socket.io','app/call','app/utils','app/visitor','validator','html2canvas'],function(webrtc,$,socketio,call,util,visitor) {
+requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visitor','validator','html2canvas'],function(webrtc,$,socketio,call,util,visitor) {
   		console.log('lib is loaded');
       var src = $('#bakbakscript').attr('src');
   		var customerId = src.substring(src.indexOf('=')+1);

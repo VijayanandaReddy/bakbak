@@ -89,7 +89,9 @@ var socket;
 			socket.emit('call',data);
 		};
 
-		socket.presence = function(visitor) { //make it channel specific
+		socket.presence = function(visitor,state) { //make it channel specific
+			state = (state == undefined || state == null) ? true:state;
+			visitor.state = state;
 			socket.emit('presence',{
 				sender : sender,
 				data : visitor //should change in future with the visitor data.
@@ -176,6 +178,15 @@ var socket;
 		self.gAData = fillCookieData(self.gAData,'__utmctr');
 		self.gAData = fillCookieData(self.gAData,'__utmclid');
 
+	}
+
+	initializeByeBye = function(self) {
+		$(window).unload(function() {
+			socket.presence(self,false);
+		});
+		$(window).on('beforeunload',function() {
+			socket.presence(self,false);
+		});	
 	}
 
 

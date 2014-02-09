@@ -20,16 +20,34 @@ var bakbakUrl ='';
 			addToChatMessageBox(message.sender,message.sender,message.message);
 		};
 
+		disableChat = function(visitorId) {
+			console.log('Disabling Chat!');
+			$('#chatMsg'+visitorId).attr('disabled', 'disabled');
+			$('#chatSendInput'+visitorId).attr('disabled', 'disabled');
+		}
+
+		enableChat = function(visitorId) {
+			console.log('Enabling Chat!');
+			$('#chatMsg'+visitorId).removeAttr('disabled');
+			$('#chatSendInput'+visitorId).removeAttr('disabled');
+		}
+
 		this.onPresence = function (message) {
 			console.log(message);
 			var presenceUser = message.data;
-			console.log(self.users);
+			console.log('Presence-->' + presenceUser);
 			for(i in self.users) {
 				user=self.users[i];
 				if(user.visitorId == presenceUser.visitorId) {
 					//currently return.
 					//In future we will update that visitor.
 					console.log("User already in the list!");
+					console.log('Presence STATE -> ' + presenceUser.state);
+					if(!presenceUser.state) {
+						disableChat(presenceUser.visitorId);
+					} else {
+						enableChat(presenceUser.visitorId);
+					}
 					self.users[i].lastOnline = new Date().getTime();
 					if(self.users[i].location == null) {
 						console.log('Updating location for visitor' + presenceUser.visitorId);
@@ -51,8 +69,7 @@ var bakbakUrl ='';
 						self.sendChatMessage(presenceUser.id,presenceUser.visitorId,text,false);
 
 					} else if(presenceUser.id == null) {
-						$('#chatMsg'+presenceUser.visitorId).attr('disabled', 'disabled');
-						$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
+						disableChat(presenceUser.visitorId);
 					}
 					if(presenceUser.location != null) //And check if popover is not there!
 						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
@@ -72,7 +89,10 @@ var bakbakUrl ='';
 				$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
 			}
 			setTimeout(function() {
-				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page.");
+				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page.");/* \
+					<iframe src='//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.donateoldspectacles.org%2F&amp;width&amp;layout=button&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=35&amp;appId=163796550478024' \
+					 scrolling='no' frameborder='0' style='border:none; overflow:hidden; height:35px;' allowTransparency='true'></iframe> \
+					");*/
 			},3000);
 			 
 		};
