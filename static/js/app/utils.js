@@ -1,5 +1,7 @@
 /*common utils for the app */
 
+var embedly_key='ec9acca865ff44c2af3db2c91a269730';
+
 /*
 Stuffing into natives
 */
@@ -11,6 +13,29 @@ String.prototype.endsWith = function(suffix) {
 String.prototype.replaceAll = function(key,replaceString) {
     return this.replace(new RegExp(key, 'g'), replaceString);
 };
+
+/**
+ * A utility function to find all URLs - FTP, HTTP(S) and Email - in a text string
+ * and return them in an array.  Note, the URLs returned are exactly as found in the text.
+ * 
+ * @param text
+ *            the text to be searched.
+ * @return an array of URLs.
+ */
+function findUrls( text ) {
+    var source = (text || '').toString();
+    var urlArray = [];
+    var url;
+    var matchArray;
+    // Regular expression to find FTP, HTTP(S) and email URLs.
+    var regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
+    // Iterate through any URLs in the text.
+    while( (matchArray = regexToken.exec( source )) !== null ) {
+        var token = matchArray[0];
+        urlArray.push( token );
+    }
+    return urlArray;
+}
 
 
 /* Gloabls */
@@ -142,7 +167,12 @@ var socket;
 		if(visitorId) {
 			chatBox = $('#chatMsgBox'+visitorId);
 		}
+		urlsArray = findUrls(chatText);
 		chatBox.append('<small><br>'+senderName+': '+chatText+'</small>');
+		if($('#chatMsgBox').length && urlsArray.length > 0) {
+			$('#chatMsgBox').append('<small><br><a href='+urlsArray[0]+'>'+urlsArray[0]+'<a></small>');
+			$('#chatMsgBox a').embedly({key: embedly_key, query: {maxwidth: 240}});
+		}
   		chatBox.scrollTop(9999999999);
 	}
 
@@ -221,125 +251,6 @@ var VISITOR_HEARTBEAT = 60*1000;//15000;
 var CUSTOMER_MONITOR = 60*1000;//20000;
 var VISITOR_MONITOR = 90*1000;//20000;
 
-/* Browser Detects starts here */
-var BrowserDetect = {
-	init: function () {
-		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
-		this.version = this.searchVersion(navigator.userAgent)
-			|| this.searchVersion(navigator.appVersion)
-			|| "an unknown version";
-		this.OS = this.searchString(this.dataOS) || "an unknown OS";
-	},
-	searchString: function (data) {
-		for (var i=0;i<data.length;i++)	{
-			var dataString = data[i].string;
-			var dataProp = data[i].prop;
-			this.versionSearchString = data[i].versionSearch || data[i].identity;
-			if (dataString) {
-				if (dataString.indexOf(data[i].subString) != -1)
-					return data[i].identity;
-			}
-			else if (dataProp)
-				return data[i].identity;
-		}
-	},
-	searchVersion: function (dataString) {
-		var index = dataString.indexOf(this.versionSearchString);
-		if (index == -1) return;
-		return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
-	},
-	dataBrowser: [
-		{
-			string: navigator.userAgent,
-			subString: "Chrome",
-			identity: "Chrome"
-		},
-		{ 	string: navigator.userAgent,
-			subString: "OmniWeb",
-			versionSearch: "OmniWeb/",
-			identity: "OmniWeb"
-		},
-		{
-			string: navigator.vendor,
-			subString: "Apple",
-			identity: "Safari",
-			versionSearch: "Version"
-		},
-		{
-			prop: window.opera,
-			identity: "Opera",
-			versionSearch: "Version"
-		},
-		{
-			string: navigator.vendor,
-			subString: "iCab",
-			identity: "iCab"
-		},
-		{
-			string: navigator.vendor,
-			subString: "KDE",
-			identity: "Konqueror"
-		},
-		{
-			string: navigator.userAgent,
-			subString: "Firefox",
-			identity: "Firefox"
-		},
-		{
-			string: navigator.vendor,
-			subString: "Camino",
-			identity: "Camino"
-		},
-		{		// for newer Netscapes (6+)
-			string: navigator.userAgent,
-			subString: "Netscape",
-			identity: "Netscape"
-		},
-		{
-			string: navigator.userAgent,
-			subString: "MSIE",
-			identity: "Explorer",
-			versionSearch: "MSIE"
-		},
-		{
-			string: navigator.userAgent,
-			subString: "Gecko",
-			identity: "Mozilla",
-			versionSearch: "rv"
-		},
-		{ 		// for older Netscapes (4-)
-			string: navigator.userAgent,
-			subString: "Mozilla",
-			identity: "Netscape",
-			versionSearch: "Mozilla"
-		}
-	],
-	dataOS : [
-		{
-			string: navigator.platform,
-			subString: "Win",
-			identity: "Windows"
-		},
-		{
-			string: navigator.platform,
-			subString: "Mac",
-			identity: "Mac"
-		},
-		{
-			   string: navigator.userAgent,
-			   subString: "iPhone",
-			   identity: "iPhone/iPod"
-	    },
-		{
-			string: navigator.platform,
-			subString: "Linux",
-			identity: "Linux"
-		}
-	]
-
-};
-BrowserDetect.init();
-/* Browser Detect completed here */
 /* Other utils methods here */
 function readCookie(name) {
 	var nameEQ = name + "=";

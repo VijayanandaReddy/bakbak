@@ -268,10 +268,6 @@ app.use('/css',express.static(path.join(__dirname, 'static/css')));
 app.use('/js',express.static(path.join(__dirname, 'static/js')));
 app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
 
-//embedly api key!
-//ec9acca865ff44c2af3db2c91a269730
-
-
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect

@@ -4,7 +4,8 @@ require.config({
         app: '../app',
         jquery: 'jquery-2.0.3.min',
         css: '../../css',
-        socketio: '../../socket.io/socket.io.js'
+        socketio: '../../socket.io/socket.io.js',
+
     },
     shim: {
         'webrtcsupport': {
@@ -23,14 +24,14 @@ function loadCss(url) {
 
 
 
-requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visitor','validator','html2canvas'],
-  function(webrtc,$,socketio,call,util,visitor,validator,html2canvas) {
+requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visitor','validator','html2canvas','jquery.embedly-3.1.1.min'],
+  function(webrtc,$,socketio,call,util,visitor,validator,html2canvas,embedly) {
   		console.log('lib is loaded');
       var src = $('#bakbakscript').attr('src');
   		var customerId = src.substring(src.indexOf('=')+1);
       console.log('Customer Id is ' + customerId);
   		var visitor = new Visitor(customerId);
-		visitor.init();
+		  visitor.init();
 		//Cannot afford bootstrap css need to use custom css. Remove it post demo
 		loadCss('css/bootstrap.css');
 		//loadCss('css/bootstrap-responsive.css');
