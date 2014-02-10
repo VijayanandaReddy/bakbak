@@ -36,6 +36,9 @@ var bakbakUrl ='';
 			console.log(message);
 			var presenceUser = message.data;
 			console.log('Presence-->' + presenceUser);
+			if(!presenceUser.adminSocketId) {
+				heartbeat(self);
+			}
 			for(i in self.users) {
 				user=self.users[i];
 				if(user.visitorId == presenceUser.visitorId) {
