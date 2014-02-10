@@ -14,6 +14,11 @@ String.prototype.replaceAll = function(key,replaceString) {
     return this.replace(new RegExp(key, 'g'), replaceString);
 };
 
+Date.prototype.toShortDate = function() {
+	return this.getDate()+'/'+(this.getMonth()+1)+'/'+this.getFullYear()+
+		' '+this.getHours()+':'+this.getMinutes()+':'+this.getSeconds();
+}
+
 /**
  * A utility function to find all URLs - FTP, HTTP(S) and Email - in a text string
  * and return them in an array.  Note, the URLs returned are exactly as found in the text.

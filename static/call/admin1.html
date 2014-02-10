@@ -90,12 +90,12 @@
 							{{if gAData.__utma != null }}
 								<tr>
 								</tr>
-									<td>Initial Visit:</td><td>${Date(gAData.__utma.split('.')[2]).toLocaleString()}</td>
+									<td>Initial Visit:</td><td>${new Date(gAData.__utma.split('.')[2]).toShortDate()}</td>
 								<tr>
-									<td>Previous Visit:</td><td>${Date(gAData.__utma.split('.')[3]).toLocaleString()}</td>
+									<td>Previous Visit:</td><td>${new Date(gAData.__utma.split('.')[3]).toShortDate()}</td>
 								</tr>
 								<tr>
-									<td>Session Begin:</td><td>${Date(gAData.__utma.split('.')[4]).toLocaleString()}</td>
+									<td>Session Begin:</td><td>${new Date(gAData.__utma.split('.')[4]).toShortDate()}</td>
 								</tr>
 							{{/if}}
 							{{if gAData.__utmb != null }}
