@@ -87,19 +87,25 @@
 									<td>Adword:</td><td>${gAData.__utmclid}</td>
 								</tr>
 							{{/if}}
-							{{if gAData.__utmz != null }}
-								<tr>
-									<td>PageViews:</td><td>${gAData.__utmz.split('.')[1]}</td>
-								</tr>
-							{{/if}}
 							{{if gAData.__utma != null }}
 								<tr>
-									<td>Visits:</td><td>${gAData.__utma.split('.')[1]}</td>
+									<td>Initial Visit:</td><td>${new Date(gAData.__utma.split('.')[2])}</td>
+								</tr>
+								<tr>
+									<td>Previous Visit:</td><td>${new Date(gAData.__utma.split('.')[3])}</td>
+								</tr>
+								<tr>
+									<td>Session Begin:</td><td>${new Date(gAData.__utma.split('.')[4])}</td>
 								</tr>
 							{{/if}}
 							{{if gAData.__utmb != null }}
 								<tr>
-									<td>Pages Visited:</td><td>${gAData.__utmb.split('.')[1]}</td>
+									<td>Total Visits:</td><td>${gAData.__utmb.split('.')[1]}</td>
+								</tr>
+							{{/if}}
+							{{if gAData.__utmv != null }}
+								<tr>
+									<td>Custom Variable:</td><td>${gAData.__utmv}</td>
 								</tr>
 							{{/if}}
 							{{if referer != null }}

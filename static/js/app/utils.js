@@ -203,16 +203,16 @@ var socket;
 		self.gAData = fillCookieData(self.gAData,'__utma');
 		self.gAData = fillCookieData(self.gAData,'__utmz');
 		self.gAData = fillCookieData(self.gAData,'__utmx');
-		self.gAData = fillCookieData(self.gAData,'__utmc');
 		self.gAData = fillCookieData(self.gAData,'__utmb');
 		self.gAData = fillCookieData(self.gAData,'__utmv');
-		self.gAData = fillCookieData(self.gAData,'__utmcmd');
-		self.gAData = fillCookieData(self.gAData,'__utmcsr');
-		self.gAData = fillCookieData(self.gAData,'__utmcct');
-		self.gAData = fillCookieData(self.gAData,'__utmccn');
-		self.gAData = fillCookieData(self.gAData,'__utmctr');
 		self.gAData = fillCookieData(self.gAData,'__utmclid');
-
+		if(self.gAData.__utmz) {
+			utmz = self.gAData.__utmz.split('.')[4].split['|'];
+			for(i in utmz) {
+				each = utmz[i].split("=");
+				self.gAData[each[0]] = each[1];
+			}
+		}
 	}
 
 	initializeRefererData = function(self) {
