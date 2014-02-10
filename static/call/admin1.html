@@ -20,7 +20,7 @@
 			var customer = new Customer('admin');
 			customer.init();
 			getDateString = function(text) {
-				d = new Date(text);
+				d = new Date(text*1000);
 				return d.toShortDate();
 			}
 		</script>
