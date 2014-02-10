@@ -19,6 +19,10 @@
 		<script type="text/javascript">
 			var customer = new Customer('admin');
 			customer.init();
+			getDateString = function(text) {
+				d = new Date(text);
+				return d.toShortDate();
+			}
 		</script>
 		<script id="UserListTemplate" type="text/x-jquery-tmpl">
 			<tr id='${visitorId}'>
@@ -90,12 +94,12 @@
 							{{if gAData.__utma != null }}
 								<tr>
 								</tr>
-									<td>Initial Visit:</td><td>${new Date(gAData.__utma.split('.')[2]).toShortDate()}</td>
+									<td>Initial Visit:</td><td>${getDateString(gAData.__utma.split('.')[2])}</td>
 								<tr>
-									<td>Previous Visit:</td><td>${new Date(gAData.__utma.split('.')[3]).toShortDate()}</td>
+									<td>Previous Visit:</td><td>${getDateString(gAData.__utma.split('.')[3])}</td>
 								</tr>
 								<tr>
-									<td>Session Begin:</td><td>${new Date(gAData.__utma.split('.')[4]).toShortDate()}</td>
+									<td>Session Begin:</td><td>${getDateString(gAData.__utma.split('.')[4])}</td>
 								</tr>
 							{{/if}}
 							{{if gAData.__utmb != null }}
