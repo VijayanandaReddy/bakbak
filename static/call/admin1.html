@@ -102,6 +102,26 @@
 									<td>Pages Visited:</td><td>${gAData.__utmb.split('.')[1]}</td>
 								</tr>
 							{{/if}}
+							{{if referer != null }}
+								<tr>
+									<td>Known</td><td>${referer.known}</td>
+								</tr>
+								<tr>
+									<td>Referer</td><td>${referer.referer}</td>
+								</tr>
+								<tr>
+									<td>Medium</td><td>${referer.medium}</td>
+								</tr>
+								<tr>
+									<td>Search Term</td><td>${referer.search_term}</td>
+								</tr>
+								<tr>
+									<td>Uri</td><td>${referer.uri.href}</td>
+								</tr>
+								<tr>
+									<td>Current</td><td id='curent_url{$visitorId}'>${current_url}</td>
+								</tr>
+							{{/if}}
 							</table>
 						</div>
 					</td>
@@ -118,8 +138,9 @@
 					{{/if}}
 					</td>
 					<td>
-						<div class='browserDetails alert'><img class='imageIconMedium' src='/img/browsers/png/${browser.toLowerCase()}.png' title='${browser}'/> ${version}
-						<img class='imageIconMedium' src='/img/os/png/${os.toLowerCase()}.png' title='${os}'> ${os}</img></div>
+						<div class='browserDetails alert'><img class='imageIconMedium' src='/img/browsers/png/${ua.ua.family.toLowerCase().replaceAll(" ","_")}.png' title='${ua.ua.family}'/> ${ua.ua.major}.${ua.ua.minor}
+						<img class='imageIconMedium' src='/img/os/png/${ua.os.family.toLowerCase().replaceAll(" ","_")}.png' title='${ua.os.family}'> ${ua.os.major}.${ua.os.minor}</img>
+						<img class='imageIconMedium' src='/img/os/png/${ua.device.family.toLowerCase()}.png' title='${ua.device.family}'> ${ua.device.family}</img></div>
 					</td>
 					<td> {{if visitorId}}
 						<div class='chatPanel'>

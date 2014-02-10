@@ -18,9 +18,9 @@
 		this.location = null;
 		this.adminSocketId=null;
 		//this.geolocation = window.navigator.geolocation;
-		this.browser = BrowserDetect.browser;
-		this.os = BrowserDetect.OS;
-		this.version = BrowserDetect.version;
+		//this.browser = BrowserDetect.browser;
+		//this.os = BrowserDetect.OS;
+		//this.version = BrowserDetect.version;
 		this.gAData = null;
 		this.id = null; //socketid will be stored here.
 		this.call = new Call(customerId);
@@ -57,10 +57,12 @@
 		};
 		this.init = function() {
 			$('#chatPanel').hide();
+			initializeRefererData(self);
+			initializeUserAgentData(self);
+			initializeLocationData(self);
 			initializeStatusUi();
 			$('#offlineIndicator').show();
 			initializeWebRTCSupport(self);
-			initializeLocationData(self);
 			initializeGoogleAnalyticsData(self);
 			initializeSocket(self);
 			heartbeat(self);

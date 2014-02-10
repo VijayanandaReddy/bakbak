@@ -8,6 +8,10 @@ String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
+String.prototype.replaceAll = function(key,replaceString) {
+    return this.replace(new RegExp(key, 'g'), replaceString);
+};
+
 
 /* Gloabls */
 
@@ -180,6 +184,28 @@ var socket;
 		self.gAData = fillCookieData(self.gAData,'__utmclid');
 
 	}
+
+	initializeRefererData = function(self) {
+		referer_url = document.referrer;
+		current_url = window.location.toString();
+		$.post( bakbakUrl + "referer",
+			{
+				referer_url : referer_url,
+				current_url : current_url
+			},'json').done(function(response) {
+				console.log(response);
+    			self.referer = response;
+    			self.current_url = current_url;
+				});
+  	}
+
+  	initializeUserAgentData = function(self) {
+		userAgent = navigator.userAgent.toString();
+		$.post( bakbakUrl + "ua",{ua:userAgent},'json').done(function(response) {
+				console.log(response);
+    			self.ua = response;		
+				});
+  	}
 
 	initializeByeBye = function(self) {
 		$(window).unload(function() {

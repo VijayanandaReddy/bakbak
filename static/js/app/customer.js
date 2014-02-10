@@ -52,30 +52,35 @@ var bakbakUrl ='';
 						enableChat(presenceUser.visitorId);
 					}
 					self.users[i].lastOnline = new Date().getTime();
-					if(self.users[i].location == null) {
+					if(self.users[i].location == null && presenceUser.location != null) {
 						console.log('Updating location for visitor' + presenceUser.visitorId);
 						self.users[i].location=presenceUser.location;
-						$('#'+presenceUser.visitorId).detach();
-						$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
-						$("#flagIcon"+presenceUser.visitorId).tooltip();
+						updateVisitorUi(i,presenceUser);
 						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
+					if(self.users[i].referer == null && presenceUser.referer != null) {
+						self.users[i].referer=presenceUser.referer;
+						updateVisitorUi(i,presenceUser);
+						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
+					}
+					if(self.users[i].ua == null && presenceUser.ua != null) {
+						self.users[i].ua=presenceUser.ua;
+						updateVisitorUi(i,presenceUser);
+						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
+					}
+					$('#curent_url'+presenceUser.visitorId).text(presenceUser.curent_url);
+					self.users[i].curent_url = presenceUser.curent_url;
 					console.log('The userId is ' + self.users[i].id + ' while presence userId is ' + presenceUser.id);
 					if((self.users[i].id == null)  || ((self.users[i].id != presenceUser.id) && presenceUser.id)) {
 						self.users[i].id = presenceUser.id;
-						var text = $('#chatMsgBox'+presenceUser.visitorId).html();
-						console.log("Chat text is " +text);
-						$('#'+presenceUser.visitorId).detach();
-						$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
-						$("#flagIcon"+presenceUser.visitorId).tooltip();
-						$('#chatMsgBox'+presenceUser.visitorId).html(text);
+						var text = updateVisitorUi(i,presenceUser);
 						self.sendChatMessage(presenceUser.id,presenceUser.visitorId,text,false);
 
 					} else if(presenceUser.id == null) {
 						disableChat(presenceUser.visitorId);
 					}
-					if(presenceUser.location != null) //And check if popover is not there!
-						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
+					//if(presenceUser.location != null) //And check if popover is not there!
+					//	$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					return;
 				}
 			}
@@ -99,6 +104,17 @@ var bakbakUrl ='';
 			},3000);
 			 
 		};
+
+		updateVisitorUi = function(i,presenceUser) {
+			self.users[i].id = presenceUser.id;
+			var text = $('#chatMsgBox'+presenceUser.visitorId).html();
+			console.log("Chat text is " +text);
+			$('#'+presenceUser.visitorId).detach();
+			$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
+			$("#flagIcon"+presenceUser.visitorId).tooltip();
+			$('#chatMsgBox'+presenceUser.visitorId).html(text);
+			return text;
+		}
 
 		this.onCall = function(message) {
 			console.log(message);

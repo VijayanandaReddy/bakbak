@@ -7,7 +7,9 @@ var express = require('express'),
     path           = require('path'), 
     templatesDir   = path.resolve(__dirname, 'templates'), 
     emailTemplates = require('email-templates'), 
-    nodemailer     = require('nodemailer');
+    nodemailer     = require('nodemailer'),
+    Referer = require('referer-parser'),
+    ua = require('ua-parser');
 
 var port = process.env.PORT || 5000;
 var visitor_count=0;
@@ -176,6 +178,24 @@ app.get('/location', function(req, res) {
 
 });
 
+app.post('/referer', function(req, resp) {
+    resp.header("Access-Control-Allow-Origin", "*");
+    var referer_obj = req.body;
+    referer_url = referer_obj.referer_url;
+    current_url = referer_obj.current_url;
+    var r = new Referer(referer_url,current_url);
+    resp.send(r);
+});
+
+app.post('/ua', function(req, resp) {
+    resp.header("Access-Control-Allow-Origin", "*");
+    var userAgent = req.body['ua'];
+    var info = new ua.parse(userAgent);
+    console.log('USER AGENT---->'+userAgent);
+    console.log(info.ua.toString());
+    resp.send(info);
+});
+
 app.post('/email', function(req, resp) {
     resp.header("Access-Control-Allow-Origin", "*");
     var visitor = req.body;
@@ -247,6 +267,9 @@ app.use('/img',express.static(path.join(__dirname, 'static/img')));
 app.use('/css',express.static(path.join(__dirname, 'static/css')));
 app.use('/js',express.static(path.join(__dirname, 'static/js')));
 app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
+
+//embedly api key!
+//ec9acca865ff44c2af3db2c91a269730
 
 
 app.use(function (req, res, next) {
