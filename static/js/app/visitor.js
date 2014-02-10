@@ -17,10 +17,7 @@
 		this.webrtc = null;
 		this.location = null;
 		this.adminSocketId=null;
-		//this.geolocation = window.navigator.geolocation;
-		//this.browser = BrowserDetect.browser;
-		//this.os = BrowserDetect.OS;
-		//this.version = BrowserDetect.version;
+		this.current_url = window.location.toString();
 		this.gAData = null;
 		this.id = null; //socketid will be stored here.
 		this.call = new Call(customerId);

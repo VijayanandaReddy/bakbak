@@ -187,15 +187,13 @@ var socket;
 
 	initializeRefererData = function(self) {
 		referer_url = document.referrer;
-		current_url = window.location.toString();
 		$.post( bakbakUrl + "referer",
 			{
 				referer_url : referer_url,
-				current_url : current_url
+				current_url : self.current_url
 			},'json').done(function(response) {
 				console.log(response);
     			self.referer = response;
-    			self.current_url = current_url;
 				});
   	}
 

@@ -68,8 +68,7 @@ var bakbakUrl ='';
 						updateVisitorUi(i,presenceUser);
 					}
 					self.users[i].curent_url = presenceUser.curent_url;
-					console.log($('#curent_url'+presenceUser.visitorId));
-					$('#curent_url'+presenceUser.visitorId).text(presenceUser.curent_url);
+					$('#curent_url'+presenceUser.visitorId).text(presenceUser.current_url);
 					console.log('The userId is ' + self.users[i].id + ' while presence userId is ' + presenceUser.id);
 					if((self.users[i].id == null)  || ((self.users[i].id != presenceUser.id) && presenceUser.id)) {
 						self.users[i].id = presenceUser.id;
