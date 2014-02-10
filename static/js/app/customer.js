@@ -59,17 +59,17 @@ var bakbakUrl ='';
 						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
 					if(self.users[i].referer == null && presenceUser.referer != null) {
+						console.log("UPDATING REFERER!!");
 						self.users[i].referer=presenceUser.referer;
 						updateVisitorUi(i,presenceUser);
-						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
 					if(self.users[i].ua == null && presenceUser.ua != null) {
 						self.users[i].ua=presenceUser.ua;
 						updateVisitorUi(i,presenceUser);
-						$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
 					}
-					$('#curent_url'+presenceUser.visitorId).text(presenceUser.curent_url);
 					self.users[i].curent_url = presenceUser.curent_url;
+					console.log($('#curent_url'+presenceUser.visitorId));
+					$('#curent_url'+presenceUser.visitorId).text(presenceUser.curent_url);
 					console.log('The userId is ' + self.users[i].id + ' while presence userId is ' + presenceUser.id);
 					if((self.users[i].id == null)  || ((self.users[i].id != presenceUser.id) && presenceUser.id)) {
 						self.users[i].id = presenceUser.id;
@@ -107,12 +107,12 @@ var bakbakUrl ='';
 
 		updateVisitorUi = function(i,presenceUser) {
 			self.users[i].id = presenceUser.id;
-			var text = $('#chatMsgBox'+presenceUser.visitorId).html();
+			var text = $('#chatMsgBox'+self.users[i].visitorId).html();
 			console.log("Chat text is " +text);
-			$('#'+presenceUser.visitorId).detach();
-			$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
-			$("#flagIcon"+presenceUser.visitorId).tooltip();
-			$('#chatMsgBox'+presenceUser.visitorId).html(text);
+			$('#'+self.users[i].visitorId).detach();
+			$("#UserListTemplate").tmpl(self.users[i]).appendTo("#userList");
+			$("#flagIcon"+self.users[i].visitorId).tooltip();
+			$('#chatMsgBox'+self.users[i].visitorId).html(text);
 			return text;
 		}
 
