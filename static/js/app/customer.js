@@ -4,7 +4,7 @@ var bakbakUrl ='';
 		this.customerId = customerId;
 		this.visitorId = customerId;
 		this.users = new Array();
-		this.id = null; //Used for socket Id.
+		this.id = getSessionId(); 
 		this.webrtcCall = new Call(customerId);
 		var self = this;
 		this.presenceIndicator = function() {
@@ -73,10 +73,12 @@ var bakbakUrl ='';
 					if((self.users[i].id == null)  || ((self.users[i].id != presenceUser.id) && presenceUser.id)) {
 						self.users[i].id = presenceUser.id;
 						var text = updateVisitorUi(i,presenceUser);
-						self.sendChatMessage(presenceUser.id,presenceUser.visitorId,text,false);
-
 					} else if(presenceUser.id == null) {
 						disableChat(presenceUser.visitorId);
+					} else if(presenceUser.first_time) {
+						console.log('FIRST TIME ' + presenceUser.first_time);
+						var text = $('#chatMsgBox'+self.users[i].visitorId).html();
+						self.sendChatMessage(presenceUser.id,presenceUser.visitorId,text,false);
 					}
 					//if(presenceUser.location != null) //And check if popover is not there!
 					//	$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geoplugin_longitude)});
@@ -96,6 +98,7 @@ var bakbakUrl ='';
 				$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
 			}
 			setTimeout(function() {
+				console.log("First time message!");
 				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page. \
 					<iframe src='//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.donateoldspectacles.org%2F&amp;width&amp;layout=button&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=35&amp;appId=163796550478024' \
 					 scrolling='no' frameborder='0' style='border:none; overflow:hidden; height:35px;' allowTransparency='true'></iframe> \

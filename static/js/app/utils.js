@@ -45,6 +45,10 @@ function findUrls( text ) {
 
 /* Gloabls */
 
+getSessionId = function() {
+	return readCookie('bakbak.sid').split('.')[0].replace('s%3A','');
+}
+
 var socket;
 
 	initializeSocket = function(config) {
@@ -63,7 +67,7 @@ var socket;
 		console.log('Declaring a new channel');
 		io.connect(SIGNALING_SERVER).emit('new-channel', {
 						channel: channel,
-					        sender : sender
+					     sender : sender
    		});
 
 
@@ -74,10 +78,7 @@ var socket;
 	      		if (config.callback) {
 				config.callback(socket);
 			}
-			console.log('Setting id ' + socket.socket.sessionid);
-			console.log(socket);
-			config.id = socket.socket.sessionid;
-			console.log("Got session " + config.id);
+			console.log('Connected with socket ' + socket.socket.sessionid);
 			config.presenceIndicator();
    		});
 

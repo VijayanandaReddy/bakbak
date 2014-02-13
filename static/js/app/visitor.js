@@ -19,11 +19,15 @@
 		this.adminSocketId=null;
 		this.current_url = window.location.toString();
 		this.gAData = null;
-		this.id = null; //socketid will be stored here.
+		this.id = getSessionId(); //socketid will be stored here.
 		this.call = new Call(customerId);
 		this.visitorId = getUserId();
 		this.presenceIndicator = function () {
+			if(self.first_time == undefined) {
+				self.first_time = true;
+			}
 			heartbeat(self);
+			self.first_time = false;
 		}
 		var self = this;
 		function setAdminStatus(status) {
@@ -246,13 +250,23 @@
 		this.onChat = function(message) {
 			//console.log(message);
 			addOnlineLabel();
-			self.adminSocketId = message.senderId;
 			enableChatBar();
 			showChatBar(true);
-			if(message.html) {
-				addToChatMessageBoxHtml(null,self.visitorId,message.message);
+			console.log(message);
+			if(message.sender == self.visitorId) {
+				if(message.senderId != socket.socket.sessionid) {
+					addToChatMessageBox(null,'me',message.message);
+				} else {
+					console.log("Wont add!");
+					return;
+				}
 			} else {
-				addToChatMessageBox(null,message.sender,message.message);
+				self.adminSocketId = message.senderId;
+				if(message.html && $('#chatMsgBox').html() == '' ) {
+					addToChatMessageBoxHtml(null,self.visitorId,message.message);
+				} else if(!message.html){
+					addToChatMessageBox(null,message.sender,message.message);
+				}
 			}
 		};
 
