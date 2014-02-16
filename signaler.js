@@ -36,7 +36,7 @@ app.configure(function() {
         store: sessionStore,
         secret: EXPRESS_SID_SECRET,
         key: EXPRESS_SID_KEY,
-        cookie: {httpOnly: false},
+        cookie: {httpOnly: false , maxAge:86400000}, //24 hours
     }));
     app.use(app.router);
     app.enable('trust proxy');
@@ -58,11 +58,9 @@ app.configure(function() {
         // to the API (e.g. in case you use sessions)
         res.setHeader('Access-Control-Allow-Credentials', true);
         // Pass to next layer of middleware
-        req.session.cookie.maxAge = 3600000;
-        req.session.blah = Date();
-        console.log("Setting time on Session Cookie!");
         next();
     });
+
 });
 
 //Only because we have one dynamo
