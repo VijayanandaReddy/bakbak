@@ -46,7 +46,7 @@ app.configure(function() {
 
     app.get('/js/bakbak.js', function (req, res) {
         console.log("SERVING BAKBAK.js");
-        req.session.cookie.expire = false;
+        req.session.cookie.maxAge = 86400000;
         res.setHeader('Content-Type', 'application/javascript');
         var filePath = path.join(__dirname + '/static/js/bakbak.js');
         console.log(filePath);
