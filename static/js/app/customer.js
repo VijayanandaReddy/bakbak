@@ -1,12 +1,13 @@
 var bakbakUrl ='';
 (function() {
 	window.Customer = function(customerId) {
+		var self = this;
 		this.customerId = customerId;
 		this.visitorId = customerId;
 		this.users = new Array();
 		this.id = getSessionId(); 
 		this.webrtcCall = new Call(customerId);
-		var self = this;
+		
 		this.presenceIndicator = function() {
 			heartbeat(self);
 			setTimeout(self.presenceIndicator,CUSTOMER_HEARTBEAT);

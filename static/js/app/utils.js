@@ -46,7 +46,15 @@ function findUrls( text ) {
 /* Gloabls */
 
 getSessionId = function() {
-	return readCookie('bakbak.sid').split('.')[0].replace('s%3A','');
+	var response;
+	$.ajax({
+         url:    bakbakUrl + "sessionid",
+         success: function(result) {
+                      response = result;
+                  },
+         async:   false
+    });
+   return response;
 }
 
 var socket;

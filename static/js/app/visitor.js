@@ -8,6 +8,7 @@
 			}
 			return userId;
 		}
+		var self = this;
 		//Extract a method
 		this.visitorName = readCookie('bakbakchatVisitorName') ? readCookie('bakbakchatVisitorName') : 'Unknown';
 		this.adminOnline = false;
@@ -29,7 +30,7 @@
 			heartbeat(self);
 			self.first_time = false;
 		}
-		var self = this;
+		
 		function setAdminStatus(status) {
 			if(status) {
 				addOnlineLabel();

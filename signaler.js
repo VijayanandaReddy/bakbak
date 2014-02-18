@@ -44,15 +44,6 @@ app.configure(function() {
     app.use(app.router);
     app.enable('trust proxy');
 
-    app.get('/js/bakbak.js', function (req, res) {
-        console.log("SERVING BAKBAK.js");
-        req.session.cookie.maxAge = 86400000;
-        res.setHeader('Content-Type', 'application/javascript');
-        var filePath = path.join(__dirname + '/static/js/bakbak.js');
-        console.log(filePath);
-        res.sendfile(filePath);
-    });
-
     app.use(express.compress());
     app.use('/img',express.static(path.join(__dirname, 'static/img')));
     app.use('/css',express.static(path.join(__dirname, 'static/css')));
@@ -245,6 +236,13 @@ app.get('/tour.js', function (req, res) {
     res.setHeader('Content-Type', 'application/javascript');
     res.sendfile(__dirname + '/static/tour.js');
 });
+
+app.get('/sessionid', function (req, res) {
+        console.log("Fetching session id");
+        var sidCookie = req.sessionID;
+        console.log(sidCookie);
+        res.send(sidCookie);
+    });
 
 app.get('/location', function(req, res) {
     console.log(req.ip);
