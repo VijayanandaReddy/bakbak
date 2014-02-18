@@ -20,7 +20,7 @@
 		this.adminSocketId=null;
 		this.current_url = window.location.toString();
 		this.gAData = null;
-		this.id = getSessionId(); //socketid will be stored here.
+		this.id = sessionId; //socketid will be stored here.
 		this.call = new Call(customerId);
 		this.visitorId = getUserId();
 		this.presenceIndicator = function () {

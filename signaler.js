@@ -10,7 +10,8 @@ var express = require('express'),
     nodemailer     = require('nodemailer'),
     Referer = require('referer-parser'),
     ua = require('ua-parser'),
-    MemoryStore = express.session.MemoryStore;
+    MemoryStore = express.session.MemoryStore,
+    cons = require('consolidate');
 
 var port = process.env.PORT || 5000;
 var visitor_count=0;
@@ -45,6 +46,17 @@ app.configure(function() {
     app.enable('trust proxy');
 
     app.use(express.compress());
+
+    app.get('/js/bakbak.js', function (req, res) {
+        res.setHeader('Content-Type', 'application/javascript');
+        console.log(req.sessionID);
+        cons.swig(__dirname + '/static/js/bakbak.js', { sessionId: req.sessionID }, function(err, html){
+            if (err) throw err;
+            console.log(html);
+            res.send(html);
+        });
+    });
+
     app.use('/img',express.static(path.join(__dirname, 'static/img')));
     app.use('/css',express.static(path.join(__dirname, 'static/css')));
     app.use('/js',express.static(path.join(__dirname, 'static/js')));

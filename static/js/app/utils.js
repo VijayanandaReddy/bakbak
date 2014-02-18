@@ -45,6 +45,7 @@ function findUrls( text ) {
 
 /* Gloabls */
 
+//Replace with generic way of doing things
 getSessionId = function() {
 	var response;
 	$.ajax({

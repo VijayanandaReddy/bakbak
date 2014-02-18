@@ -1,4 +1,5 @@
   var bakbakUrl = window.location.hostname != 'localhost' ? 'http://cryptic-thicket-3838.herokuapp.com/':'';
+  var sessionId = '{{ sessionId }}';
   console.log('Url is ->' + bakbakUrl);
   var fileref=document.createElement('script');
   fileref.setAttribute("type","text/javascript");
