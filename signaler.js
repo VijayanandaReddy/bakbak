@@ -11,7 +11,6 @@ var express = require('express'),
     Referer = require('referer-parser'),
     ua = require('ua-parser'),
     MemoryStore = express.session.MemoryStore;
-    cookie = require
 
 var port = process.env.PORT || 5000;
 var visitor_count=0;
@@ -36,10 +35,21 @@ app.configure(function() {
         store: sessionStore,
         secret: EXPRESS_SID_SECRET,
         key: EXPRESS_SID_KEY,
-        cookie: {httpOnly: false , maxAge:86400000}, //24 hours
+        cookie: {
+                httpOnly: false, 
+                maxAge:86400000,
+                //expires: new Date(Date.now() + 60 * 10000) 
+                }, //24 hours
     }));
     app.use(app.router);
     app.enable('trust proxy');
+
+    app.get('/js/bakbak.js', function (req, res) {
+        console.log("SERVING BAKBAK.js");
+        req.session.cookie.expire = false;
+        res.setHeader('Content-Type', 'application/javascript');
+        res.sendfile(__dirname + '/js/bakbak.js');
+    });
 
     app.use(express.compress());
     app.use('/img',express.static(path.join(__dirname, 'static/img')));
