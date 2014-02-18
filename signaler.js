@@ -48,7 +48,7 @@ app.configure(function() {
         console.log("SERVING BAKBAK.js");
         req.session.cookie.expire = false;
         res.setHeader('Content-Type', 'application/javascript');
-        res.sendfile(__dirname + '/js/bakbak.js');
+        res.sendfile(__dirname + 'static/js/bakbak.js');
     });
 
     app.use(express.compress());
