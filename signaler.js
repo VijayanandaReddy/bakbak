@@ -14,7 +14,6 @@ var express = require('express'),
     cons = require('consolidate');
 
 var port = process.env.PORT || 5000;
-var visitor_count=0;
 var active_sessions = {}; //in future would use a persistent store!
 server.listen(port);
 console.log("Connected on port " + port);
@@ -52,7 +51,6 @@ app.configure(function() {
         console.log(req.sessionID);
         cons.swig(__dirname + '/static/js/bakbak.js', { sessionId: req.sessionID }, function(err, html){
             if (err) throw err;
-            console.log(html);
             res.send(html);
         });
     });
@@ -99,7 +97,7 @@ io.configure(function () {
                 if (err) {// || !session || session.isLogged !== true) {
                     return accept('Not logged in.', false);
                 } else {
-                    console.log('SETTING session ' + session);
+                    console.log('SETTING session ' + sidCookie);
                     // If you want, you can attach the session to the handshake data, so you can use it again later
                     data.sidCookie = sidCookie;
                     return accept(null, true);
@@ -147,8 +145,13 @@ io.sockets.on('connection', function (socket) {
             console.error("Server might have restarted!");
             return;
         }
+        var data={};
+        data['id'] = socket.handshake.sidCookie;
+        data['state'] = false;
+        socket.broadcast.emit('presence', data);
         active_sessions[socket.handshake.sidCookie].splice( active_sessions[socket.handshake.sidCookie].indexOf(socket.id),1);
     });
+
 });
 
 function onNewNamespace(channel, sender) {
@@ -158,14 +161,13 @@ function onNewNamespace(channel, sender) {
             socket.emit('connect', true);
         }
         var socketid = socket.id;
-        console.error("VISITOR NUMBER " + ++visitor_count/3);
-    	//socket.join(socket.handshake.sessionID);
 
         socket.on('message', function (data) {
             if (data.sender == sender)
                 socket.broadcast.emit('message', data);
         });
 	   socket.on('presence', function (data) {
+        console.log("DATA.SENDER-> "+data.sender+" SENDER->"+sender);
             if (data.sender == sender) {
                 console.log('PRESENCE --> ' +data.sender);
                 socket.broadcast.emit('presence', data);
@@ -208,7 +210,15 @@ function onNewNamespace(channel, sender) {
     });
 }
 
+app.get('/index', function (req, res) {
+    res.sendfile(__dirname + '/static/call/index.html');
+});
+
 app.get('/', function (req, res) {
+    res.sendfile(__dirname + '/static/call/index.html');
+});
+
+app.get('/index1', function (req, res) {
     res.sendfile(__dirname + '/static/call/index1.html');
 });
 
@@ -257,8 +267,8 @@ app.get('/sessionid', function (req, res) {
     });
 
 app.get('/location', function(req, res) {
-    console.log(req.ip);
-    console.log(req.ips);
+    //console.log(req.ip);
+    //console.log(req.ips);
     res.header("Access-Control-Allow-Origin", "*");
     var ip = req.ip;
     var url = "http://www.geoplugin.net/json.gp?ip="+ip;
@@ -270,7 +280,7 @@ app.get('/location', function(req, res) {
 	      	console.log("Got location response status code: " + response.statusCode);
 	      	res.setHeader('Content-Type','application/json');
 		response.on('data', function (body) {
-			    	console.log('location response : ' + body);
+			    	//console.log('location response : ' + body);
 			    	res.send(body);
 			      	});
 	      }).on('error', function(e) {
@@ -295,8 +305,8 @@ app.post('/ua', function(req, resp) {
     resp.header("Access-Control-Allow-Origin", "*");
     var userAgent = req.body['ua'];
     var info = new ua.parse(userAgent);
-    console.log('USER AGENT---->'+userAgent);
-    console.log(info.ua.toString());
+    //console.log('USER AGENT---->'+userAgent);
+    //console.log(info.ua.toString());
     resp.send(info);
 });
 

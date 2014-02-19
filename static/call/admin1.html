@@ -17,7 +17,8 @@
 		<script src="/js/app/utils.js"></script>
 		<script src="/js/app/customer.js"></script>
 		<script type="text/javascript">
-			var customer = new Customer('admin');
+			var adminId = getParameterByName('adminId') 
+			var customer = new Customer(adminId);
 			customer.init();
 			getDateString = function(text) {
 				d = new Date(text*1000);
