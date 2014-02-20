@@ -24,7 +24,7 @@ function loadCss(url) {
 
 
 
-requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visitor','validator','html2canvas','jquery.embedly-3.1.1.min'],
+requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visitor','validator','html2canvas','jquery.embedly-3.1.1.min','jquery.placeholder'],
   function(webrtc,$,socketio,call,util,visitor,validator,html2canvas,embedly) {
   		console.log('lib is loaded');
       var src = $('#bakbakscript').attr('src');

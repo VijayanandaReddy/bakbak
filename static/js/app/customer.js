@@ -49,7 +49,10 @@ var bakbakUrl ='';
 					console.log('Presence STATE -> ' + presenceUser.state);
 					if(!presenceUser.state) {
 						disableChat(presenceUser.visitorId);
+						self.users[i].online = false;
+						return;
 					} else {
+						self.users[i].online = true;
 						enableChat(presenceUser.visitorId);
 					}
 					self.users[i].lastOnline = new Date().getTime();
@@ -88,6 +91,7 @@ var bakbakUrl ='';
 			}
 			console.log("Adding new user!");
 			presenceUser.lastOnline = new Date().getTime();
+			presenceUser.online = true;
 			self.users.push(presenceUser);
 			$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
 			$("#flagIcon"+presenceUser.visitorId).tooltip();
@@ -149,13 +153,17 @@ var bakbakUrl ='';
 			for(i in self.users) {
 				var user = self.users[i];
 				var now = new Date().getTime();
-				var timeDiff = now - user.lastOnline;
-				//Give a lag in timeDiff for production
-				if(timeDiff > VISITOR_MONITOR) {
+				if(!user.online) {
+					var timeDiff = now - user.lastOnline;
+					//Give a lag in timeDiff for production
+					if(timeDiff > VISITOR_MONITOR) {
 						console.log("Visitor went offline " + user.visitorId + " at " + now);
 						$('#'+user.visitorId).detach();
 						self.users.splice(i,1);
-					}	
+					}
+				} else {
+					user.lastOnline = now;
+				}	
 			}
 			setTimeout(self.visitorMonitor,VISITOR_MONITOR);
 		}

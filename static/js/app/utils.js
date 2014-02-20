@@ -175,7 +175,8 @@ var socket;
 	
 	heartbeat = function(data) {
 		console.log("Sending presence!");
-		socket.presence(data);
+		if(socket)
+			socket.presence(data);
 	};
 
 	initializeCalling = function() {
@@ -312,14 +313,14 @@ var socket;
 	}
 
 	playNewUser = function() {
-		if(soundManager && isHidden()) {
+		if(typeof(soundManager) != "undefined" && isHidden()) {
 			console.log("New user sound");
 			soundManager.play('newUser');
 		}
 	}
 
 	playNewMessage = function() {
-		if(soundManager && isHidden()) {
+		if(typeof(soundManager) != "undefined" && isHidden()) {
 			soundManager.play('newMessage');
 		}
 	}
