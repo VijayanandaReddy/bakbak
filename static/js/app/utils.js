@@ -60,12 +60,9 @@ function getHiddenProp(){
 
 
 function isHidden() {
-	if ($.support.pageVisibility) {
-  		var prop = getHiddenProp();
-    	if (!prop) return false;
-    	return document[prop];
-		}
-    return false;
+	var prop = getHiddenProp();
+    if (!prop) return false;
+    return document[prop];
 }
 
 
