@@ -33,7 +33,7 @@ requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visit
   		var visitor = new Visitor(customerId);
 		  visitor.init();
 		//Cannot afford bootstrap css need to use custom css. Remove it post demo
-		loadCss('css/bootstrap.css');
+		loadCss('css/bakbak_bootstrap_min.css');
 		//loadCss('css/bootstrap-responsive.css');
     loadCss('css/base.css');
   	}); 

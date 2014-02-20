@@ -84,7 +84,7 @@
 		}
 
 		initializeStatusUi = function() {
-			$("body").append("<footer id='bakbakchat' style='width:150px;z-index:99999;margin:0;position:fixed;bottom:0px' class='table-bordered backgroundGray'></footer>");
+			$("body").append("<div id ='bakbakchat_container' class='bakbak_bootstrap'><footer id='bakbakchat' style='width:150px;z-index:99999;margin:0;position:fixed;bottom:0px' class='table-bordered backgroundGray'></footer></div>");
 			var adminId = readCookie('bakbakchatOnline');
 			if(adminId) {
 				//addOnlineLabel();
