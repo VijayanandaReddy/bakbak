@@ -98,6 +98,7 @@ var bakbakUrl ='';
 				$('#chatMsg'+presenceUser.visitorId).attr('disabled', 'disabled');
 				$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
 			}
+			playNewUser();
 			setTimeout(function() {
 				console.log("First time message!");
 				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page. \
@@ -141,6 +142,7 @@ var bakbakUrl ='';
 			self.visitorMonitor();
 			//initialize_calling();
 			initializeByeBye(self);
+			intializeSoundManager();
 		}
 		this.visitorMonitor = function() {
 			console.log('VISITOR MONITOR');

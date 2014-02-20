@@ -59,6 +59,7 @@ app.configure(function() {
     app.use('/css',express.static(path.join(__dirname, 'static/css')));
     app.use('/js',express.static(path.join(__dirname, 'static/js')));
     app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
+    app.use('/sounds',express.static(path.join(__dirname, 'static/sounds')));
 
     app.use(function (req, res, next) {
         // Website you wish to allow to connect

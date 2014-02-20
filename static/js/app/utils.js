@@ -42,6 +42,32 @@ function findUrls( text ) {
     return urlArray;
 }
 
+function getHiddenProp(){
+    var prefixes = ['webkit','moz','ms','o'];
+    
+    // if 'hidden' is natively supported just return it
+    if ('hidden' in document) return 'hidden';
+    
+    // otherwise loop over all the known prefixes until we find one
+    for (var i = 0; i < prefixes.length; i++){
+        if ((prefixes[i] + 'Hidden') in document) 
+            return prefixes[i] + 'Hidden';
+    }
+
+    // otherwise it's not supported
+    return null;
+}
+
+
+function isHidden() {
+	if ($.support.pageVisibility) {
+  		var prop = getHiddenProp();
+    	if (!prop) return false;
+    	return document[prop];
+		}
+    return false;
+}
+
 
 /* Gloabls */
 
@@ -189,6 +215,7 @@ var socket;
 			$('#chatMsgBox a').embedly({key: embedly_key, query: {maxwidth: 240}});
 		}
   		chatBox.scrollTop(9999999999);
+  		playNewMessage();
 	}
 
 	addToChatMessageBoxHtml = function(visitorId,myName,chatText) {
@@ -260,6 +287,44 @@ var socket;
 		$(window).on('beforeunload',function() {
 			socket.presence(self,false);
 		});	
+	}
+
+	intializeSoundManager = function() {
+		soundManager.setup({
+    		// where to find the SWF files, if needed
+    		url: bakbakUrl + 'static/swf',
+    		onready: function() {
+      			soundManager.createSound({
+      				id: 'newUser',
+      				url: bakbakUrl+'sounds/doorbell.mp3'
+    			});
+    			soundManager.createSound({
+      				id: 'newMessage',
+      				url: bakbakUrl+'sounds/text_message.mp3'
+    			});
+    			
+    		},
+
+    		ontimeout: function() {
+    			console.log("SOUND MANAGER FAILED TO LOAD!");
+    			soundManager = undefined;
+      			// Uh-oh. No HTML5 support, SWF missing, Flash blocked or other issue
+    		}
+		});
+
+	}
+
+	playNewUser = function() {
+		if(soundManager && isHidden()) {
+			console.log("New user sound");
+			soundManager.play('newUser');
+		}
+	}
+
+	playNewMessage = function() {
+		if(soundManager && isHidden()) {
+			soundManager.play('newMessage');
+		}
 	}
 
 
