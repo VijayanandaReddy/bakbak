@@ -1,4 +1,10 @@
   var bakbakUrl = window.location.hostname != 'localhost' ? 'http://cryptic-thicket-3838.herokuapp.com/':'';
+  if(bakbakUrl != '' && !console) {
+    console = {};
+    console.log = function() {
+
+    }
+  }
   var sessionId = '{{ sessionId }}';
   console.log('Url is ->' + bakbakUrl);
   var fileref=document.createElement('script');
