@@ -177,6 +177,11 @@ function onNewNamespace(channel, sender) {
 		  console.log('GOT CHAT msg for ' + data.reciever + " from " + data.sender );
 		  sidCookie = data.reciever;
           socketIds = active_sessions[sidCookie];
+          if(!socketIds) {
+            console.error("Active Session are " + active_sessions);
+            console.error("sidCookie " + sidCookie);
+            return;
+          }
           for (i in socketIds) {
             if(data.sender == sender) {
                 console.log("SENDING CHAT MSG TO " + socketIds[i]);

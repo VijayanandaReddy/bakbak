@@ -211,6 +211,7 @@ var socket;
 		$.getJSON( bakbakUrl + "location", function(data) {
 					console.log(data);
 					self.location = data;
+					heartbeat(self);
 					});
 	}
 	initializeGoogleAnalyticsData = function(self) {
@@ -239,6 +240,7 @@ var socket;
 			},'json').done(function(response) {
 				console.log(response);
     			self.referer = response;
+    			heartbeat(self);
 				});
   	}
 
@@ -246,7 +248,8 @@ var socket;
 		userAgent = navigator.userAgent.toString();
 		$.post( bakbakUrl + "ua",{ua:userAgent},'json').done(function(response) {
 				console.log(response);
-    			self.ua = response;		
+    			self.ua = response;
+    			heartbeat(self);	
 				});
   	}
 
