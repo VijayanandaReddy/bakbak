@@ -132,13 +132,14 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('presence', function (channel) {
+        console.log("GOT PRESENCE!!!");
         var isChannelPresent = !! channels[channel];
         socket.emit('presence', isChannelPresent);
         if (!isChannelPresent)
             initiatorChannel = channel;
     });
 
-    socket.on('disconnect', function (channel) {
+    /*socket.on('disconnect', function (channel) {
         if (initiatorChannel)
             channels[initiatorChannel] = null;
         console.log('DISCONNECTED!!!!! ----> ' + socket.id);
@@ -149,9 +150,9 @@ io.sockets.on('connection', function (socket) {
         var data={};
         data['id'] = socket.handshake.sidCookie;
         data['state'] = false;
-        socket.broadcast.emit('presence', data);
+        io.sockets.emit('presence', data);
         active_sessions[socket.handshake.sidCookie].splice( active_sessions[socket.handshake.sidCookie].indexOf(socket.id),1);
-    });
+    });*/
 
 });
 
@@ -169,10 +170,13 @@ function onNewNamespace(channel, sender) {
         });
 	   socket.on('presence', function (data) {
         console.log("DATA.SENDER-> "+data.sender+" SENDER->"+sender);
-            if (data.sender == sender) {
-                console.log('PRESENCE --> ' +data.sender);
-                socket.broadcast.emit('presence', data);
+        if (data.sender == sender) {
+            if(data.data.visitorId) {
+                socket.visitorId = data.data.visitorId;
             }
+            console.log('PRESENCE --> ' +data.sender);
+            socket.broadcast.emit('presence', data);
+        }
         });
 	   socket.on('chat',function (data) { 
 		  console.log('GOT CHAT msg for ' + data.reciever + " from " + data.sender );
@@ -213,6 +217,25 @@ function onNewNamespace(channel, sender) {
             console.log('CALL DROPPED ' +data.sender + ' ' + sender);
           }
        });
+
+        socket.on('disconnect', function (channel) {
+            console.log('DISCONNECTED!!!!! ----> ' + socket.id);
+            if(!active_sessions[socket.handshake.sidCookie]) {
+                console.error("Server might have restarted!");
+                return;
+            }
+            var message = {};
+            var data={};
+            data['id'] = socket.handshake.sidCookie;
+            if(socket.visitorId) {
+                data['visitorId'] = socket.visitorId;
+            }
+            message.sender = sender;
+            data['state'] = false;
+            message.data = data;
+            socket.broadcast.emit('presence', message);
+            active_sessions[socket.handshake.sidCookie].splice( active_sessions[socket.handshake.sidCookie].indexOf(socket.id),1);
+        });
     });
 }
 

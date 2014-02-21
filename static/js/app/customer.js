@@ -37,7 +37,7 @@ var bakbakUrl ='';
 			console.log(message);
 			var presenceUser = message.data;
 			console.log('Presence-->' + presenceUser);
-			if(!presenceUser.adminSocketId) {
+			if((typeof(presenceUser.adminSocketId) == "undefined") || !presenceUser.adminSocketId ) {
 				heartbeat(self);
 			}
 			for(i in self.users) {
