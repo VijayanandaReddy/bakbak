@@ -330,7 +330,7 @@ var socket;
 var CUSTOMER_HEARTBEAT = 30*1000;//10000;
 var VISITOR_HEARTBEAT = 60*1000;//15000;
 var CUSTOMER_MONITOR = 60*1000;//20000;
-var VISITOR_MONITOR = 20000;//90*1000;//20000;
+var VISITOR_MONITOR = 90*1000;//20000;
 
 /* Other utils methods here */
 function readCookie(name) {
