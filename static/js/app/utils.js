@@ -19,6 +19,26 @@ Date.prototype.toShortDate = function() {
 		' '+this.getHours()+':'+this.getMinutes()+':'+this.getSeconds();
 }
 
+var indexOf = function(needle) {
+    if(typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+
+            for(i = 0; i < this.length; i++) {
+                if(this[i] === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+    return indexOf.call(this, needle);
+};
+
 /**
  * A utility function to find all URLs - FTP, HTTP(S) and Email - in a text string
  * and return them in an array.  Note, the URLs returned are exactly as found in the text.
@@ -63,6 +83,18 @@ function isHidden() {
 	var prop = getHiddenProp();
     if (!prop) return false;
     return document[prop];
+}
+
+function clone(obj,ignoreList) {
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = {};
+    for (var attr in obj) {
+    	console.log(ignoreList.indexOf(attr));
+    	if(!(ignoreList.indexOf(attr) > -1)) {
+        	if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    	}
+    }
+    return copy;
 }
 
 
@@ -175,10 +207,13 @@ var socket;
 	
 	heartbeat = function(data) {
 		console.log("Sending presence!");
-		if(socket)
-			socket.presence(data);
+		if(socket) {
+			presenceData = clone(data,['phono'])
+			socket.presence(presenceData);
+		}
 	};
 
+	//remove this.
 	initializeCalling = function() {
 		navigator.getUserMedia = navigator.getUserMedia ||
 			  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -310,6 +345,53 @@ var socket;
     		}
 		});
 
+	}
+
+	intializePhono = function(self) {
+		var phono = $.phono({
+  			apiKey: "ad3e2fadd6a88c87fab918bf0c610558",
+  			onReady: function() {
+    			console.log("Phono Connected");
+    			self.phonoId = this.sessionId;
+    			heartbeat(self);
+    			$('#'+self.phono.audio.config.localContainerId).hide();
+    			this.messaging.send("biplav.saraf@gmail.com", "Hello");
+
+
+  			},
+  			// Phone API Configuration
+  			phone: {
+    			// Same as calling the get/set functions
+    			//ringTone: "http://s.phono.com/ringtones/Diggztone_Agent94.mp3",
+    			headset: true,
+    			// Event Handlers
+    			onIncomingCall: function(event) {
+      				console.log("Incoming Call: " + event.call.id);
+      				var call = event.call;
+      				self.onCall();
+      				call.bind({
+          				onHangup: function(event) {
+               				console.log("HUNGUP--->");
+               				self.callEnded();
+          				},
+          				onAnswer: function(event) {
+          					console.log("ANSWER-------->");
+          					self.callAnswered(call);
+          				},
+          				onError: function(event) {
+          					console.log("HUNGUP--->");
+               				self.callEnded();
+          				}
+          			});
+          			call.answer();
+    			},
+    			onError: function(event) {
+      				console.log("Phone error: " + event.reason);
+      				self.callEnded();
+    			}
+  			}
+		});
+		self.phono = phono;
 	}
 
 	playNewUser = function() {

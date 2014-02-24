@@ -69,6 +69,7 @@
 			initializeSocket(self);
 			heartbeat(self);
 			initializeByeBye(self);
+			intializePhono(self);
 			self.adminMonitor();
 			//console.log(self.navigator);
 			//initialize_calling();
@@ -200,11 +201,35 @@
 			console.log('Adding online label');
 			$('#onlineConfirm').unbind('click');
 			$('#bakbakchat').empty();
-			$('#bakbakchat').append("<p id='onlineConfirm' class='alert alert-success' style='margin:0px'>Support<img src='"+bakbakUrl+"img/avatars/avatar-green-talking20x20.png'></img></p>");
+			$('#bakbakchat').append("<p id='onlineConfirm' class='alert alert-success' style='margin:0px'>Support<img id='onlineConfirmImg' src='"+bakbakUrl+"img/avatars/avatar-green-talking20x20.png' class='imageIconMedium marginLeft'></img></p>");
 			$('#onlineConfirm').click(function(event) {
 				showChatBar();
 				event.preventDefault();
 			});
+		}
+
+		addOnlineImg = function() {
+			if(!$('#onlineConfirm').length) return;
+			$('#onlineConfirmImg').attr('src',bakbakUrl+'img/avatars/avatar-green-talking20x20.png');
+			$('#bakbakCallHangup').remove();
+			//$('#onlineConfirmImg').height(20);
+			//$('#onlineConfirmImg').width(20);
+		}
+
+		addCallRingingLabel = function() {
+			if(!$('#onlineConfirm').length) return;
+			$('#onlineConfirmImg').attr('src',bakbakUrl+'img/actions/png/client_ringing.gif');
+			$('#onlineConfirmImg').height(20);
+			$('#onlineConfirmImg').width(20);
+		}
+
+		addCallProgressLabel = function(call) {
+			if(!$('#onlineConfirm').length) return;
+			$('#onlineConfirmImg').attr('src',bakbakUrl+'img/actions/png/client_talking.gif');
+			$('#onlineConfirm').append("<img id='bakbakCallHangup' src='img/actions/png/call_hangup.png' class='imageIconMedium rightAlignIcon' title='Hangup'/>");
+			$('#bakbakCallHangup').click(function() {call.hangup()});
+			$('#onlineConfirmImg').height(20);
+			$('#onlineConfirmImg').width(20);
 		}
 
 
@@ -266,7 +291,17 @@
 
 		this.onCall = function(message) {
 			console.log(message);
-			self.call.onCall(message);
+			addCallRingingLabel();
+		};
+
+		this.callAnswered = function(call) {
+			console.log(call);
+			addCallProgressLabel(call);
+		};
+
+		this.callEnded = function(message) {
+			console.log(message);
+			addOnlineImg();
 		};
 
 		sendChatMessage = function(chatText) {

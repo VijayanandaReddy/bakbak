@@ -67,6 +67,12 @@ var bakbakUrl ='';
 						self.users[i].referer=presenceUser.referer;
 						updateVisitorUi(i,presenceUser);
 					}
+					if((self.users[i].phonoId == null && presenceUser.referer != null) ||
+					 	(self.users[i].phonoId != presenceUser.phonoId)) {
+						console.log("UPDATING REFERER!!");
+						self.users[i].phonoId=presenceUser.phonoId;
+						updateVisitorUi(i,presenceUser);
+					}
 					if(self.users[i].ua == null && presenceUser.ua != null) {
 						self.users[i].ua=presenceUser.ua;
 						updateVisitorUi(i,presenceUser);
@@ -93,6 +99,8 @@ var bakbakUrl ='';
 			presenceUser.lastOnline = new Date().getTime();
 			presenceUser.online = true;
 			self.users.push(presenceUser);
+			$('#'+presenceUser.visitorId).detach();
+			$('#'+presenceUser.visitorId).remove();
 			$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
 			$("#flagIcon"+presenceUser.visitorId).tooltip();
 			if(presenceUser.location != null ) {
@@ -118,6 +126,7 @@ var bakbakUrl ='';
 			var text = $('#chatMsgBox'+self.users[i].visitorId).html();
 			console.log("Chat text is " +text);
 			$('#'+self.users[i].visitorId).detach();
+			$('#'+self.users[i].visitorId).remove();
 			$("#UserListTemplate").tmpl(self.users[i]).appendTo("#userList");
 			$("#flagIcon"+self.users[i].visitorId).tooltip();
 			$('#chatMsgBox'+self.users[i].visitorId).html(text);
@@ -147,6 +156,8 @@ var bakbakUrl ='';
 			//initialize_calling();
 			initializeByeBye(self);
 			intializeSoundManager();
+			intializePhono(self);
+			//self.phonoId = '1';
 		}
 		this.visitorMonitor = function() {
 			console.log('VISITOR MONITOR');
@@ -168,8 +179,42 @@ var bakbakUrl ='';
 			setTimeout(self.visitorMonitor,VISITOR_MONITOR);
 		}
 
-		this.audioCall = function(id) {
-			self.webrtcCall.call(id,true);
+		this.audioCall = function(id,callImg) {
+			console.log("Dialing to " + id);
+			var callButton = $(callImg);
+			calls = self.phono.phone.calls;
+			for(i in calls) {
+				if($.inArray(calls[i].state, [0,1,3]) > -1) {
+					calls[i].hangup();
+					return;
+				}
+			}
+			self.phono.phone.dial(id, {
+          		onRing: function() {
+            		console.log("RINGING");
+            		callButton.attr('src','/img/actions/png/ringing.gif');
+            		callButton.attr("disabled", true)
+            		callButton.attr("title","Ringing");
+          		},
+          		onAnswer: function() {
+            		console.log("ANSWERED");
+            		callButton.attr('src','/img/actions/png/recieved.png');
+            		callButton.attr("disabled", false)
+            		callButton.attr('title',"Hangup");
+          		},
+          		onHangup: function() {
+            		console.log("HANGUP");
+            		callButton.attr('src','/img/actions/png/audio.png');
+            		callButton.attr("disabled", false);
+            		callButton.attr('title','Call');
+          		},
+          		onError: function() {
+            		console.log("ERROR");
+            		callButton.attr('src','/img/actions/png/audio.png');
+            		callButton.attr("disabled", false).
+            		callButton.attr('title',"Call");
+            	}
+        });
 		}
 
 		this.editUserId = function(visitorId,element,id) {
