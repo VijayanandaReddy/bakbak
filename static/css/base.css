@@ -79,8 +79,8 @@ only screen and (max-width: 760px),
 	}
 
 	.chatMaximize {
-		width:95%;
-		height:95%;
+		width:90%;
+		height:90%;
 	}
 
 	.chatPanel {
@@ -94,6 +94,7 @@ only screen and (max-width: 760px),
 	.maxHeight100 {
 		height: 80% !important;
 		max-height: 80%;
+		min-height: 200px !important;
 	}
 
 }
