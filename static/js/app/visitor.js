@@ -83,7 +83,7 @@
 		}
 
 		initializeStatusUi = function() {
-			$("body").append("<div id ='bakbakchat_container' class='bakbak_bootstrap'><footer id='bakbakchat' style='width:150px;z-index:99999;margin:0;position:fixed;bottom:0px' class='table-bordered backgroundGray'></footer></div>");
+			$("body").append("<div id ='bakbakchat_container' class='bakbak_bootstrap'><footer id='bakbakchat' style='z-index:99999;margin:0;position:fixed;bottom:0px' class='table-bordered backgroundGray'></footer></div>");
 			var adminId = readCookie('bakbakchatOnline');
 			if(adminId) {
 				//addOnlineLabel();
@@ -106,12 +106,14 @@
 					console.log("Hiding Contact Us bar!");
 					//$('#chatMsg').blur();
 					$('#contactUsPanel').hide();
-					$('#bakbakchat').width('150px');
+					//$('#bakbakchat').width('150px');
+					$('#bakbakchat').removeClass('chatMaximize').addClass('chatMinimize');
 				} else {
 					console.log("Showing chat bar!");
 					$('#contactUsPanel').show();
 					//$('#chatMsg').focus();
-					$('#bakbakchat').width('260px');
+					$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
+					//$('#bakbakchat').width('260px');
 				}
 				return;
 			}
@@ -136,7 +138,7 @@
 				event.preventDefault();
 				sendContactUsForm($(this).serialize());
 			});
-			$('#bakbakchat').width('260px');
+			$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
 			$('#inputEmail').focus();
 			$('input, textarea').placeholder();
 		}
@@ -159,12 +161,12 @@
 					console.log("Hiding chat bar!");
 					$('#chatMsg').blur();
 					$('#chatPanel').hide();
-					$('#bakbakchat').width('150px');
+					$('#bakbakchat').removeClass('chatMaximize').addClass('chatMinimize');
 				} else {
 					console.log("Showing chat bar!");
 					$('#chatPanel').show();
 					$('#chatMsg').focus();
-					$('#bakbakchat').width('260px');
+					$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
 					console.log('Admin socket id is ' + self.adminSocketId);
 					if(!self.adminSocketId) {
 						disableChatBar();
@@ -188,7 +190,7 @@
 			$('#chatSendButton').click(function() {
 				sendChatMessage($('#chatMsg').val());
 			});
-			$('#bakbakchat').width('260px');
+			$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
 			$('#chatMsg').focus();
 			if(!self.adminSocketId) {
 				disableChatBar();		
@@ -197,11 +199,12 @@
 
 		addOnlineLabel = function() {
 			if($('#onlineConfirm').length) return;
-			$('#bakbakchat').width('150px');
 			console.log('Adding online label');
 			$('#onlineConfirm').unbind('click');
 			$('#bakbakchat').empty();
-			$('#bakbakchat').append("<p id='onlineConfirm' class='alert alert-success' style='margin:0px'>Support<img id='onlineConfirmImg' src='"+bakbakUrl+"img/avatars/avatar-green-talking20x20.png' class='imageIconMedium marginLeft'></img></p>");
+			$('#bakbakchat').append("<p id='onlineConfirm' class='alert alert-success' style='margin:0px'><span class='chatHeaderText'>Support</span><img id='onlineConfirmImg' src='"+bakbakUrl+"img/avatars/avatar-green-talking20x20.png' class='imageIconMedium marginLeft'></img></p>");
+			$('#bakbakchat').removeClass('extraImage');
+			$('#bakbakchat').removeClass('chatMaximize').addClass('chatMinimize');
 			$('#onlineConfirm').click(function(event) {
 				showChatBar();
 				event.preventDefault();
@@ -212,12 +215,14 @@
 			if(!$('#onlineConfirm').length) return;
 			$('#onlineConfirmImg').attr('src',bakbakUrl+'img/avatars/avatar-green-talking20x20.png');
 			$('#bakbakCallHangup').remove();
+			$('#bakbakchat').removeClass('extraImage');
 			//$('#onlineConfirmImg').height(20);
 			//$('#onlineConfirmImg').width(20);
 		}
 
 		addCallRingingLabel = function() {
 			if(!$('#onlineConfirm').length) return;
+			$('#bakbakchat').removeClass('extraImage');
 			$('#onlineConfirmImg').attr('src',bakbakUrl+'img/actions/png/client_ringing.gif');
 			$('#onlineConfirmImg').height(20);
 			$('#onlineConfirmImg').width(20);
@@ -226,7 +231,8 @@
 		addCallProgressLabel = function(call) {
 			if(!$('#onlineConfirm').length) return;
 			$('#onlineConfirmImg').attr('src',bakbakUrl+'img/actions/png/client_talking.gif');
-			$('#onlineConfirm').append("<img id='bakbakCallHangup' src='img/actions/png/call_hangup.png' class='imageIconMedium rightAlignIcon' title='Hangup'/>");
+			$('#onlineConfirm').append("<img id='bakbakCallHangup' src="+bakbakUrl+"'img/actions/png/call_hangup.png' class='imageIconMedium rightAlignIcon' title='Hangup'/>");
+			$('#bakbakchat').addClass('extraImage');
 			$('#bakbakCallHangup').click(function() {call.hangup()});
 			$('#onlineConfirmImg').height(20);
 			$('#onlineConfirmImg').width(20);
@@ -235,11 +241,12 @@
 
 		addOfflineLabel = function() {
 			if($('#offlineConfirm').length) return;
-			$('#bakbakchat').width('150px');
 			console.log('Adding offline label');
 			$('#bakbakchat').empty();
 			$('#offlineConfirm').unbind('click');
-			$('#bakbakchat').append("<p id='offlineConfirm' class='alert alert-danger' style='margin:0px'>Feedback<img src='"+bakbakUrl+"img/avatars/avatar-red-talking20x20.png'></img></p>");
+			$('#bakbakchat').removeClass('extraImage');
+			$('#bakbakchat').append("<div id='offlineConfirm' class='alert alert-danger' style='margin:0px'><span class='chatHeaderText'>Feedback</span><img src='"+bakbakUrl+"img/avatars/avatar-red-talking20x20.png'></img></div>");
+			$('#bakbakchat').removeClass('chatMaximize').addClass('chatMinimize');
 			$('#offlineConfirm').click(function(event) {
 				showContactUsBar();
 				event.preventDefault();

@@ -49,6 +49,55 @@
 	right: 20px;
 }
 
+/*
+Stylin chat bar
+*/
+.chatMinimize {
+	width:150px;
+}
+
+.chatMaximize {
+	width:260px;
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+
+	.chatMinimize  .chatHeaderText {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	.extraImage.chatMinimize {
+		width:100px !important;
+	}
+
+	.chatMinimize {
+		width:50px;
+	}
+
+	.chatMaximize {
+		width:95%;
+		height:95%;
+	}
+
+	.chatPanel {
+		height:90%;
+	}
+
+	#chatMsg {
+		width: 100% !important;
+	}
+
+	.maxHeight100 {
+		height: 80% !important;
+		max-height: 80%;
+	}
+
+}
+
 
 /* 
 Generic Styling, for Desktops/Laptops 
@@ -71,6 +120,7 @@ td, th {
   border: 1px solid #ccc; 
   text-align: left; 
 }
+
 
 /* 
 Max width before this PARTICULAR table gets nasty
