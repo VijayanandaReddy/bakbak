@@ -358,6 +358,9 @@ var socket;
 	}
 
 	intializePhono = function(self) {
+		if(self.webrtc && !self.webrtc.support) {
+			return false;
+		}
 		var phono = $.phono({
   			apiKey: "ad3e2fadd6a88c87fab918bf0c610558",
   			onReady: function() {
