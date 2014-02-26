@@ -177,6 +177,15 @@ var socket;
 			socket.emit('setCookie',data);
 		};
 
+		socket.screenshot = function(id,imgData) {
+			var data = {};
+			data.reciever = id;
+			data.sender = sender;
+			data.imgData = imgData;
+			console.log('Sending fetch screenshot to ' +  id);
+			socket.emit('screenshot',data);
+		};
+
 		socket.call = function(video,id,request,data) {
 			if(!data)
 				data = {};
@@ -203,6 +212,7 @@ var socket;
 		socket.on('chat',config.onChat);
 		socket.on('call',config.onCall);
 		socket.on('setCookie',config.setCookie);
+		socket.on('screenshot',config.onScreenshot);
 	};
 	
 	heartbeat = function(data) {

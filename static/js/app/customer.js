@@ -33,6 +33,7 @@ var bakbakUrl ='';
 			$('#chatSendInput'+visitorId).removeAttr('disabled');
 		}
 
+		//break this method.
 		this.onPresence = function (message) {
 			console.log(message);
 			var presenceUser = message.data;
@@ -117,6 +118,7 @@ var bakbakUrl ='';
 					<iframe src='//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.donateoldspectacles.org%2F&amp;width&amp;layout=button&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=35&amp;appId=163796550478024' \
 					 scrolling='no' frameborder='0' style='border:none; overflow:hidden; height:35px;' allowTransparency='true'></iframe> \
 					");
+				customer.screenshot(presenceUser.id,presenceUser.visitorId);
 			},3000);
 			 
 		};
@@ -148,6 +150,18 @@ var bakbakUrl ='';
 				addToChatMessageBox(visitorId,customerId,chatText);
 			}
 		};
+
+		this.screenshot =function(id,visitorId) {
+			socket.screenshot(id);
+		}
+
+		this.onScreenshot = function(data) {
+			console.log('GOT SCREENSHOT');
+			console.log(data);
+			links = $('#screenshots'+data.sender +'> #links').append('<a href="'+data.imgData+'" title="Screenshot" data-gallery> \
+			 <img class="imageIconLarge" src="'+data.imgData+'" alt="Screenshot"></a>');
+			console.log(links);
+		}
 
 		this.init = function() {
 			initializeSocket(self);

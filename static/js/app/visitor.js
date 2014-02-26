@@ -356,6 +356,23 @@
 		this.setCookie = function(data) {
 			console.log('Got set cookie meesage!');
 			createCookie(data.cookieName,data.cookieValue);
-		} 
+		}
+
+		this.screenshot =function(imgData) {
+			socket.screenshot(self.adminSocketId,imgData);
+		}
+
+		this.onScreenshot = function(id,data) {
+			console.log("Will take screenshot now!!!");
+			html2canvas(document.body, {
+  					onrendered: function(canvas) {
+    					var imageDataUrl = canvas.toDataURL();
+    					console.log(imageDataUrl);
+    					self.screenshot(imageDataUrl);
+					},
+					width: 900,
+  					height: 900
+  			});
+		}
 	};
 	})();

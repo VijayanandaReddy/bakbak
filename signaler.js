@@ -139,21 +139,6 @@ io.sockets.on('connection', function (socket) {
             initiatorChannel = channel;
     });
 
-    /*socket.on('disconnect', function (channel) {
-        if (initiatorChannel)
-            channels[initiatorChannel] = null;
-        console.log('DISCONNECTED!!!!! ----> ' + socket.id);
-        if(!active_sessions[socket.handshake.sidCookie]) {
-            console.error("Server might have restarted!");
-            return;
-        }
-        var data={};
-        data['id'] = socket.handshake.sidCookie;
-        data['state'] = false;
-        io.sockets.emit('presence', data);
-        active_sessions[socket.handshake.sidCookie].splice( active_sessions[socket.handshake.sidCookie].indexOf(socket.id),1);
-    });*/
-
 });
 
 function onNewNamespace(channel, sender) {
@@ -205,6 +190,25 @@ function onNewNamespace(channel, sender) {
           } else {
             console.log('SET COOKIE ' +data.sender + ' ' + sender);
           }
+       });
+
+        socket.on('screenshot',function (data) {
+          console.log('GOT SCREENSHOT msg for ' + data.reciever + ' for id ' +socketid);
+          sidCookie = data.reciever;
+          socketIds = active_sessions[sidCookie];
+          if(!socketIds) {
+            console.error("Active Session are " + active_sessions);
+            console.error("sidCookie " + sidCookie);
+            return;
+          }
+          for (i in socketIds) {
+            if(data.sender == sender) {
+                console.log("SENDING SCREENSHOT MSG TO " + socketIds[i]);
+                 io.of('/' + channel).socket(socketIds[i]).emit('screenshot',data);
+            } else {
+                console.log('SCREENSHOT MSG DROPPED ' +data.sender + ' ' + sender);
+            }
+          } 
        });
 
         socket.on('call',function (data) {

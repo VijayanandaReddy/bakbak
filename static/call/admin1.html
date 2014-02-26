@@ -18,6 +18,9 @@
 		<script src="/js/app/call.js"></script>
 		<script src="/js/app/utils.js"></script>
 		<script src="/js/app/customer.js"></script>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+		<link rel="stylesheet" href="/css/bootstrap-image-gallery.min.css">
 		<script type="text/javascript">
 			var adminId = getParameterByName('adminId') 
 			var customer = new Customer(adminId);
@@ -51,6 +54,10 @@
 						<img class='imageIconMedium' src='/img/os/png/${ua.os.family.toLowerCase().replaceAll(" ","_")}.png' title='${ua.os.family}'> ${ua.os.major}.${ua.os.minor}</img>
 						 ${ua.device.family}</div>
 					{{/if}}
+					<div id='screenshots${visitorId}' class='screenshotDetails alert'>
+						<div id="links">    					
+						</div>
+					<div>
 				</td>
 				<td>
 						<div class='googleAnalytics container-fluid '>
@@ -146,11 +153,7 @@
 								{{else}}
 								<img class='imageIconMedium marginLeft' src='/img/actions/png/dnd.png' title='No Video'></img>
 								{{/if}}
-								{{if webrtc.screenSharing }}
-								<img class='imageIconMedium marginLeft' src='/img/actions/png/screen.png' title='Screen'></img>
-								{{else}}
-								<img class='imageIconMedium marginLeft' src='/img/actions/png/dnd.png' title='No Screen'></img>
-								{{/if}}
+								<img class='imageIconMedium marginLeft' src='/img/actions/png/screen.png' title='Screen'  onClick=customer.screenshot('${id}','${visitorId}') ></img>
 							{{else}}
 								<img class='imageIconMedium marginLeft' src='/img/actions/png/dnd.png' title='No WebRTC'></img>
 							{{/if}}
@@ -193,5 +196,41 @@
 				</table> 
 			</div>
 		</div>
-	</body>
+	<!-- Image Gallery -->
+	<div id="blueimp-gallery" class="blueimp-gallery">
+    <!-- The container for the modal slides -->
+    <div class="slides"></div>
+    <!-- Controls for the borderless lightbox -->
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+    <!-- The modal dialog, which will be used to wrap the lightbox content -->
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body next"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left prev">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button type="button" class="btn btn-primary next">
+                        Next
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
+<script src="/js/bootstrap-image-gallery.min.js"></script>
+</body>
 </html>
