@@ -159,7 +159,7 @@ var bakbakUrl ='';
 			console.log('GOT SCREENSHOT');
 			console.log(data);
 			links = $('#screenshots'+data.sender +'> #links').append('<a href="'+data.imgData+'" title="Screenshot" data-gallery> \
-			 <img class="imageIconLarge" src="'+data.imgData+'" alt="Screenshot"></a>');
+			 <img class="imageIconLarge screenshotImg'+data.sender+'" src="'+data.imgData+'" alt="Screenshot"></a>');
 			console.log(links);
 		}
 
@@ -251,15 +251,33 @@ var bakbakUrl ='';
 
 		this.emailVisitorDetails = function(visitorId) {
 			console.log('Sending email!');
+			console.log(self.users.length);
 			for(i in self.users) {
 				if(self.users[i].visitorId == visitorId) {
-					toPost = self.users[i];
+					visitor = self.users[i];
+					toPost = visitor;
 					toPost['email'] = 'biplav.saraf@gmail.com';
 					toPost['template'] = 'chatScript';
 					toPost['chatScript'] = $('#chatMsgBox'+visitorId).html();
-					$.post( bakbakUrl + "email",toPost, 'json').done(function(data) {
-						if(data == "OK") {
-							console.log('Email sent SUCCESS!');
+					toPost['images'] = [];
+					var len = $('.screenshotImg'+visitorId).length;
+					console.log(len);
+					$('.screenshotImg'+visitorId).each(function(index,element) {
+						console.log(index);
+						imgSrc = $(this).attr('src');
+						console.log(imgSrc);
+						toPost['images'].push(imgSrc);
+						if(index == len-1) {
+							console.log('SENDING');
+							console.log(bakbakUrl + "email");
+							$.post( bakbakUrl + "email",toPost, 'json').done(function(data) {
+								if(data == "OK") {
+									console.log('Email sent SUCCESS!');
+								} else {
+									console.log('EMAIL sent ERROR!');
+								}
+							});
+							return false;
 						}
 					});
 				}

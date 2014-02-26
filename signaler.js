@@ -371,14 +371,22 @@ app.post('/email', function(req, resp) {
         var templateName = visitor['template'];
          var buf = undefined;
 
+        var attachmentObj = [];
         if(visitor['image']) {
             var b64string = visitor['image'];
             b64string = b64string.replace('data:image/png;base64,','');
             buf = new Buffer(b64string, 'base64');
-            
+            attachmentObj =[{'filename' : 'screenshot.jpg' , 'contents' : buf}];
+        } else if (visitor['images']) {
+            for(i in visitor['images']) {
+                var b64string = visitor['images'][i];
+                b64string = b64string.replace('data:image/png;base64,','');
+                buf = new Buffer(b64string, 'base64');
+                attachmentObj.push({'filename' : 'screenshot.jpg' , 'contents' : buf});
+            }
         }
 
-
+        console.log(attachmentObj.length);
         // Send a single email
         template(templateName, locals, function(err, html, text) {
             if (err) {
@@ -394,7 +402,7 @@ app.post('/email', function(req, resp) {
                     html: html,
                     // generateTextFromHTML: true,
                     text: text,
-                    attachments : (buf != undefined ? [{'filename' : 'screenshot.jpg' , 'contents' : buf}] : [])
+                    attachments : attachmentObj
                     }, function(err, responseStatus) {
                     if (err) {
                         console.log(err);
