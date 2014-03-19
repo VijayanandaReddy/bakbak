@@ -1,6 +1,4 @@
-var bakbakUrl = ((window.location.hostname != 'localhost') && 
-	!(window.location.hostname.indexOf('192.168.') > -1) &&
-	!(window.location.hostname.indexOf('10.95.') > -1)) 
+var bakbakUrl =  window.location.port != '5000'
 	? 'http://cryptic-thicket-3838.herokuapp.com/':'';
 if (typeof console == "undefined") {
   window.console = {

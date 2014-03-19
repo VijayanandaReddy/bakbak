@@ -407,6 +407,11 @@ var socket;
 		self.phono = phono;
 	}
 
+	initializeTenHands = function() {
+		//api key
+		//0c945ac4-330b-46d7-aa78-e966a1dd0c0e
+	}
+
 	playNewUser = function() {
 		if(typeof(soundManager) != "undefined" && isHidden()) {
 			console.log("New user sound");

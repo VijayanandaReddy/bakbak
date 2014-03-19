@@ -1,22 +1,42 @@
-var express = require('express'),
-    path = require('path'),
-    app = express(),
-    server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
-    http  = require('http'),
-    path           = require('path'), 
-    templatesDir   = path.resolve(__dirname, 'templates'), 
-    emailTemplates = require('email-templates'), 
-    nodemailer     = require('nodemailer'),
-    Referer = require('referer-parser'),
-    ua = require('ua-parser'),
-    MemoryStore = express.session.MemoryStore,
-    cons = require('consolidate');
+var appPath = __dirname + '/app'
+    , express = require('express')
+    , app = express()
+    , server = require('http').createServer(app)
+    , io = require('socket.io').listen(server)
+    , http  = require('http')
+    , path           = require('path')
+    , templatesDir   = path.resolve(__dirname, 'templates')
+    , emailTemplates = require('email-templates')
+    , nodemailer     = require('nodemailer')
+    , Referer = require('referer-parser')
+    , ua = require('ua-parser')
+    , MemoryStore = express.session.MemoryStore
+    , cons = require('consolidate')
+    , mongoose = require('mongoose')
+    , fs = require('fs')
+    , everyauth = require('everyauth');
 
 var port = process.env.PORT || 5000;
-var active_sessions = {}; //in future would use a persistent store!
-server.listen(port);
-console.log("Connected on port " + port);
+var db_string = 'mongodb://biplav:biplav3403@ds033097.mongolab.com:33097/heroku_app18693040';
+if(port == 5000) {
+    db_string='mongodb://127.0.0.1/mymongodb';
+}
+//in future would use a persistent store for these.
+var active_sessions = {}; 
+var active_admins = {};
+// if you like to see what is going on, set this to true switch off in production
+
+/** Connect to database and load models **/
+mongoose.connect(db_string);
+var models_path = appPath + '/models';
+fs.readdirSync(models_path).forEach(function (file) {
+    require(models_path+'/'+file)
+});
+var UserModel = mongoose.model('UserModel');
+require(appPath + '/authenticate')(app,everyauth);
+var user = require(appPath + '/controllers/user');
+
+
 // ----------------------------------socket.io
 
 var channels = {};
@@ -29,6 +49,12 @@ var cookieParser = express.cookieParser(EXPRESS_SID_SECRET);
 var sessionStore = new MemoryStore();
 
 app.configure(function() {
+    app.set('port', port);
+    app.set('views', appPath + '/views');
+    app.set('view engine', 'ejs');
+    app.use(express.favicon());
+    app.use(express.logger('dev'));
+    app.use(express.methodOverride());
     app.use(express.bodyParser());
     app.use(cookieParser);
     app.use(express.session({
@@ -43,23 +69,16 @@ app.configure(function() {
     }));
     app.use(app.router);
     app.enable('trust proxy');
-
     app.use(express.compress());
-
-    app.get('/js/bakbak.js', function (req, res) {
-        res.setHeader('Content-Type', 'application/javascript');
-        console.log(req.sessionID);
-        cons.swig(__dirname + '/static/js/bakbak.js', { sessionId: req.sessionID }, function(err, html){
-            if (err) throw err;
-            res.send(html);
-        });
-    });
-
     app.use('/img',express.static(path.join(__dirname, 'static/img')));
     app.use('/css',express.static(path.join(__dirname, 'static/css')));
     app.use('/js',express.static(path.join(__dirname, 'static/js')));
     app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
     app.use('/sounds',express.static(path.join(__dirname, 'static/sounds')));
+     app.use('/home_files',express.static(path.join(__dirname, 'home_files')));
+    app.use(everyauth.middleware(app));
+    app.use(everyauth.middleware(app)); // important to call this AFTER session!
+    app.use(app.router);
 
     app.use(function (req, res, next) {
         // Website you wish to allow to connect
@@ -75,7 +94,20 @@ app.configure(function() {
         next();
     });
 
+    app.get('/js/bakbak.js', function (req, res) {
+        res.setHeader('Content-Type', 'application/javascript');
+        console.log(req.sessionID);
+        cons.swig(__dirname + '/static/js/bakbak.js', { sessionId: req.sessionID }, function(err, html){
+            if (err) throw err;
+            res.send(html);
+        });
+    });
 });
+
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+
 
 //Only because we have one dynamo
 io.configure(function () { 
@@ -96,12 +128,25 @@ io.configure(function () {
                 // And last, we check if the used has a valid session and if he is logged in
                 //Need this later now jsut need to set session id
                 if (err) {// || !session || session.isLogged !== true) {
-                    return accept('Not logged in.', false);
+                    return accept('Error in loading from sessions store.', false);
                 } else {
-                    console.log('SETTING session ' + sidCookie);
-                    // If you want, you can attach the session to the handshake data, so you can use it again later
-                    data.sidCookie = sidCookie;
-                    return accept(null, true);
+                    user.isAdmin(session, function(isAdmin,user) {
+                        if(isAdmin) {
+                            console.log('Admin detected!');
+                            data.isAdmin = true;
+                            data.user = user;
+                            if(active_admins[user.userId] && 
+                                active_admins[user.userId] != sidCookie) {
+                                console.log('Admin already connected please wait for the previous session to disconnect!');
+                                accept('Admin already logged in with a different session',false);
+                            } else {
+                                active_admins[user.userId] = user.userId;
+                            }
+                        }
+                        console.log('SETTING session ' + sidCookie);
+                        data.sidCookie = sidCookie;
+                        return accept(null, true);
+                    });
                 }
             });
         });
@@ -120,6 +165,7 @@ io.sockets.on('connection', function (socket) {
     if(!active_sessions[socket.handshake.sidCookie]) {
         active_sessions[socket.handshake.sidCookie] = [];
     }
+     
     active_sessions[socket.handshake.sidCookie].push(socket.id);
 
     socket.on('new-channel', function (data) {
@@ -239,6 +285,10 @@ function onNewNamespace(channel, sender) {
             message.data = data;
             socket.broadcast.emit('presence', message);
             active_sessions[socket.handshake.sidCookie].splice( active_sessions[socket.handshake.sidCookie].indexOf(socket.id),1);
+            if(socket.handshake.isAdmin) {
+                console.log('Admin Disconnected');
+                delete active_admins[socket.handshake.user.userId];
+            }
         });
     });
 }
@@ -247,15 +297,12 @@ app.get('/index', function (req, res) {
     res.sendfile(__dirname + '/static/call/index.html');
 });
 
-app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/static/call/index.html');
-});
-
 app.get('/index1', function (req, res) {
     res.sendfile(__dirname + '/static/call/index1.html');
 });
 
 app.get('/admin', function (req, res) {
+    console.log("User is -->" +req.user);
     console.log(req.sessionID);
     res.sendfile(__dirname + '/static/call/admin1.html');
 });
@@ -416,6 +463,13 @@ app.post('/email', function(req, resp) {
         });
     }
     });
+});
+
+require(appPath + '/app_urls')(app);
+
+server.listen(app.get('port'), function(){
+  console.log("BakBakio server listening on port " + app.get('port'));
+  //console.log(everyauth.google.configurable());
 });
 
 

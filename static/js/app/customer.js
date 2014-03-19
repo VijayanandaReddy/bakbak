@@ -10,7 +10,7 @@ var bakbakUrl ='';
 		
 		this.presenceIndicator = function() {
 			heartbeat(self);
-			setTimeout(self.presenceIndicator,CUSTOMER_HEARTBEAT);
+			//setTimeout(self.presenceIndicator,CUSTOMER_HEARTBEAT);
 		}
 		this.onMessage = function(message) {
 			console.log(message);
@@ -38,7 +38,9 @@ var bakbakUrl ='';
 			console.log(message);
 			var presenceUser = message.data;
 			console.log('Presence-->' + presenceUser);
-			if((typeof(presenceUser.adminSocketId) == "undefined") || !presenceUser.adminSocketId ) {
+			if(((typeof(presenceUser.adminSocketId) == "undefined") || 
+				!presenceUser.adminSocketId )&& 
+				presenceUser.id != self.id) {
 				heartbeat(self);
 			}
 			for(i in self.users) {

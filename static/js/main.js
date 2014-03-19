@@ -25,7 +25,7 @@ function loadCss(url) {
 
 
 requirejs(['webrtcsupport','jquery','socketio','app/call','app/utils','app/visitor','validator','html2canvas',
-  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min'],
+  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0'],
   function(webrtc,$,socketio,call,util,visitor,validator,html2canvas,embedly) {
   		console.log('lib is loaded');
       var src = $('#bakbakscript').attr('src');
