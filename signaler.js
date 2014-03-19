@@ -27,7 +27,7 @@ var active_admins = {};
 // if you like to see what is going on, set this to true switch off in production
 
 /** Connect to database and load models **/
-mongoose.connect(db_string);
+mongoose.connect(db_string  );
 var models_path = appPath + '/models';
 fs.readdirSync(models_path).forEach(function (file) {
     require(models_path+'/'+file)
