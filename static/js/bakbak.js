@@ -1,5 +1,5 @@
 var bakbakUrl =  window.location.port != '5000'
-	? 'http://cryptic-thicket-3838.herokuapp.com/':'';
+	? 'http://bakbakio.herokuapp.com/':'';
 if (typeof console == "undefined") {
   window.console = {
     log: function () {}
