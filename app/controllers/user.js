@@ -6,6 +6,10 @@ var mongoose = require('mongoose')
  */
 
   exports.isAdmin = function(session,callback) {
+  	if(session == null || typeof session == 'undefined') {
+  		callback(false,null);
+  		return;
+  	}
  	var auth = session.auth;
  	if(typeof auth == 'undefined') {
  		console.log("NOT LOGGED IN");
