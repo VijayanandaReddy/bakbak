@@ -152,12 +152,14 @@
 		</script>
 		<script src="/js/app/customer.js"></script>
 		<script type="text/javascript">
-			var customer = new Customer('<%= application._id %>');
-			customer.init();
-			getDateString = function(text) {
-				d = new Date(text*1000);
-				return d.toShortDate();
-			}
+			$( document ).ready(function() {
+    			var customer = new Customer('<%= application._id %>');
+				customer.init();
+				getDateString = function(text) {
+					d = new Date(text*1000);
+					return d.toShortDate();
+				}
+			});
 		</script>
 		<link href="/css/base.css" rel="stylesheet">
 		<!--<link href="/css/bootstrap.css" rel="stylesheet"> -->
