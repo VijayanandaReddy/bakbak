@@ -151,16 +151,6 @@
 			</div>
 		</script>
 		<script src="/js/app/customer.js"></script>
-		<script type="text/javascript">
-			$( document ).ready(function() {
-    			var customer = new Customer('<%= application._id %>');
-				customer.init();
-				getDateString = function(text) {
-					d = new Date(text*1000);
-					return d.toShortDate();
-				}
-			});
-		</script>
 		<link href="/css/base.css" rel="stylesheet">
 		<!--<link href="/css/bootstrap.css" rel="stylesheet"> -->
 		<!--<<link href="/css/bootstrap-responsive.css" rel="stylesheet">
@@ -229,5 +219,15 @@
 <!--</div>-->
 <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
 <script src="/js/bootstrap-image-gallery.min.js"></script>
+<script type="text/javascript">
+			$( document ).ready(function() {
+    			var customer = new Customer('<%= application._id %>');
+				customer.init();
+				getDateString = function(text) {
+					d = new Date(text*1000);
+					return d.toShortDate();
+				}
+			});
+		</script>
 <% include layouts/containerFluidClose %>
 <% include layouts/footer %>
