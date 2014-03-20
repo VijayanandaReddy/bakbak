@@ -1,7 +1,8 @@
 <% include layouts/headOpen %>
-
+<!-- use below for debug purpose -->
+<!--<script src='https://embeddedjavascript.googlecode.com/files/ejs_fulljslint.js'></script> --> 
+<script src="/js/lib/ejs.js"></script>
 <script src='/js/lib/jquery-2.0.3.min.js'></script>
-<script src="/js/lib/jquery.tmpl.min.js"></script>
 <script src="/js/lib/jquery-ui.js"></script>
 <script src="/js/lib/bootstrap-tooltip.js"></script>
 <script src="/js/lib/bootstrap-popover.js"></script>
@@ -220,14 +221,14 @@
 <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
 <script src="/js/bootstrap-image-gallery.min.js"></script>
 <script type="text/javascript">
-			$( document ).ready(function() {
-    			var customer = new Customer('<%= application._id %>');
-				customer.init();
-				getDateString = function(text) {
+			getDateString = function(text) {
 					d = new Date(text*1000);
 					return d.toShortDate();
 				}
-			});
+			//$(document).ready(function() {
+    			var customer = new Customer('<%= application._id %>');
+				customer.init();
+			//});
 		</script>
 <% include layouts/containerFluidClose %>
 <% include layouts/footer %>

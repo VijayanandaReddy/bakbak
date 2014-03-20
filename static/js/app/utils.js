@@ -218,7 +218,9 @@ var socket;
 	heartbeat = function(data) {
 		console.log("Sending presence!");
 		if(socket) {
-			presenceData = clone(data,['phono'])
+			presenceData = clone(data,['phono']);
+			console.log('Sending presence data');
+			console.log(presenceData);
 			socket.presence(presenceData);
 		}
 	};

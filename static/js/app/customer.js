@@ -37,7 +37,8 @@ var bakbakUrl ='';
 		this.onPresence = function (message) {
 			console.log(message);
 			var presenceUser = message.data;
-			console.log('Presence-->' + presenceUser);
+			console.log('Presence-->');
+			console.log(presenceUser);
 			if(((typeof(presenceUser.adminSocketId) == "undefined") || 
 				!presenceUser.adminSocketId )&& 
 				presenceUser.id != self.id) {
@@ -102,10 +103,7 @@ var bakbakUrl ='';
 			presenceUser.lastOnline = new Date().getTime();
 			presenceUser.online = true;
 			self.users.push(presenceUser);
-			$('#'+presenceUser.visitorId).detach();
-			$('#'+presenceUser.visitorId).remove();
-			$("#UserListTemplate").tmpl(presenceUser).appendTo("#userList");
-			$("#flagIcon"+presenceUser.visitorId).tooltip();
+			updateVisitorRow(presenceUser);
 			if(presenceUser.location != null ) {
 				$("#map"+presenceUser.visitorId).popover({content : getMapContent(presenceUser.location.geoplugin_city,presenceUser.location.geoplugin_latitude,presenceUser.location.geolugin_longitude)});
 			}
@@ -129,12 +127,18 @@ var bakbakUrl ='';
 			self.users[i].id = presenceUser.id;
 			var text = $('#chatMsgBox'+self.users[i].visitorId).html();
 			console.log("Chat text is " +text);
-			$('#'+self.users[i].visitorId).detach();
-			$('#'+self.users[i].visitorId).remove();
-			$("#UserListTemplate").tmpl(self.users[i]).appendTo("#userList");
-			$("#flagIcon"+self.users[i].visitorId).tooltip();
+			updateVisitorRow(self.users[i]);
 			$('#chatMsgBox'+self.users[i].visitorId).html(text);
 			return text;
+		}
+
+		updateVisitorRow = function(user) {
+			$('#'+user.visitorId).detach();
+			$('#'+user.visitorId).remove();
+			console.log(JSON.stringify(user));
+			var html = new EJS({url: '/js/tpl/visitor.ejs'}).render(user);
+			$(html).appendTo("#userList");
+			$("#flagIcon"+user.visitorId).tooltip();
 		}
 
 		this.onCall = function(message) {

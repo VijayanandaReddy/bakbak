@@ -206,6 +206,7 @@ function onNewNamespace(channel, sender) {
                 socket.visitorId = data.data.visitorId;
             }
             console.log('PRESENCE --> ' +data.sender);
+            console.log(data);
             socket.broadcast.emit('presence', data);
         }
         });
