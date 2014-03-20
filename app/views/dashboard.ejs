@@ -152,7 +152,7 @@
 		</script>
 		<script src="/js/app/customer.js"></script>
 		<script type="text/javascript">
-			var customer = new Customer('<%= user._id %>');
+			var customer = new Customer('<%= application._id %>');
 			customer.init();
 			getDateString = function(text) {
 				d = new Date(text*1000);
