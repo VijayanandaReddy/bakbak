@@ -333,6 +333,7 @@ app.get('/tour.js', function (req, res) {
 });
 
 app.get('/sessionid', function (req, res) {
+        res.header("Access-Control-Allow-Origin", "*");
         console.log("Fetching session id");
         var sidCookie = req.sessionID;
         console.log(sidCookie);

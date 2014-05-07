@@ -1,13 +1,5 @@
 (function() {
  	window.Visitor = function(customerId) { //CustomerId is the admin with whom this guy is connected to.
- 		getUserId = function() {
-			var userId = readCookie('bakbakUserId');
-			if(userId == null) {
-				userId = getGUID();
-				createCookie('bakbakUserId',userId,999);
-			}
-			return userId;
-		}
 		var self = this;
 		//Extract a method
 		this.visitorName = readCookie('bakbakchatVisitorName') ? readCookie('bakbakchatVisitorName') : 'Unknown';
@@ -23,7 +15,6 @@
 		this.id = sessionId; //socketid will be stored here.
 		this.call = new Call(customerId);
 		this.visitorId = getSessionId();
-		//this.phonoId = '1';
 		this.presenceIndicator = function () {
 			if(self.first_time == undefined) {
 				self.first_time = true;
