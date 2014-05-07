@@ -16,7 +16,7 @@
 	<% }else {%>
 		<div class='locationDetails alert'>Location fetching...</div>
 	<%}%>
-	<%if(ua){%>
+	<%if(typeof ua != 'undefined'){%>
 		<div class='browserDetails alert'><img class='imageIconMedium' src='/img/browsers/png/<%=ua.ua.family.toLowerCase().replaceAll(" ","_")%>.png' title='<%=ua.ua.family%>'/> <%=ua.ua.major%>.<%=ua.ua.minor%>
 			<img class='imageIconMedium' src='/img/os/png/<%=ua.os.family.toLowerCase().replaceAll(" ","_")%>.png' title='<%=ua.os.family%>'> <%=ua.os.major%>.<%=ua.os.minor%></img>
 		<%=ua.device.family%></div>
@@ -110,7 +110,7 @@
 							<div id='chatSendBox<%=visitorId%>'class='chatText input-append'>
   								<input id='chatMsg<%=visitorId%>' class="input-block-level" id="chatMsg<%=visitorId%>" type="text" placeholder="Chat" onkeydown="if (event.keyCode == 13) customer.sendChatMessage('<%=id%>','<%=visitorId%>',$('#chatMsg<%=visitorId%>').val());">
 							<%if(webrtc.support) {%>
-								<%if(webrtc.webAudio && typeof phonoId != 'undefined') {%>
+								<%if(webrtc.webAudio && typeof 	phonoId != 'undefined') {%>
 								<img id='callButton<%=phonoId%>' class='imageIconMedium marginLeft' src='/img/actions/png/audio.png' title='Call' onClick=customer.audioCall('<%=phonoId%>',this)></img>
 								<% } else { %>
 								<img class='imageIconMedium marginLeft' src='/img/actions/png/dnd.png' title='No Call'></img>
