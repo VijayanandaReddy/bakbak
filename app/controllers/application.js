@@ -16,7 +16,27 @@ exports.index = function(req, res){
 					create:false,
 					createOrEdit:false,
 					application:application,
-					success_message:req.session.success_message
+					success_message:req.session.success_message,
+					current:'base'
+				});	
+			}
+		});
+	});
+};
+
+exports.offline = function(req, res){
+	userUtil.userById(req,function(user){
+		ApplicationModel.findOne({adminId:user._id},function(err,application) {
+			if(err || application == null) {
+				res.redirect('/application/create');
+			} else {
+				console.log(application)
+				res.render('application_offline', {user:user,
+					create:false,
+					createOrEdit:false,
+					application:application,
+					success_message:req.session.success_message,
+					current:'offline'
 				});	
 			}
 		});

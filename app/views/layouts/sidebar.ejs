@@ -1,10 +1,10 @@
 <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="/application/#">Basic Settings</a></li>
-            <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Reports</a></li>
-            <li><a href="http://getbootstrap.com/examples/dashboard/#">Analytics</a></li>
-            <li><a href="http://getbootstrap.com/examples/dashboard/#">Export</a></li> -->
+            <li <% if(current == 'base') { %> class="active" <% } %>><a href="/application/#">Basic Settings</a></li>
+            <li <% if(current == 'offline') { %> class="active" <% } %>><a href="/application/offline/#">Offline Form</a></li>
+            <li <% if(current == 'bakbak') { %> class="active" <% } %>><a href="/application/bakbaks/#">BakBaks</a></li>
+            <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Export</a></li> -->
           </ul>
          <!-- <ul class="nav nav-sidebar">
             <li><a href="">Nav item</a></li>

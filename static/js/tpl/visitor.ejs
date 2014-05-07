@@ -110,7 +110,7 @@
 							<div id='chatSendBox<%=visitorId%>'class='chatText input-append'>
   								<input id='chatMsg<%=visitorId%>' class="input-block-level" id="chatMsg<%=visitorId%>" type="text" placeholder="Chat" onkeydown="if (event.keyCode == 13) customer.sendChatMessage('<%=id%>','<%=visitorId%>',$('#chatMsg<%=visitorId%>').val());">
 							<%if(webrtc.support) {%>
-								<%if(webrtc.webAudio && phonoId) {%>
+								<%if(webrtc.webAudio && typeof phonoId != 'undefined') {%>
 								<img id='callButton<%=phonoId%>' class='imageIconMedium marginLeft' src='/img/actions/png/audio.png' title='Call' onClick=customer.audioCall('<%=phonoId%>',this)></img>
 								<% } else { %>
 								<img class='imageIconMedium marginLeft' src='/img/actions/png/dnd.png' title='No Call'></img>

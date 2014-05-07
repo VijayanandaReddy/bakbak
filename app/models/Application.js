@@ -4,6 +4,11 @@ var mongoose = require('mongoose'),
 /**
  * Schema
  */
+ var BakBak = Schema({ 
+	type: String,
+	data: String
+});
+
 var ApplicationSchema = Schema({
     adminId: String,
     name: String,
@@ -12,7 +17,8 @@ var ApplicationSchema = Schema({
     domain_blacklist: Array,
     enabled: Boolean,
     agentIds: Array,
-    displayName: String
+    displayName: String/*,
+    offlineForm: BakBak*/
 });
 
 mongoose.model('ApplicationModel', ApplicationSchema);

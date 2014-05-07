@@ -93,15 +93,6 @@ app.configure(function() {
         // Pass to next layer of middleware
         next();
     });
-
-    app.get('/js/bakbak.js', function (req, res) {
-        res.setHeader('Content-Type', 'application/javascript');
-        console.log(req.sessionID);
-        cons.swig(__dirname + '/static/js/bakbak.js', { sessionId: req.sessionID }, function(err, html){
-            if (err) throw err;
-            res.send(html);
-        });
-    });
 });
 
 app.configure('development', function(){
@@ -215,6 +206,7 @@ function onNewNamespace(channel, sender) {
 		  sidCookie = data.reciever;
           socketIds = active_sessions[sidCookie];
           if(!socketIds) {
+            console.error("ERROR:::: NO SOCKETIDS FOUND!");
             console.error("Active Session are " + active_sessions);
             console.error("sidCookie " + sidCookie);
             return;

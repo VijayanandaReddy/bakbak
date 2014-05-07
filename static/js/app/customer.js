@@ -177,7 +177,7 @@ var bakbakUrl ='';
 			initializeByeBye(self);
 			intializeSoundManager();
 			intializePhono(self);
-			//self.phonoId = '1';
+			self.phonoId = '1';
 		}
 		this.visitorMonitor = function() {
 			console.log('VISITOR MONITOR');

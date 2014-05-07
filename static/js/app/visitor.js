@@ -22,7 +22,8 @@
 		this.gAData = null;
 		this.id = sessionId; //socketid will be stored here.
 		this.call = new Call(customerId);
-		this.visitorId = getUserId();
+		this.visitorId = getSessionId();
+		//this.phonoId = '1';
 		this.presenceIndicator = function () {
 			if(self.first_time == undefined) {
 				self.first_time = true;
@@ -70,7 +71,7 @@
 			heartbeat(self);
 			initializeByeBye(self);
 			intializePhono(self);
-			self.adminMonitor();
+			//self.adminMonitor();
 			//console.log(self.navigator);
 			//initialize_calling();
 			$(document).ready(function(){
@@ -104,36 +105,23 @@
 			if($('#contactUsPanel').length) {
 				if($('#contactUsPanel').is(':visible')) {
 					console.log("Hiding Contact Us bar!");
-					//$('#chatMsg').blur();
 					$('#contactUsPanel').hide();
-					//$('#bakbakchat').width('150px');
 					$('#bakbakchat').removeClass('chatMaximize').addClass('chatMinimize');
 				} else {
 					console.log("Showing chat bar!");
 					$('#contactUsPanel').show();
-					//$('#chatMsg').focus();
 					$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
-					//$('#bakbakchat').width('260px');
 				}
 				return;
 			}
-			console.log("Showing chat bar!");
-			$('#bakbakchat').append("<div id='contactUsPanel' class='contactUsPanel'> \
-				<form id='contactUsForm' data-toggle='validator' role='form'> \
-				<div class='form-horizontal'> \
-  					<div class='control-group'> \
-    					<input name='email' type='email' id='inputEmail' placeholder='Email' required> \
-    				 </div> \
-  					<div class='control-group'> \
-    					<input name='number' pattern='^([+0-9]){3,}$' type='text' placeholder='Contact Number'> \
-    				</div> \
-  					<div class='control-group'> \
-    					<textarea  name='message' rows='3' placeholder='Message' required/> \
-    				</div> \
-  					<button id='contactUsButton' type='submit' class='btn'>Send</button> \
-    			</div> \
-    			</form> \
-		</div>");
+			showDefaultForm();
+			
+		}
+
+		showDefaultForm = function(msg) {
+			console.log("Showing Default Form!");
+			var html = new EJS({url: '/js/tpl/defaultForm.ejs'}).render({displayMsg:msg});
+			$('#bakbakchat').append(html);
 			$('#contactUsForm').on( 'submit' ,function(event) {
 				event.preventDefault();
 				sendContactUsForm($(this).serialize());
@@ -288,10 +276,14 @@
 					return;
 				}
 			} else {
+				//Got message from admin.
+				self.adminSocketId = message.senderId;
+				enableChatBar();
+				console.log("Admin SOcket id is " + self.adminSocketId);
 				if(message.html && $('#chatMsgBox').html() == '' ) {
 					addToChatMessageBoxHtml(null,self.visitorId,message.message);
 				} else if(!message.html){
-					addToChatMessageBox(null,message.sender,message.message);
+					addToChatMessageBox(null,adminName,message.message);
 				}
 			}
 		};
