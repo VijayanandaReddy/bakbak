@@ -1,3 +1,10 @@
+if(process.env.NODETIME_ACCOUNT_KEY) {
+  require('nodetime').profile({
+    accountKey: process.env.NODETIME_ACCOUNT_KEY,
+    appName: 'BakBakio' // optional
+  });
+}
+
 var appPath = __dirname + '/app'
     , express = require('express')
     , app = express()
