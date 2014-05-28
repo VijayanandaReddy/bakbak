@@ -11,7 +11,8 @@ require.config({
         'webrtcsupport': {
             exports: 'webrtcsupport'
         },
-    }
+    },
+    waitSeconds: 0
 });
 
 function loadCss(url) {

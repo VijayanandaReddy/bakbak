@@ -25,6 +25,7 @@
 
 		function initClickMap() {
 			//Need a loading here.
+			var loadingOverLay = createLoadingOverLay();
 			console.log("MOUSETRACKER:: init ClickMap");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
 			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url).done(function(data){
@@ -52,11 +53,13 @@
                     raf(update);
                 }
                 raf(update);
+                $(loadingOverLay).hide();
 			});
 		}
 
 		function initClickCount() {
-			//Need a loading here.
+			var loadingOverLay = createLoadingOverLay();
+			var canvas = createCanvasOverlay();
 			console.log("MOUSETRACKER:: init ClickCount");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
 			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url).done(function(data){
@@ -78,7 +81,7 @@
 						hide:false
 						});
 				}
-					
+				$(loadingOverLay).hide();
 				
 			});
 		}
@@ -138,6 +141,21 @@
 			pos['pageY'] = e.pageY;
 			pos['time'] = Date.now();
 			return pos;
+		}
+
+		function createLoadingOverLay() {
+			myCanvas = document.createElement('div');
+  			document.body.appendChild(myCanvas);
+  			myCanvas.style.position = 'absolute';
+  			myCanvas.style.left="0px";
+  			myCanvas.style.top="0px";
+  			myCanvas.style.zIndex="999999";
+  			myCanvas.style.width="100%";
+  			myCanvas.style.height="40px";
+  			myCanvas.width=myCanvas.offsetWidth;
+  			myCanvas.height=myCanvas.offsetHeight;
+  			$(myCanvas).html("<img src='http://www.gameskizi.info/assets/images/CARGADOR.gif' />");
+  			return myCanvas;
 		}
 
 		function createCanvasOverlay() {
