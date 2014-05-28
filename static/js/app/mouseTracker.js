@@ -27,7 +27,7 @@
 			//Need a loading here.
 			console.log("MOUSETRACKER:: init ClickMap");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
-			$.get( bakbakUrl + "/mousetrack/?customerId="+customerId+"&pageUrl="+self.url).done(function(data){
+			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url).done(function(data){
 				console.log("MOUSETRACKER:: init "+data); //use list ineterface to add data, server return formatted data.
 				try{
 					 var canvas = createCanvasOverlay();
