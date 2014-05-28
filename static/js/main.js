@@ -11,6 +11,9 @@ require.config({
         'webrtcsupport': {
             exports: 'webrtcsupport'
         },
+        'util': {
+          deps: ['jquery']
+        } 
     },
     waitSeconds: 0
 });

@@ -84,7 +84,7 @@
 
 				}
 				console.log("MOUSETRACKER:: done")
-				$(loadingOverLay).fadeOut(100);
+				$(loadingOverLay).fadeOut(1000);
 				
 				
 			});
@@ -157,7 +157,7 @@
   			myCanvas.style.opacity=0.8;
   			myCanvas.style.background="#aaa";
   			myCanvas.id="bakbakloadingMask";
-  			$(myCanvas).html("<img id='bakbakClickLoading' src='"+bakbakUrl+"img/actions/gif/loaderBar.gif'>Loading</img>");
+  			$(myCanvas).html("<img id='bakbakClickLoading' src='"+bakbakUrl+"img/actions/gif/loaderBar.gif'><p style='color:#fff'>Loading</img>");
   			return myCanvas;
 		}
 
