@@ -24,8 +24,8 @@
 
 
 		function initClickMap() {
-			//Need a loading here.
 			var loadingOverLay = createLoadingOverLay();
+			$(loadingOverLay).fadeIn(100);
 			console.log("MOUSETRACKER:: init ClickMap");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
 			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url).done(function(data){
@@ -53,13 +53,14 @@
                     raf(update);
                 }
                 raf(update);
-                $(loadingOverLay).hide();
+                $(loadingOverLay).fadeOut(10000);
 			});
 		}
 
 		function initClickCount() {
 			var loadingOverLay = createLoadingOverLay();
-			var canvas = createCanvasOverlay();
+			$(loadingOverLay).fadeIn(100);
+			//var canvas = createCanvasOverlay();
 			console.log("MOUSETRACKER:: init ClickCount");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
 			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url).done(function(data){
@@ -73,15 +74,18 @@
 						clickCount = data[i].clickCount;
 					}
 					$(elem).attr('clickCount',clickCount);
-					$(elem).qtip({
+					var tooltip = $(elem).qtip({
 						suppress: false,
 						id: 'clickCountTip',
 						content: ''+clickCount,
 						show:true,
 						hide:false
-						});
+						}).get('api');
+
 				}
-				$(loadingOverLay).hide();
+				console.log("MOUSETRACKER:: done")
+				$(loadingOverLay).fadeOut(100);
+				
 				
 			});
 		}
@@ -149,12 +153,11 @@
   			myCanvas.style.position = 'absolute';
   			myCanvas.style.left="0px";
   			myCanvas.style.top="0px";
-  			myCanvas.style.zIndex="999999";
-  			myCanvas.style.width="100%";
-  			myCanvas.style.height="40px";
-  			myCanvas.width=myCanvas.offsetWidth;
-  			myCanvas.height=myCanvas.offsetHeight;
-  			$(myCanvas).html("<img src='http://www.gameskizi.info/assets/images/CARGADOR.gif' />");
+  			myCanvas.style.zIndex="10";
+  			myCanvas.style.opacity=0.8;
+  			myCanvas.style.background="#aaa";
+  			myCanvas.id="bakbakloadingMask";
+  			$(myCanvas).html("<img id='bakbakClickLoading' src='"+bakbakUrl+"img/actions/gif/loaderBar.gif'>Loading</img>");
   			return myCanvas;
 		}
 
