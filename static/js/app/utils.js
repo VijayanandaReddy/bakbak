@@ -39,7 +39,7 @@ var indexOf = function(needle) {
     return indexOf.call(this, needle);
 };
 
-jQuery.fn.getPath = function () {
+/*jQuery.fn.getPath = function () {
     if (this.length != 1) {
     	console.log("MOUSETRACKER:: Length is" + this.length);
     	throw 'Requires one element.';
@@ -79,7 +79,7 @@ jQuery.fn.getPath = function () {
 
     return path;
 };
-
+*/
 /**
  * A utility function to find all URLs - FTP, HTTP(S) and Email - in a text string
  * and return them in an array.  Note, the URLs returned are exactly as found in the text.
