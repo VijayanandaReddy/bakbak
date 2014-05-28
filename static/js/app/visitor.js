@@ -111,7 +111,7 @@
 
 		showDefaultForm = function(msg) {
 			console.log("Showing Default Form!");
-			var html = new EJS({url: bakbakUrl+'/js/tpl/defaultForm.ejs'}).render({displayMsg:msg});
+			var html = new EJS({url: bakbakUrl+'js/tpl/defaultForm.ejs'}).render({displayMsg:msg});
 			$('#bakbakchat').append(html);
 			$('#contactUsForm').on( 'submit' ,function(event) {
 				event.preventDefault();
