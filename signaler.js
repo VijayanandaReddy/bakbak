@@ -35,6 +35,7 @@ fs.readdirSync(models_path).forEach(function (file) {
 var UserModel = mongoose.model('UserModel');
 require(appPath + '/authenticate')(app,everyauth);
 var user = require(appPath + '/controllers/user');
+var mousetrack = require(appPath + '/controllers/mousetrack');
 
 
 // ----------------------------------socket.io
@@ -131,6 +132,7 @@ io.configure(function () {
                                 console.log('Admin already connected please wait for the previous session to disconnect!');
                                 accept('Admin already logged in with a different session',false);
                             } else {
+                                console.log("Adding admin to the list!");    
                                 active_admins[user.userId] = user.userId;
                             }
                         }
@@ -261,6 +263,15 @@ function onNewNamespace(channel, sender) {
           }
        });
 
+        socket.on('mouseTrack',function (data) {
+          console.log('GOT MouseTrack for for ' + data.reciever + ' for id ' +socketid);
+          socketId = data.reciever;
+          data.senderId = socketid;
+          //console.log("Data is");
+          //console.log(data);
+          mousetrack.updateLog(data.log);
+       });
+
         socket.on('disconnect', function (channel) {
             console.log('DISCONNECTED!!!!! ----> ' + socket.id);
             if(!active_sessions[socket.handshake.sidCookie]) {
@@ -349,7 +360,7 @@ app.get('/location', function(req, res) {
     if(ip == '127.0.0.1') {
     	url = "http://www.geoplugin.net/json.gp";
     }
-    console.log("Making a request to fetch location data. for " + url);
+    //console.log("Making a request to fetch location data. for " + url);
     http.get(url, function(response) {
 	      	console.log("Got location response status code: " + response.statusCode);
 	      	res.setHeader('Content-Type','application/json');

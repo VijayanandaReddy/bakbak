@@ -3,6 +3,7 @@ var index = require(__dirname + '/controllers/index')
     , dashboard = require(__dirname + '/controllers/dashboard')
     , user = require(__dirname + '/controllers/user')
     , application = require(__dirname + '/controllers/application')
+    , mousetrack = require(__dirname + '/controllers/mousetrack')
     , bakbakjs = require(__dirname + '/controllers/bakbakjs');
 
 module.exports = function(app) {
@@ -15,6 +16,7 @@ module.exports = function(app) {
 	app.get('/application',user.authenticated,application.index);
 	app.get('/application/offline',user.authenticated,application.offline);
 	app.get('/user',user.authenticated,user.index);	
-	app.get('/user/logout',user.authenticated,user.logout);	
+	app.get('/user/logout',user.authenticated,user.logout);
+	app.get('/mousetrack/',mousetrack.getLog);	
 	app.get('/js/bakbak.js',bakbakjs.index);	
 }

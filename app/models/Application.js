@@ -5,8 +5,19 @@ var mongoose = require('mongoose'),
  * Schema
  */
  var BakBak = Schema({ 
-	type: String,
-	data: String
+    type: String,
+    data: String
+});
+
+var PageLevelMouseTrack = Schema({
+    url: String,
+    clickTrack:Boolean,
+    movementTrack:Boolean,
+    scrollDepth:Boolean
+});
+
+var MouseTracking = Schema({
+    pages:[PageLevelMouseTrack]
 });
 
 var ApplicationSchema = Schema({
@@ -18,6 +29,7 @@ var ApplicationSchema = Schema({
     enabled: Boolean,
     agentIds: Array,
     displayName: String/*,
+    mouseTracking: MouseTracking,
     offlineForm: BakBak*/
 });
 

@@ -39,6 +39,47 @@ var indexOf = function(needle) {
     return indexOf.call(this, needle);
 };
 
+jQuery.fn.getPath = function () {
+    if (this.length != 1) {
+    	console.log("MOUSETRACKER:: Length is" + this.length);
+    	throw 'Requires one element.';
+    }
+
+    var path, node = this;
+    while (node.length) {
+        var realNode = node[0];
+        var name = (
+
+            // IE9 and non-IE
+            realNode.localName ||
+
+            // IE <= 8
+            realNode.tagName ||
+            realNode.nodeName
+
+        );
+
+        // on IE8, nodeName is '#document' at the top level, but we don't need that
+        if (!name || name == '#document') break;
+
+        name = name.toLowerCase();
+        if (realNode.id) {
+            // As soon as an id is found, there's no need to specify more.
+            return name + '#' + realNode.id + (path ? '>' + path : '');
+        } else if (realNode.className) {
+            name += '.' + realNode.className.split(/\s+/).join('.');
+        }
+
+        var parent = node.parent(), siblings = parent.children(name);
+        if (siblings.length > 1) name += ':eq(' + siblings.index(node) + ')';
+        path = name + (path ? '>' + path : '');
+
+        node = parent;
+    }
+
+    return path;
+};
+
 /**
  * A utility function to find all URLs - FTP, HTTP(S) and Email - in a text string
  * and return them in an array.  Note, the URLs returned are exactly as found in the text.
@@ -87,6 +128,7 @@ function isHidden() {
 
 function clone(obj,ignoreList) {
     if (null == obj || "object" != typeof obj) return obj;
+    if (null == ignoreList) ignoreList=[];
     var copy = {};
     for (var attr in obj) {
     	console.log(ignoreList.indexOf(attr));
@@ -97,6 +139,42 @@ function clone(obj,ignoreList) {
     return copy;
 }
 
+function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+        }
+    }
+}
+
+function removeURLParameter(url, parameter) {
+    //prefer to use l.search if you have a location/link object
+    var urlparts= url.split('?');   
+    if (urlparts.length>=2) {
+
+        var prefix= encodeURIComponent(parameter)+'=';
+        var pars= urlparts[1].split(/[&;]/g);
+
+        //reverse iteration as may be destructive
+        for (var i= pars.length; i-- > 0;) {    
+            //idiom for string.startsWith
+            if (pars[i].lastIndexOf(prefix, 0) !== -1) {  
+                pars.splice(i, 1);
+            }
+        }
+
+        url= urlparts[0]+'?'+pars.join('&');
+        if(url.endsWith("?")) {
+        	url = url.replace(new RegExp('\\?$'), '')
+        }
+        return url;
+    } else {
+        return url;
+    }
+}
 
 /* Gloabls */
 
@@ -175,6 +253,15 @@ var socket;
 			data.sender = sender;
 			console.log('Sending setCookie to ' +  id);
 			socket.emit('setCookie',data);
+		};
+
+		socket.mouseTrack = function(customerId,info) {
+			var data = {};
+			data.type = 'mouseTrack';
+			data.log = info;
+			data.reciever = customerId;
+			data.sender = sender;
+			socket.emit('mouseTrack',data);
 		};
 
 		socket.screenshot = function(id,imgData) {
@@ -371,8 +458,6 @@ var socket;
     			heartbeat(self);
     			$('#'+self.phono.audio.config.localContainerId).hide();
     			this.messaging.send("biplav.saraf@gmail.com", "Hello");
-
-
   			},
   			// Phone API Configuration
   			phone: {
