@@ -1,0 +1,45 @@
+<% include layouts/headOpen %>
+<script src="/js/lib/validator.js"></script>
+<% include layouts/headClose %>
+<% include layouts/internalHeader %>
+<% include layouts/containerFluidOpen %>
+<%if(!createOrEdit){%>
+<% include layouts/sidebar %>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<% } %>
+	<%if(typeof error_message !== 'undefined'){%>
+	<p class='bg-error'><%= error_message%></p>
+	<%} else if(typeof success_message !== 'undefined') { %>
+	<p class='bg-info'><%= success_message%></p>
+	<%} %>
+	
+	<p class='bg-info'>Configure mouse tracking</p>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Mouse Track Details </h3>
+  </div>
+  <div class="panel-body">
+	  <form role="form" 
+	  	action='/application/mousetrack/upsert'
+	  	method='POST'>
+		  <input type="hidden" class="form-control" name="_id" value="<%=mousetrack._id %>">
+		  <input type="hidden" class="form-control" name="applicationId" value="<%=applicationId %>" disabled>
+		  <div class="form-group">
+			  <label for="exampleInputEmail1">Url</label>
+			  <input type="url" class="form-control" name="url" value="<%=mousetrack.url %>" required>
+			  <p class="help-block">Exact url for tracking click events</p>
+		  </div>
+		  <div class="checkbox">
+			  <label>
+				  <input type="checkbox" name='clickTrack' 	<%if(mousetrack.clickTrack){%>checked/<%} %>>
+			  </label>
+			  <p class="help-block">Enable this to track page clicks.</p>
+		  </div>
+		  <button type="submit" class="btn btn-default">Save</button>
+	  </form>
+	</div>
+</div>
+<% include layouts/containerFluidClose %>
+<% include layouts/footer %>

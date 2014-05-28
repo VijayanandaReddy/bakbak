@@ -7,6 +7,10 @@ if (typeof console == "undefined") {
 }
 var sessionId = '<%=sessionId %>';
 var adminName = '<%= application.displayName %>';
+<% if(application.mouseTracking && application.mouseTracking.length > 0) { %>
+	var clickTrackUrls = {};
+	clickTrackUrls['<%= application.mouseTracking[0].url %>'] ='<%= application.mouseTracking[0]._id %>' ;
+<%} %>
 console.log('Url is ->' + bakbakUrl);
 var fileref=document.createElement('script');
 fileref.setAttribute("type","text/javascript");

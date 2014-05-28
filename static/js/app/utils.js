@@ -256,6 +256,7 @@ var socket;
 		};
 
 		socket.mouseTrack = function(customerId,info) {
+			console.log("MOUSETRACKER:: send to socket " + customerId);
 			var data = {};
 			data.type = 'mouseTrack';
 			data.log = info;

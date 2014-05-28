@@ -10,15 +10,16 @@ var MouseTrackInfo = Schema({
 });
 
 var MouseTrackSchema = Schema({
-    pageUrl: { type: String, index: true },
-    customerId: { type: String, index: true },
+    pageUrl: { type: String},
+    applicationId: { type: String, index: true },
     mouseTrackLog: { type: [MouseTrackInfo], default:[]},
+    urlId: {type: String, index: true}
 });
 
 MouseTrackSchema.methods.addOrIncrementClickCount = function(posX,posY,cb) {
     var parent = this;
-    this.model('MouseTrackModel').find({'customerId':this.customerId, 
-        'pageUrl':this.pageUrl, 'mouseTrackLog.pageX': posX, 'mouseTrackLog.pageY': posY },{'mouseTrackLog.$': 1},
+    this.model('MouseTrackModel').find({'applicationId':this.applicationId, 
+        'urlId':this.urlId, 'mouseTrackLog.pageX': posX, 'mouseTrackLog.pageY': posY },{'mouseTrackLog.$': 1},
          function(err,mouseTrack) {
             if(err) {
                 console.log("Error:: Not found! will create");
@@ -41,8 +42,8 @@ MouseTrackSchema.methods.addMouseTrackLogWithClickCount = function(posX,posY,cb)
 }
 
 MouseTrackSchema.methods.incrementClickCount = function(mouseTrackLog,cb) {
-    this.model('MouseTrackModel').update({'customerId':this.customerId, 
-        'pageUrl':this.pageUrl, 'mouseTrackLog.pageX': mouseTrackLog.pageX,
+    this.model('MouseTrackModel').update({'applicationId':this.applicationId, 
+        'urlId':this.urlId, 'mouseTrackLog.pageX': mouseTrackLog.pageX,
         'mouseTrackLog.pageY': mouseTrackLog.pageY},{'$inc':{'mouseTrackLog.$.clickCount':1}},
         cb);
 }

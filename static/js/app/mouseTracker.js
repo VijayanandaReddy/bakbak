@@ -5,30 +5,41 @@
 		this.movementList = [];
 		this.clickPosition = [];
 		this.url=window.location.href;
+		this.urlId='';
 		MAX_SIZE=100;
 		this.init = function() {
 			console.log("MOUSETRACKER:: init " + self.url);
 			var bakbakClickMap = getUrlParameter('bakbakClickMap');
 			console.log("MOUSETRACKER:: init " + bakbakClickMap);
 			if(bakbakClickMap == 'map') {
-				initClickMap();
+				if(isValidUrl()) initClickMap();
 			} else if(bakbakClickMap == 'count') {
-				initClickCount();
+				if(isValidUrl()) initClickCount();
 			} else {
-				if(window.location.href == "http://localhost:5000/index1" ||
-        			window.location.href.indexOf("censore.blogspot") > -1) {
-					initForRecording();
-				}
+				if(isValidUrl()) initForRecording();
 			}
 		};
 
+		function isValidUrl() {
+			self.url = self.url.replace("?bakbakClickMap=map","");
+			self.url = self.url.replace("?bakbakClickMap=count","");
+			for(url in clickTrackUrls) {
+				console.log("MOUSETRACKER:: " +url);	
+				if(url == self.url) {
+					self.urlId = clickTrackUrls[url];
+					console.log('MOUSETRACKER:: Correct URL');
+					return true;
+				}
+			}
+			return false;
+		}
 
 		function initClickMap() {
 			var loadingOverLay = createLoadingOverLay();
 			$(loadingOverLay).fadeIn(100);
 			console.log("MOUSETRACKER:: init ClickMap");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
-			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url).done(function(data){
+			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data){
 				console.log("MOUSETRACKER:: init "+data); //use list ineterface to add data, server return formatted data.
 				try{
 					 var canvas = createCanvasOverlay();
@@ -63,7 +74,7 @@
 			//var canvas = createCanvasOverlay();
 			console.log("MOUSETRACKER:: init ClickCount");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
-			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url).done(function(data){
+			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data){
 				console.log("MOUSETRACKER:: init "+data); //use list ineterface to add data, server return formatted data.
 				for(i in data) {
 					var elem = document.elementFromPoint(data[i].pageX, data[i].pageY);
@@ -92,11 +103,14 @@
 
 
 		function send() {
+			console.log("MOUSETRACKER:: Sending MouseTracking Data.");
 			socket.mouseTrack(customerId,
 				{'mouseMovements': self.movementList,
 				  'clickPosition': self.clickPosition,
 				 'pageUrl' : self.url,
-				 'customerId' : self.customerId}
+				 'customerId' : self.customerId,
+				  'urlId': self.urlId
+				}
 			);
 			self.clickPosition=[]; //Can loose Clicks.
 			initMovementList(); //Can loose some movement.
@@ -109,6 +123,7 @@
 		}
 
 		function initClickListeners() {
+			console.log("MOUSETRACKER:: init initClickListeners")
 			$(window).click(function(e) {
 				self.clickPosition.push(getPosition(e));
 				send();
