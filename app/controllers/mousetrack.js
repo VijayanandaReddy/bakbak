@@ -32,6 +32,7 @@ exports.updateLog= function(info){
 };
 
 exports.getLog = function(req,res) {
+	res.header("Access-Control-Allow-Origin", "*");
 	var customerId = req.query.customerId;
 	var pageUrl = req.query.pageUrl;
 	console.log("PageUrl:: " + pageUrl + " customerId:: " + customerId);
