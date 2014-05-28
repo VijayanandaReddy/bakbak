@@ -71,16 +71,6 @@ app.configure(function() {
     app.use(app.router);
     app.enable('trust proxy');
     app.use(express.compress());
-    app.use('/img',express.static(path.join(__dirname, 'static/img')));
-    app.use('/css',express.static(path.join(__dirname, 'static/css')));
-    app.use('/js',express.static(path.join(__dirname, 'static/js')));
-    app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
-    app.use('/sounds',express.static(path.join(__dirname, 'static/sounds')));
-     app.use('/home_files',express.static(path.join(__dirname, 'home_files')));
-    app.use(everyauth.middleware(app));
-    app.use(everyauth.middleware(app)); // important to call this AFTER session!
-    app.use(app.router);
-
     app.use(function (req, res, next) {
         // Website you wish to allow to connect
         res.setHeader('Access-Control-Allow-Origin', '*');
@@ -94,6 +84,16 @@ app.configure(function() {
         // Pass to next layer of middleware
         next();
     });
+    app.use('/img',express.static(path.join(__dirname, 'static/img')));
+    app.use('/css',express.static(path.join(__dirname, 'static/css')));
+    app.use('/js',express.static(path.join(__dirname, 'static/js')));
+    app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
+    app.use('/sounds',express.static(path.join(__dirname, 'static/sounds')));
+     app.use('/home_files',express.static(path.join(__dirname, 'home_files')));
+    app.use(everyauth.middleware(app));
+    app.use(everyauth.middleware(app)); // important to call this AFTER session!
+    //app.use(app.router);
+
 });
 
 app.configure('development', function(){
