@@ -14,7 +14,7 @@
 		this.gAData = null;
 		this.id = sessionId; //socketid will be stored here.
 		this.call = new Call(customerId);
-		this.visitorId = getSessionId();
+		this.visitorId = sessionId;
 		this.presenceIndicator = function () {
 			if(self.first_time == undefined) {
 				self.first_time = true;
@@ -268,7 +268,7 @@
 				}
 			} else {
 				//Got message from admin.
-				self.adminSocketId = message.senderId;
+				//self.adminSocketId = message.senderId;
 				enableChatBar();
 				console.log("Admin SOcket id is " + self.adminSocketId);
 				if(message.html && $('#chatMsgBox').html() == '' ) {

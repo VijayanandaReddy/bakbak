@@ -26,7 +26,7 @@ exports.updateLog= function(info){
 				console.log(err);
 			} else {
 				console.log('Succedded to update click count');
-				console.log(result);
+				//console.log(result);
 			}
 		});
 		console.log(info);

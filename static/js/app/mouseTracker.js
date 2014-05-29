@@ -53,7 +53,7 @@
                                          window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
                  var update = function(){
                     for(i in data) {
-					heatmap.addPoint(data[i].pageX, data[i].pageY, data[i].clickCount, 1/450); //figure out intensity
+						heatmap.addPoint(data[i].pageX, data[i].pageY, data[i].clickCount, 1/450); //figure out intensity
 					}
                     heatmap.adjustSize(); // can be commented out for statically sized heatmaps, resize clears the map
                     heatmap.update(); // adds the buffered points
