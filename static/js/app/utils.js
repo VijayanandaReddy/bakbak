@@ -39,6 +39,53 @@ var indexOf = function(needle) {
     return indexOf.call(this, needle);
 };
 
+findElementLocation = function (el) {
+    //if(el !== null) throw Exception("Got null element");
+    if (el instanceof $) {
+      // a jQuery element
+      el = el[0];
+    }
+    if (el[0] && el.attr && el[0].nodeType == 1) {
+      // Or a jQuery element not made by us
+      el = el[0];
+    }
+    if (el.id) {
+      return "#" + el.id;
+    }
+    if (el.tagName == "BODY") {
+      return "body";
+    }
+    if (el.tagName == "HEAD") {
+      return "head";
+    }
+    if (el === document) {
+      return "document";
+    }
+    var parent = el.parentNode;
+    if ((! parent) || parent == el) {
+      console.warn("elementLocation(", el, ") has null parent");
+      throw new Error("No locatable parent found");
+    }
+    var parentLocation = findElementLocation(parent);
+    var children = parent.childNodes;
+    var _len = children.length;
+    var index = 0;
+    for (var i=0; i<_len; i++) {
+      if (children[i] == el) {
+        break;
+      }
+      if (children[i].nodeType == document.ELEMENT_NODE) {
+        if (children[i].className.indexOf("togetherjs") != -1) {
+          // Don't count our UI
+          continue;
+        }
+        // Don't count text or comments
+        index++;
+      }
+    }
+    return parentLocation + ":nth-child(" + (index+1)	 + ")";
+  }
+
 /*jQuery.fn.getPath = function () {
     if (this.length != 1) {
     	console.log("MOUSETRACKER:: Length is" + this.length);

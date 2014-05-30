@@ -2,11 +2,16 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+var MousePos = Schema({
+    x: { type: Number},
+    y: { type: Number}
+});
+
 var MouseTrackInfo = Schema({
-    pageX:{ type: Number,  index: true },
-    pageY :{ type: Number, index:true },
-    clickCount:{ type: Number, min: 0 },
-    timeSpent: { type: Number, min: 0 }
+    pos:{ type: [MousePos], default:[]},
+    element: {type: String, index:true},
+    clickCount:{ type: Number, default: 0 },
+    timeSpent: { type: Number, default: 0 }
 });
 
 var MouseTrackSchema = Schema({
@@ -16,36 +21,69 @@ var MouseTrackSchema = Schema({
     urlId: {type: String, index: true}
 });
 
-MouseTrackSchema.methods.addOrIncrementClickCount = function(posX,posY,cb) {
+MouseTrackSchema.methods.addOrIncrementClickCount = function(element,pageX,pageY,cb) {
     var parent = this;
-    this.model('MouseTrackModel').find({'applicationId':this.applicationId, 
-        'urlId':this.urlId, 'mouseTrackLog.pageX': posX, 'mouseTrackLog.pageY': posY },{'mouseTrackLog.$': 1},
-         function(err,mouseTrack) {
+    this.model('MouseTrackModel').findOneAndUpdate(
+        {   'applicationId':this.applicationId, 
+            'urlId':this.urlId, 
+            'mouseTrackLog.element': { $ne : element}
+        }, 
+        {
+            "$push": {'mouseTrackLog' :{'element':element,'clickCount':0,'timeSpent':0, 'pos':[]}}
+        },
+        {
+            'new': true
+        },
+        function(err,result) {
             if(err) {
-                console.log("Error:: Not found! will create");
+                console.log("Stuck! in adding or incrmenting click count");
                 console.log(err);
-                parent.addMouseTrackLogWithClickCount(posX,posY,cb);
-            } else if(mouseTrack.length == 0) {
-                console.log("Not found! will create");
-                console.log(mouseTrack);
-                parent.addMouseTrackLogWithClickCount(posX,posY,cb);
             } else {
-                console.log(mouseTrack);
-                parent.incrementClickCount(( mouseTrack[0].mouseTrackLog[0]),cb);
+                console.log(result);
+                parent.incrementClickCount(element,pageX,pageY,cb);
             }
         });
 }
 
-MouseTrackSchema.methods.addMouseTrackLogWithClickCount = function(posX,posY,cb) {
-     this.mouseTrackLog.push({'pageX':posX,'pageY':posY,'clickCount':1,'timeSpent':0});
-     this.save(cb);
+
+MouseTrackSchema.methods.storePostion = function(element,pageX,pageY,cb) {
+   this.model('MouseTrackModel').findOneAndUpdate(
+        {   'applicationId':this.applicationId, 
+            'urlId':this.urlId, 
+            'mouseTrackLog.element': element,
+            'mouseTrackLog.pos.x' : { $ne: pageX },
+            'mouseTrackLog.pos.y' : { $ne: pageY } 
+        },
+        {
+            "$push": {'mouseTrackLog.$.pos' :{x:+pageX,y:+pageY}}
+        },
+        {
+            'new': true
+        },
+        cb);
 }
 
-MouseTrackSchema.methods.incrementClickCount = function(mouseTrackLog,cb) {
+
+MouseTrackSchema.methods.incrementClickCount = function(element,pageX,pageY,cb) {
+    var parent = this;
     this.model('MouseTrackModel').update({'applicationId':this.applicationId, 
-        'urlId':this.urlId, 'mouseTrackLog.pageX': mouseTrackLog.pageX,
-        'mouseTrackLog.pageY': mouseTrackLog.pageY},{'$inc':{'mouseTrackLog.$.clickCount':1}},
-        cb);
+        'urlId':this.urlId, 'mouseTrackLog.element': element},
+        {
+            '$inc':{'mouseTrackLog.$.clickCount':1}
+        },
+        {
+            'new': true
+        },
+        function(err,result) {
+            if(err) {
+                console.log("Failed to increment click count " + err);
+                parent.storePostion(element,pageX,pageY,cb);
+            } else {
+                console.log("Incremented click count");
+                console.log(result);
+                parent.storePostion(element,pageX,pageY,cb);
+            }
+        });
 }
 
 MouseTrackInfo.methods.incrementClickCount = function(cb) {

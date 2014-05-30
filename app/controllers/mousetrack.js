@@ -13,6 +13,7 @@ exports.updateLog= function(info){
 	if(!clickPosition) return;
 	var pageX = clickPosition['pageX'];
 	var pageY = clickPosition['pageY'];
+	var element = clickPosition['element'];
 	//Think about musemovement later.
 	console.log("PageX " + pageX + " PageY " + pageY + " " +urlId );
 	isPageUrlValid(applicationId,urlId,pageUrl,function(model){
@@ -20,7 +21,7 @@ exports.updateLog= function(info){
 			console.log("Failed to access db!");
 			return;
 		}
-		model.addOrIncrementClickCount(pageX,pageY,function(err,result) {
+		model.addOrIncrementClickCount(element,pageX,pageY,function(err,result) {
 			if(err) {
 				console.log('Failed to update click count');
 				console.log(err);

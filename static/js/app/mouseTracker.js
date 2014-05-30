@@ -40,7 +40,6 @@
 			console.log("MOUSETRACKER:: init ClickMap");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
 			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data){
-				console.log("MOUSETRACKER:: init "+data); //use list ineterface to add data, server return formatted data.
 				try{
 					 var canvas = createCanvasOverlay();
  				   	 var heatmap = createWebGLHeatmap({canvas: canvas});
@@ -51,17 +50,36 @@
 				
 				var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                                          window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-                 var update = function(){
-                    for(i in data) {
-						heatmap.addPoint(data[i].pageX, data[i].pageY, data[i].clickCount, 1/450); //figure out intensity
-					}
-                    heatmap.adjustSize(); // can be commented out for statically sized heatmaps, resize clears the map
+                var formatted_data = [];
+                var totalClick = 0;
+                for(i in data) {
+                	var element = data[i].element;
+                	if(element.indexOf('body:') == 0) {
+                		element=element.replace('body:','body :');
+                	}
+                	var clickCount = data[i].clickCount;
+                	var offset = $(element).offset();
+         
+                	for(p in data[i].pos) {
+                		pageX = data[i].pos[p].x+offset.left;
+                		pageY = data[i].pos[p].y+offset.top; 
+                		pixelSize = 100;
+                		formatted_data.push({x:pageX,y:pageY,size:pixelSize,clickCount:clickCount});
+                	}
+                	totalClick = totalClick + clickCount;
+				}
+                var update = function(){
+                 	for(i in formatted_data) {
+                 		console.log(formatted_data[i]);
+                 		heatmap.addPoint(formatted_data[i].x,formatted_data[i].y,10,formatted_data[i].clickCount/totalClick);
+                 	}
+                    //heatmap.adjustSize(); // can be commented out for statically sized heatmaps, resize clears the map
                     heatmap.update(); // adds the buffered points
                     heatmap.display(); // adds the buffered points
                     //heatmap.multiply(0.9995);
                     //heatmap.blur();
                     //heatmap.clamp(0.0, 1.0); // depending on usecase you might want to clamp it
-                    raf(update);
+                    //raf(update);
                 }
                 raf(update);
                 $(loadingOverLay).fadeOut(10000);
@@ -77,13 +95,11 @@
 			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data){
 				console.log("MOUSETRACKER:: init "+data); //use list ineterface to add data, server return formatted data.
 				for(i in data) {
-					var elem = document.elementFromPoint(data[i].pageX, data[i].pageY);
-					var clickCount = $(elem).attr('clickCount');
-					if(clickCount) {
-						clickCount = +clickCount + +data[i].clickCount;
-					} else {
-						clickCount = data[i].clickCount;
-					}
+					var elem = data[i].element;
+					if(elem.indexOf('body:') == 0) {
+                		elem=elem.replace('body:','body :');
+                	}
+					var clickCount = data[i].clickCount;
 					$(elem).attr('clickCount',clickCount);
 					var tooltip = $(elem).qtip({
 						suppress: false,
@@ -92,12 +108,9 @@
 						show:true,
 						hide:false
 						}).get('api');
-
 				}
 				console.log("MOUSETRACKER:: done")
-				$(loadingOverLay).fadeOut(1000);
-				
-				
+				$(loadingOverLay).fadeOut(1000);	
 			});
 		}
 
@@ -118,7 +131,7 @@
 
 		function initForRecording() {
 			initMovementList();
-			initMovementListeners();
+			//initMovementListeners();
 			initClickListeners();
 		}
 
@@ -148,6 +161,7 @@
 
 		function getDummyE() {
 			var e={};
+			e['srcElement']=$('body');
 			e['pageX']=0;
 			e['pageY']=0;
 			e['time']=Date.now();
@@ -156,8 +170,14 @@
 
 		function getPosition(e) {
 			var pos={};
-			pos['pageX'] = e.pageX;
-			pos['pageY'] = e.pageY;
+			var el = e.srcElement;
+			element = findElementLocation(el);
+			console.log(findElementLocation(el));
+			offset = $(el).offset();
+			console.log(offset);
+			pos['pageX'] = e.pageX-offset.left;
+			pos['pageY'] = e.pageY - offset.top;
+			pos['element'] = element;
 			pos['time'] = Date.now();
 			return pos;
 		}
