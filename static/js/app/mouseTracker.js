@@ -171,6 +171,9 @@
 		function getPosition(e) {
 			var pos={};
 			var el = e.srcElement;
+			if(!el) {
+				el=e.target;
+			}
 			element = findElementLocation(el);
 			console.log(findElementLocation(el));
 			offset = $(el).offset();
