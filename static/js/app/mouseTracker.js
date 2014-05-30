@@ -34,6 +34,23 @@
 			return false;
 		}
 
+		function sanatizeElement(el) {
+			if(el.indexOf(':') > -1) {
+            	 each = el.split(':');
+            	 var newEl = '';
+            	 for(i in each) {
+            	 	if(i==0) {
+            	 		newEl=each[i];
+            	 	} else {
+            	 		newEL = newEl+" :"+each[i]
+            	 	}
+            	 }
+            	 console.log(newEl);
+            	 return newEL;   		
+            }
+            return el;
+		}
+
 		function initClickMap() {
 			var loadingOverLay = createLoadingOverLay();
 			$(loadingOverLay).fadeIn(100);
@@ -54,10 +71,9 @@
                 var totalClick = 0;
                 for(i in data) {
                 	var element = data[i].element;
-                	if(element.indexOf('body:') == 0) {
-                		element=element.replace('body:','body :');
-                	}
+                	element= sanatizeElement(element);
                 	var clickCount = data[i].clickCount;
+                	console.log(element);
                 	var offset = $(element).offset();
          
                 	for(p in data[i].pos) {
@@ -96,18 +112,18 @@
 				console.log("MOUSETRACKER:: init "+data); //use list ineterface to add data, server return formatted data.
 				for(i in data) {
 					var elem = data[i].element;
-					if(elem.indexOf('body:') == 0) {
-                		elem=elem.replace('body:','body :');
-                	}
+					elem= sanatizeElement(elem);
+					console.log("MOUSETRACKER:: "+elem);
+					console.log(data[i]);
 					var clickCount = data[i].clickCount;
 					$(elem).attr('clickCount',clickCount);
-					var tooltip = $(elem).qtip({
+					var tooltip = $($(elem)[0]).qtip({
 						suppress: false,
 						id: 'clickCountTip',
 						content: ''+clickCount,
 						show:true,
 						hide:false
-						}).get('api');
+						}).get('api'); 
 				}
 				console.log("MOUSETRACKER:: done")
 				$(loadingOverLay).fadeOut(1000);	

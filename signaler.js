@@ -269,7 +269,9 @@ function onNewNamespace(channel, sender) {
           data.senderId = socketid;
           //console.log("Data is");
           //console.log(data);
-          mousetrack.updateLog(data.log);
+            if(data.sender == sender) {
+                mousetrack.updateLog(data.log);
+            }
        });
 
         socket.on('disconnect', function (channel) {
