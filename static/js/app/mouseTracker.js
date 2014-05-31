@@ -68,7 +68,7 @@
 				var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                                          window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
                 var formatted_data = [];
-                var totalClick = 0;
+                var maxClickCount = 0;
                 for(i in data) {
                 	var element = data[i].element;
                 	element= sanatizeElement(element);
@@ -85,12 +85,12 @@
                 		pixelSize = 100;
                 		formatted_data.push({x:pageX,y:pageY,size:pixelSize,clickCount:clickCount});
                 	}
-                	totalClick = totalClick + clickCount;
+                	maxClickCount = clickCount > maxClickCount ? clickCount : maxClickCount;
 				}
                 var update = function(){
                  	for(i in formatted_data) {
                  		console.log(formatted_data[i]);
-                 		heatmap.addPoint(formatted_data[i].x,formatted_data[i].y,10,formatted_data[i].clickCount/totalClick);
+                 		heatmap.addPoint(formatted_data[i].x,formatted_data[i].y,10,formatted_data[i].clickCount/maxClickCount);
                  	}
                     //heatmap.adjustSize(); // can be commented out for statically sized heatmaps, resize clears the map
                     heatmap.update(); // adds the buffered points
