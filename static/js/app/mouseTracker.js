@@ -73,8 +73,11 @@
                 	var element = data[i].element;
                 	element= sanatizeElement(element);
                 	var clickCount = data[i].clickCount;
-                	console.log(element);
                 	var offset = $(element).offset();
+                	if(offset == null) {
+                		console.log("MOUSETRACKER::ERROR:: null for " + element);
+                		continue;
+                	}
          
                 	for(p in data[i].pos) {
                 		pageX = data[i].pos[p].x+offset.left;
@@ -110,6 +113,7 @@
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
 			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data){
 				console.log("MOUSETRACKER:: init "+data); //use list ineterface to add data, server return formatted data.
+				colors = ['rgb(206, 212, 245)','rgb(132, 229, 210)','rgb(209, 184, 236)','rgb(250, 190, 226)'];
 				for(i in data) {
 					var elem = data[i].element;
 					elem= sanatizeElement(elem);
@@ -117,13 +121,32 @@
 					console.log(data[i]);
 					var clickCount = data[i].clickCount;
 					$(elem).attr('clickCount',clickCount);
-					var tooltip = $($(elem)[0]).qtip({
+					/*var tooltip = $($(elem)[0]).qtip({
 						suppress: false,
 						id: 'clickCountTip',
 						content: ''+clickCount,
 						show:true,
 						hide:false
-						}).get('api'); 
+						}).get('api'); */
+					position = 'bottom';
+					offset = $($(elem)[0]).offset();
+					$($(elem)[0]).css('z-index',999);
+					if(offset != null) {
+						if ($(window).height() <  offset.top+50) {
+							position = 'top';
+						}
+					}
+
+					$($(elem)[0]).balloon({
+						contents:'<div>'+clickCount+'</div>',
+						position: position,
+						minLifetime: 20000,
+						css: {
+							'background-color': colors[i%colors.length]
+						}
+					}).showBalloon();
+					$($(elem)[0]).css('border','1px solid '+colors[i%colors.length]);
+
 				}
 				console.log("MOUSETRACKER:: done")
 				$(loadingOverLay).fadeOut(1000);	
