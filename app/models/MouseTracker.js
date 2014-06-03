@@ -1,6 +1,5 @@
 
-var mongoose = require('mongoose')
-    require('mongoose-number')(mongoose),
+var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 
