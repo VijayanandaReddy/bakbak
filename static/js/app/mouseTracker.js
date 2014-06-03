@@ -88,8 +88,12 @@
 				maxClickCount = maxClickCount /4;
                 var update = function(){
                  	for(i in formatted_data) {
+                 		var count = formatted_data[i].count;
                  		console.log(formatted_data[i]);
-                 		heatmap.addPoint(formatted_data[i].x,formatted_data[i].y,15,formatted_data[i].count/maxClickCount);
+                 		if(count > maxClickCount) {
+                 			count = count / 4;
+                 		}
+                 		heatmap.addPoint(formatted_data[i].x,formatted_data[i].y,15,count/maxClickCount);
                  	}
                     //heatmap.adjustSize(); // can be commented out for statically sized heatmaps, resize clears the map
                     heatmap.update(); // adds the buffered points
