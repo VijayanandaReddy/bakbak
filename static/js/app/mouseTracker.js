@@ -59,7 +59,7 @@
 			$.get( bakbakUrl + "mousetrack/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data){
 				try{
 					 var canvas = createCanvasOverlay();
- 				   	 var heatmap = createWebGLHeatmap({canvas: canvas});
+ 				   	 var heatmap = createWebGLHeatmap({canvas: canvas, intensityToAlpha:true});
 				} catch(ex){
 					console.log("MOUSETRACKER::cannot create heat map" );
     				console.log(ex);
@@ -81,21 +81,22 @@
          
                 	pageX = data[i].x+offset.left;
                 	pageY = data[i].y+offset.top; 
-                	pixelSize = 1000;
-                	formatted_data.push({x:pageX,y:pageY,size:pixelSize,clickCount:clickCount});
+                	pixelSize = 1;
+                	formatted_data.push({x:pageX,y:pageY,size:pixelSize,count:clickCount});
                 	maxClickCount = clickCount > maxClickCount ? clickCount : maxClickCount;
 				}
+				maxClickCount = maxClickCount;
                 var update = function(){
                  	for(i in formatted_data) {
                  		console.log(formatted_data[i]);
-                 		heatmap.addPoint(formatted_data[i].x,formatted_data[i].y,10,formatted_data[i].clickCount/maxClickCount);
+                 		heatmap.addPoint(formatted_data[i].x,formatted_data[i].y,15,formatted_data[i].count/maxClickCount);
                  	}
                     //heatmap.adjustSize(); // can be commented out for statically sized heatmaps, resize clears the map
                     heatmap.update(); // adds the buffered points
                     heatmap.display(); // adds the buffered points
                     //heatmap.multiply(0.9995);
                     //heatmap.blur();
-                    //heatmap.clamp(0.0, 1.0); // depending on usecase you might want to clamp it
+                    heatmap.clamp(0.0, 1.0); // depending on usecase you might want to clamp it
                     //raf(update);
                 }
                 raf(update);
@@ -238,14 +239,15 @@
 		function createCanvasOverlay() {
   			myCanvas = document.createElement('canvas');
   			document.body.appendChild(myCanvas);
+  			myCanvas.id='heatmapEl';
   			myCanvas.style.position = 'absolute';
   			myCanvas.style.left="0px";
   			myCanvas.style.top="0px";
   			myCanvas.style.zIndex="99999";
   			myCanvas.style.width="100%";
   			myCanvas.style.height="100%";
-  			myCanvas.width=myCanvas.offsetWidth;
-  			myCanvas.height=myCanvas.offsetHeight;
+  			//myCanvas.width=myCanvas.offsetWidth;
+  			//myCanvas.height=myCanvas.offsetHeight;
   			return myCanvas;
 		}	
 

@@ -125,7 +125,7 @@ exports.getCountLog = function(req,res) {
 	console.log("PageUrl:: " + pageUrl + " customerId:: " + customerId);
 	MouseTrackModel.aggregate([
 		{
-			$match: {applicationId: "538652bee3dd619a382b48fd", urlId:"538652c4e3dd619a382b48fe" }
+			$match: {applicationId: customerId, urlId: urlId}
 		}, 
 		{
 			$unwind:'$mouseTrackLog'}, 
