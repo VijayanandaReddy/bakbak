@@ -17,7 +17,8 @@ module.exports = function(app) {
 	app.get('/application/offline',user.authenticated,application.offline);
 	app.get('/user',user.authenticated,user.index);	
 	app.get('/user/logout',user.authenticated,user.logout);
-	app.get('/mousetrack/',mousetrack.getLog);	
+	app.get('/mousetrack/',mousetrack.getLog);
+	app.get('/mousetrack/count',mousetrack.getCountLog);	
 	app.get('/js/bakbak.js',bakbakjs.index);
 	app.get('/application/mousetrack',user.authenticated,mousetrack.getSettings);
 	app.post('/application/mousetrack/upsert',user.authenticated,mousetrack.setSettings);	

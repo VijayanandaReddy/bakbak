@@ -1,17 +1,16 @@
 
-var mongoose = require('mongoose'),
+var mongoose = require('mongoose')
+    require('mongoose-number')(mongoose),
     Schema = mongoose.Schema;
 
-var MousePos = Schema({
-    x: { type: Number},
-    y: { type: Number}
-});
 
 var MouseTrackInfo = Schema({
-    pos:{ type: [MousePos], default:[]},
     element: {type: String, index:true},
     clickCount:{ type: Number, default: 0 },
-    timeSpent: { type: Number, default: 0 }
+    timeSpent: { type: Number, default: 0 },
+    x: { type: Number, default:0},
+    y: { type: Number, default: 0},
+    identifier: {type: String}
 });
 
 var MouseTrackSchema = Schema({
@@ -26,10 +25,10 @@ MouseTrackSchema.methods.addOrIncrementClickCount = function(element,pageX,pageY
     this.model('MouseTrackModel').findOneAndUpdate(
         {   'applicationId':this.applicationId, 
             'urlId':this.urlId, 
-            'mouseTrackLog.element': { $ne : element}
+            'mouseTrackLog.identifier': { $ne : element+"X"+pageX+"Y"+pageY},
         }, 
         {
-            "$push": {'mouseTrackLog' :{'element':element,'clickCount':0,'timeSpent':0, 'pos':[]}}
+            "$push": {'mouseTrackLog' :{'element':element,'clickCount':0,'timeSpent':0, 'x':pageX, 'y':pageY, identifier: element+"X"+pageX+"Y"+pageY}}
         },
         {
             'new': true
@@ -46,16 +45,16 @@ MouseTrackSchema.methods.addOrIncrementClickCount = function(element,pageX,pageY
 }
 
 
-MouseTrackSchema.methods.storePostion = function(element,pageX,pageY,cb) {
-   this.model('MouseTrackModel').findOneAndUpdate(
-        {   'applicationId':this.applicationId, 
+MouseTrackSchema.methods.incrementClickCount = function(element,pageX,pageY,cb) {
+    var parent = this;
+    this.model('MouseTrackModel').update(
+        {
+            'applicationId':this.applicationId, 
             'urlId':this.urlId, 
-            'mouseTrackLog.element': element,
-            'mouseTrackLog.pos.x' : { $ne: pageX },
-            'mouseTrackLog.pos.y' : { $ne: pageY } 
+            'mouseTrackLog.identifier': element+"X"+pageX+"Y"+pageY
         },
         {
-            "$push": {'mouseTrackLog.$.pos' :{x:+pageX,y:+pageY}}
+            '$inc':{'mouseTrackLog.$.clickCount':1}
         },
         {
             'new': true
@@ -63,31 +62,5 @@ MouseTrackSchema.methods.storePostion = function(element,pageX,pageY,cb) {
         cb);
 }
 
-
-MouseTrackSchema.methods.incrementClickCount = function(element,pageX,pageY,cb) {
-    var parent = this;
-    this.model('MouseTrackModel').update({'applicationId':this.applicationId, 
-        'urlId':this.urlId, 'mouseTrackLog.element': element},
-        {
-            '$inc':{'mouseTrackLog.$.clickCount':1}
-        },
-        {
-            'new': true
-        },
-        function(err,result) {
-            if(err) {
-                console.log("Failed to increment click count " + err);
-                parent.storePostion(element,pageX,pageY,cb);
-            } else {
-                console.log("Incremented click count");
-                console.log(result);
-                parent.storePostion(element,pageX,pageY,cb);
-            }
-        });
-}
-
-MouseTrackInfo.methods.incrementClickCount = function(cb) {
-    this.model('MouseTrackInfo').update({},{'$inc':{'clickCount':1}},cb);
-}
 
 mongoose.model('MouseTrackModel', MouseTrackSchema);

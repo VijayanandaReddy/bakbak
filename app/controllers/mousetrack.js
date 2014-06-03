@@ -26,8 +26,8 @@ exports.updateLog= function(info){
 				console.log('Failed to update click count');
 				console.log(err);
 			} else {
-				console.log('Succedded to update click count');
-				//console.log(result);
+				console.log('Succeeded to update click count');
+				console.log(result);
 			}
 		});
 		console.log(info);
@@ -115,6 +115,34 @@ exports.getLog = function(req,res) {
 			}
 		});
 }
+
+
+exports.getCountLog = function(req,res) {
+	res.header("Access-Control-Allow-Origin", "*");
+	var customerId = req.query.customerId;
+	var pageUrl = req.query.pageUrl;
+	var urlId = req.query.urlId;
+	console.log("PageUrl:: " + pageUrl + " customerId:: " + customerId);
+	MouseTrackModel.aggregate([
+		{
+			$match: {applicationId: "538652bee3dd619a382b48fd", urlId:"538652c4e3dd619a382b48fe" }
+		}, 
+		{
+			$unwind:'$mouseTrackLog'}, 
+		{
+			$group: { _id :"$mouseTrackLog.element", total:{ $sum :"$mouseTrackLog.clickCount"}}
+		}],function(err,response) {
+			if(err || response == null) {
+				res.json({"error":err});
+			} else {
+				console.log("Found in db!");
+				console.log(response);
+				res.json(response);
+			}
+		});
+}
+
+
 
 function createClickLogEntry(applicationId,urlId,currentUrl,callback) {
 		MouseTrackModel.findOne({applicationId:applicationId,urlId:urlId},function(err,model) {
