@@ -40,9 +40,9 @@
             	 var newEl = '';
             	 for(i in each) {
             	 	if(i==0) {
-            	 		newEl=each[i];
+            	 		newEl=each[0];
             	 	} else {
-            	 		newEL = newEl+" :"+each[i]
+            	 		newEl = newEl+" :"+each[i]
             	 	}
             	 }
             	 console.log(newEl);

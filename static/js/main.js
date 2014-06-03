@@ -29,7 +29,7 @@ function loadCss(url) {
 
 
 requirejs(['jquery','jquery','webrtcsupport','socketio','app/call','app/utils','app/visitor','validator','html2canvas',
-  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0','ejs','app/mouseTracker','webgl-heatmap',
+  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0','ejs','app/mouseTracker','heatmap',//'webgl-heatmap',
   'jquery.balloon.min'],
   function($,jquery,webrtc,socketio,call,util,visitor,validator,html2canvas,embedly,placeholder,phono,tenhands,ejs,mouseTracker,heatmap,balloon) {
   		console.log('lib is loaded');
