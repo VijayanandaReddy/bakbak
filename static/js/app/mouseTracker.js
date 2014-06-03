@@ -85,7 +85,7 @@
                 	formatted_data.push({x:pageX,y:pageY,size:pixelSize,count:clickCount});
                 	maxClickCount = clickCount > maxClickCount ? clickCount : maxClickCount;
 				}
-				maxClickCount = maxClickCount;
+				maxClickCount = maxClickCount /4;
                 var update = function(){
                  	for(i in formatted_data) {
                  		console.log(formatted_data[i]);
@@ -96,7 +96,7 @@
                     heatmap.display(); // adds the buffered points
                     //heatmap.multiply(0.9995);
                     //heatmap.blur();
-                    heatmap.clamp(0.0, 1.0); // depending on usecase you might want to clamp it
+                    //heatmap.clamp(0.0, 1.0); // depending on usecase you might want to clamp it
                     //raf(update);
                 }
                 raf(update);
@@ -113,12 +113,12 @@
 			$.get( bakbakUrl + "mousetrack/count/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data_response){
 				console.log("MOUSETRACKER:: init "+data_response); //use list ineterface to add data, server return formatted data.
 				colors = ['rgb(206, 212, 245)','rgb(132, 229, 210)','rgb(209, 184, 236)','rgb(250, 190, 226)','#6FFF00','#FF00FF','#FFFF00', '#4D4DFF','#FE0001','#FF4105','#993CF3','#FFFF'];
-				for(i in data_response) {
-					var elem = data_response[i]._id;
+				for(var index_data in data_response) {
+					var elem = data_response[index_data]._id;		
 					elem= sanatizeElement(elem);
 					console.log("MOUSETRACKER:: "+elem);
-					console.log(data_response[i]);
-					var clickCount = data_response[i].total;
+					console.log(data_response[index_data]);
+					var clickCount = data_response[index_data].total;
 					$(elem).attr('clickCount',clickCount);
 					position = 'bottom';
 					offset = $($(elem)[0]).offset();
@@ -133,17 +133,17 @@
 							position = 'top';
 						}
 					}
-
+					var i = index_data % colors.length;
 					$($(elem)[0]).balloon({
 						contents:'<div>'+clickCount+'</div>',
 						position: position,
 						minLifetime: 20000,
 						css: {
-							'background-color': colors[i%colors.length],
+							'background-color': colors[i],
 							'z-index': zIndex
 						}
 					}).showBalloon();
-					$($(elem)[0]).css('border','1px solid '+colors[i%colors.length]);
+					$($(elem)[0]).css('border','1px solid '+colors[i]);
 
 				}
 				console.log("MOUSETRACKER:: done")
