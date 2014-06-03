@@ -110,15 +110,15 @@
 			//var canvas = createCanvasOverlay();
 			console.log("MOUSETRACKER:: init ClickCount");
 			self.url = removeURLParameter(self.url,'bakbakClickMap');
-			$.get( bakbakUrl + "mousetrack/count/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data){
+			$.get( bakbakUrl + "mousetrack/count/?customerId="+customerId+"&pageUrl="+self.url+"&urlId="+self.urlId).done(function(data_response){
 				console.log("MOUSETRACKER:: init "+data); //use list ineterface to add data, server return formatted data.
 				colors = ['rgb(206, 212, 245)','rgb(132, 229, 210)','rgb(209, 184, 236)','rgb(250, 190, 226)','#6FFF00','#FF00FF','#FFFF00', '#4D4DFF','#FE0001','#FF4105','#993CF3','#FFFF'];
-				for(i in data) {
-					var elem = data[i]._id;
+				for(i in data_response) {
+					var elem = data_response[i]._id;
 					elem= sanatizeElement(elem);
 					console.log("MOUSETRACKER:: "+elem);
-					console.log(data[i]);
-					var clickCount = data[i].total;
+					console.log(data_response[i]);
+					var clickCount = data_response[i].total;
 					$(elem).attr('clickCount',clickCount);
 					position = 'bottom';
 					offset = $($(elem)[0]).offset();
