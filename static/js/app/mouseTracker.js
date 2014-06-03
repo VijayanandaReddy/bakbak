@@ -46,7 +46,7 @@
             	 	}
             	 }
             	 console.log(newEl);
-            	 return newEL;   		
+            	 return newEl;   		
             }
             return el;
 		}
