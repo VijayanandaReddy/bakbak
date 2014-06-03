@@ -1,4 +1,5 @@
-(function() {
+define(['jquery','webgl-heatmap',
+  'jquery.balloon.min'],function($,heatmap,balloon) {
 	window.MouseTracker = function(customerId) {
 		var self = this;
 		this.customerId = customerId;
@@ -255,4 +256,4 @@
 		}	
 
 	};
-})();
+});

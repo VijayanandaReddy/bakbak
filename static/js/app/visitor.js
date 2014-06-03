@@ -1,4 +1,5 @@
-(function() {
+define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','html2canvas',
+  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0','ejs'],function($,webrtc,socketio,call,util,validator,html2canvas,embedly,placeholder,phono,tenhands,ejs) {
  	window.Visitor = function(customerId) { //CustomerId is the admin with whom this guy is connected to.
 		var self = this;
 		//Extract a method
@@ -358,4 +359,4 @@
   			});
 		}
 	};
-	})();
+	});
