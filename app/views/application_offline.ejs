@@ -33,7 +33,7 @@
 <div class="control-group">
   <label class="control-label" for="radios">Type</label>
   <div class="controls">
-    <% if(application.offlineForm) {%>
+    <% if(application.offlineForm && application.offlineForm.length > 0) {%>
     <input type='hidden' name='_id' value='<%= application.offlineForm[0].id %>' />
     <% } %>
     <label class="radio" for="radios-0">
