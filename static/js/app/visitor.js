@@ -109,10 +109,10 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 				return;
 			}
 			$("#bakbakchat").append("<div id='contactUsPanel'/>");
-			if(!offlineForm)
-				showDefaultForm();
-			else
+			if(offlineForm)
 				showOfflineForm(offlineForm);
+			else
+				showDefaultForm();
 		}
 
 		showOfflineForm = function(offlineForm) {
