@@ -113,6 +113,8 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 		}
 
 		showOfflineForm = function(offlineForm) {
+			if(!offlineForm)
+				showDefaultForm();
 			if(offlineForm.type == '0')
 				showDefaultForm(offlineForm.data);
 			else if(offlineForm.type == '1') 
