@@ -43,6 +43,31 @@ exports.offline = function(req, res){
 	});
 };
 
+exports.saveOffline = function(req, res){
+	userUtil.userById(req,function(user){
+		ApplicationModel.findOne({adminId:user._id},function(err,application) {
+			if(err || application == null) {
+				res.redirect('/application/create');
+			} else {
+				application.upsertOfflineForm(req.body,function(err,result){
+					if(err) {
+						res.render('application_offline', {user:user,
+							create:false,
+							createOrEdit:false,
+							application:application,
+							success_message:err,
+							current:'offline'
+						});	
+
+					} else {
+						res.redirect('/application');
+					}
+				});
+			}
+		});
+	});
+};
+
 exports.edit = function(req, res){
 	userUtil.userById(req,function(user){
 		ApplicationModel.findOne({adminId:user._id},function(err,application) {

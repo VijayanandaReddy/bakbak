@@ -1,6 +1,6 @@
-<div id='contactUsPanel' class='contactUsPanel'> 
+<div id='contactUsDefault' class='contactUsPanel'> 
 				<% if( typeof displayMsg != 'undefined' ) { %>
-          <p><%= displayMsg %></p> 
+          <p><%= decodeURI(displayMsg) %></p> 
         <% } %>
 				<form id='contactUsForm' data-toggle='validator' role='form'> 
 				<div class='form-horizontal'> 

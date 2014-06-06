@@ -13,6 +13,9 @@ require.config({
         },
         'util': {
           deps: ['jquery']
+        },
+        'html2canvas' : {
+          exports: 'html2canvas'
         } 
     },
     waitSeconds: 0
@@ -25,7 +28,6 @@ function loadCss(url) {
     link.href = bakbakUrl+url;
     document.getElementsByTagName("head")[0].appendChild(link);
 }
-
 
 
 requirejs(['jquery','webrtcsupport','socketio','app/call','app/utils','app/visitor','validator','html2canvas',

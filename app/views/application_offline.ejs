@@ -1,5 +1,4 @@
 <% include layouts/headOpen %>
-<script src="/js/lib/validator.js"></script>
 <script src="/js/lib/ejs.js"></script>
 <% include layouts/headClose %>
 <% include layouts/internalHeader %>
@@ -24,7 +23,7 @@
     <h3 class="panel-title">Contact Us Form </h3>
   </div>
   <div class="panel-body">
-	  <form class="form-horizontal">
+	  <form class="form-horizontal" action="/application/offline" method="post">
 <fieldset>
 
 <!-- Form Name 
@@ -34,16 +33,19 @@
 <div class="control-group">
   <label class="control-label" for="radios">Type</label>
   <div class="controls">
+    <% if(application.offlineForm) {%>
+    <input type='hidden' name='_id' value='<%= application.offlineForm[0].id %>' />
+    <% } %>
     <label class="radio" for="radios-0">
-      <input type="radio" name="radios" id="radios-0" value="Default Form" checked="checked" onchange="$('#defaultForm').show();$('#googleForm').hide();$('#embedForm').hide();">
+      <input type="radio" name="type" id="radios-0" value="0" checked="checked" onchange="$('#defaultForm').show();$('#googleForm').hide();$('#embedForm').hide();">
       Default Form
     </label>
     <label class="radio" for="radios-1">
-      <input type="radio" name="radios" id="radios-1" value="Google Form" onchange="$('#defaultForm').hide();$('#googleForm').show();$('#embedForm').hide();">
-      Google Form
+      <input type="radio" name="type" id="radios-1" value="1" onchange="$('#defaultForm').hide();$('#googleForm').show();$('#embedForm').hide();">
+      Form Url
     </label>
     <label class="radio" for="radios-2">
-      <input type="radio" name="radios" id="radios-2" value="Embed Form" onchange="$('#defaultForm').hide();$('#googleForm').hide();$('#embedForm').show();">
+      <input type="radio" name="type" id="radios-2" value="2" onchange="$('#defaultForm').hide();$('#googleForm').hide();$('#embedForm').show();">
       Embed Form
     </label>
   </div>
@@ -55,7 +57,7 @@
 <div class="control-group">
   <label class="control-label" for="Message">Contact Us Message</label>
   <div class="controls">                     
-    <textarea id="defaultForm_message" name="Message" rows="3" class="form-control">Hi, 
+    <textarea id="defaultForm_message" name="data" rows="3" class="form-control">Hi, 
 Currrently we are offline. Please drop us a message and we would get back to you. </textarea>
   </div>
 </div>
@@ -63,7 +65,7 @@ Currrently we are offline. Please drop us a message and we would get back to you
 <div class="control-group">
   <label class="control-label" for="Customize Embed Code"></label>
   <div class="controls">
-    <button id="preview" name="preview_emed" class="btn btn-info btn-xs" onClick="defaultFormPreview();">Preview</button>
+    <button id="preview" name="preview_emed" class="btn btn-info btn-xs" onClick="defaultFormPreview();return false;">Preview</button>
   </div>
 </div>
 </div>
@@ -72,10 +74,10 @@ Currrently we are offline. Please drop us a message and we would get back to you
 <br/><br/>
 <!-- Text input-->
 <div class="control-group">
-  <label class="control-label" for="googleFormUrl">Google Form Url</label>
+  <label class="control-label" for="googleFormUrl">Form Url</label>
   <div class="controls">
-    <input id="googleFormUrl" name="googleFormUrl" type="text" placeholder="" required="" class="form-control">
-    <p class="help-block">Please enter your google form url and press fetch below.</p>
+    <input id="googleFormUrl" name="data" type="text" placeholder="" class="form-control">
+    <p class="help-block">Please enter your form url and press preview below.</p>
   </div>
 </div>
 
@@ -83,7 +85,7 @@ Currrently we are offline. Please drop us a message and we would get back to you
 <div class="control-group">
   <label class="control-label" for="googleFormButton"></label>
   <div class="controls">
-    <button id="googleFormButton" name="googleFormButton" class="btn btn-info btn-xs" onClick="googleFormPreview();">Preview</button>
+    <button id="googleFormButton" name="googleFormButton" class="btn btn-info btn-xs" onClick="googleFormPreview();return false;">Preview</button>
   </div>
 </div>
 </div>
@@ -94,7 +96,7 @@ Currrently we are offline. Please drop us a message and we would get back to you
 <div class="control-group">
   <label class="control-label" for="embedCode">Embed Code to embed your form</label>
   <div class="controls">                     
-    <textarea id="embedCode" name="embedCode" rows="3" class="form-control">Use embed code for your wufoo form or design your bootstrap from at http://bootsnipp.com/forms and render it here.</textarea>
+    <textarea id="embedCode" name="data" rows="3" class="form-control">Use embed code for your wufoo form or design your bootstrap from at http://bootsnipp.com/forms and render it here.</textarea>
     <p class="help-block">Please enter your embed form url to customize it below.Use embed code for your wufoo form or design your bootstrap from at http://bootsnipp.com/forms and render it here.</p>
   </div>
 </div>
@@ -103,7 +105,7 @@ Currrently we are offline. Please drop us a message and we would get back to you
 <div class="control-group">
   <label class="control-label" for="Customize Embed Code"></label>
   <div class="controls">
-    <button id="preview" name="preview_emed" class="btn btn-info btn-xs" onClick="embedCodePreview();">Preview</button>
+    <button id="preview" name="preview_emed" class="btn btn-info btn-xs" onClick="embedCodePreview();return false;">Preview</button>
   </div>
 </div>
 </div>
@@ -111,7 +113,7 @@ Currrently we are offline. Please drop us a message and we would get back to you
 <div class="control-group">
   <label class="control-label" for="preview"></label>
   <div class="controls">
-    <button id="save" name="save" class="btn btn-success btn-lg btn-primary">Save</button>
+    <button id="save" name="save" type="submit" class="btn btn-success btn-lg btn-primary">Save</button>
   </div>
 </div>
 </fieldset>
@@ -131,7 +133,43 @@ Currrently we are offline. Please drop us a message and we would get back to you
 </div>
 <% include layouts/containerFluidClose %>
 <% include layouts/footer %>
+
 <script>
+populateValues = function(type,data) {
+  console.log(type);
+  console.log(decodeURI(data));
+  if(type == '0') {
+    console.log('Deault');
+    $('#radios-0').attr('checked','checked');
+    $('#defaultForm_message').val(decodeURI(data));
+    $('#defaultForm').show();
+    $('#googleForm').hide();
+    $('#embedForm').hide();
+  } else 
+  if(type == '1') {
+    $('#radios-1').attr('checked','checked');
+    $('#googleFormUrl').val(decodeURI(data));
+    $('#defaultForm').hide();
+    $('#googleForm').show();
+    $('#embedForm').hide();
+  } else {
+    $('#radios-2').attr('checked','checked');
+    $('#embedCode').val(decodeURI(data));
+    $('#defaultForm').hide();
+    $('#googleForm').hide();
+    $('#embedForm').show();
+  }
+}
+
+<% if(application.offlineForm && application.offlineForm.length > 0) { %>
+  populateValues('<%= application.offlineForm[0].type%>','<%= encodeURI(application.offlineForm[0].data)%>');
+<% } else {%>
+  $(document).ready(function() {
+    $('#defaultForm').show();
+    $('#googleForm').hide();
+    $('#embedForm').hide();
+    });
+  <% } %>
 
 //Use bootstrap 2 here or move frontend to bootstrap 3.
 defaultFormPreview = function() {
@@ -159,11 +197,6 @@ embedCodePreview = function() {
 	var code = $('#embedCode').val();
 	$("#previewArea").html(code);
 	return false;
-}
+}	
 
-$(document).ready(function() {
-	$('#defaultForm').show();
-	$('#googleForm').hide();
-	$('#embedForm').hide();
-});
 </script>

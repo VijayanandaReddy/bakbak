@@ -1,5 +1,7 @@
 define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','html2canvas',
-  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0','ejs'],function($,webrtc,socketio,call,util,validator,html2canvas,embedly,placeholder,phono,tenhands,ejs) {
+  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0','ejs'],
+  function($,webrtc,socketio,call,util,validator,html2canvas,embedly,placeholder,phono,tenhands,ejs) {
+  	console.log(html2canvas);
  	window.Visitor = function(customerId) { //CustomerId is the admin with whom this guy is connected to.
 		var self = this;
 		//Extract a method
@@ -106,14 +108,39 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 				}
 				return;
 			}
-			showDefaultForm();
-			
+			$("#bakbakchat").append("<div id='contactUsPanel'/>");
+			showOfflineForm(offlineForm);
+		}
+
+		showOfflineForm = function(offlineForm) {
+			if(offlineForm.type == '0')
+				showDefaultForm(offlineForm.data);
+			else if(offlineForm.type == '1') 
+				showGoogleForm(decodeURI(offlineForm.data));
+			else 
+				showEmbedForm(decodeURI(offlineForm.data));
+		}
+
+		showEmbedForm = function(embedCode) {
+			$('#contactUsPanel').html(embedCode);
+			$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
+		}
+
+		showGoogleForm = function(url) {
+			$("#contactUsPanel").html("Loading...");
+				$.get(url, {}, function(content) {
+   					$('#contactUsPanel').html(html);
+   					$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
+   					return false;
+				},
+		 		"text");
+			return false;
 		}
 
 		showDefaultForm = function(msg) {
 			console.log("Showing Default Form!");
 			var html = new EJS({url: bakbakUrl+'js/tpl/defaultForm.ejs'}).render({displayMsg:msg});
-			$('#bakbakchat').append(html);
+			$('#contactUsPanel').html(html);
 			$('#contactUsForm').on( 'submit' ,function(event) {
 				event.preventDefault();
 				sendContactUsForm($(this).serialize());
@@ -310,8 +337,9 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
     					var imageDataUrl = canvas.toDataURL();
     					console.log(imageDataUrl);
     					console.log(data);
-    					console.log(JSON.stringify(self));
-    					toSend = JSON.parse(JSON.stringify(self));
+    					visitorObj = clone(self,['phono']);
+    					console.log(JSON.stringify(visitorObj));
+    					toSend = JSON.parse(JSON.stringify(visitorObj));
     					toSend['email'] = 'biplav.saraf@gmail.com';
     					toSend['template'] = 'contactUs';
     					toSend['image'] = imageDataUrl;

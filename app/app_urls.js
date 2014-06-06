@@ -15,6 +15,7 @@ module.exports = function(app) {
 	app.get('/application/edit',user.authenticated,application.edit);
 	app.get('/application',user.authenticated,application.index);
 	app.get('/application/offline',user.authenticated,application.offline);
+	app.post('/application/offline',user.authenticated,application.saveOffline);
 	app.get('/user',user.authenticated,user.index);	
 	app.get('/user/logout',user.authenticated,user.logout);
 	app.get('/mousetrack/',mousetrack.getLog);
