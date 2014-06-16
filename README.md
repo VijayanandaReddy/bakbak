@@ -2,10 +2,14 @@ bakbak
 ======
 A customer engagement tool.
 
-#Source Code Documentation.
+##Source Code Documentation.
 
 Major Code:
-  *Server side [app/](https://github.com/biplav/bakbak/tree/master/app)
-  *Client side [static/js/](https://github.com/biplav/bakbak/tree/master/static/js)
+  1. Server side [app/](https://github.com/biplav/bakbak/tree/master/app)
+  2. Client side [static/js/](https://github.com/biplav/bakbak/tree/master/static/js)
 
+Technology Stack:
+Node.js, Express, Mongoose, MongoDB, Socket.io, etc
 
+Entry point:
+signaler.js
