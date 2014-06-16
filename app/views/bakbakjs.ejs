@@ -7,6 +7,7 @@ if (typeof console == "undefined") {
 }
 var sessionId = '<%=sessionId %>';
 var adminName = '<%= application.displayName %>';
+var adminEmail = '<%= application.email %>';
 <% if(application.offlineForm && application.offlineForm.length > 0) { %>
 	var offlineForm= {};
 	offlineForm['type'] = '<%= application.offlineForm[0].type %>';

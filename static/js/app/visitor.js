@@ -343,7 +343,7 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
     					visitorObj = clone(self,['phono']);
     					console.log(JSON.stringify(visitorObj));
     					toSend = JSON.parse(JSON.stringify(visitorObj));
-    					toSend['email'] = 'biplav.saraf@gmail.com';
+    					toSend['email'] = adminEmail;
     					toSend['template'] = 'contactUs';
     					toSend['image'] = imageDataUrl;
     					toSend['contactUs'] = data;

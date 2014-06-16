@@ -10,6 +10,11 @@ var mongoose = require('mongoose'),
     data: String
 });
 
+ var BakBakRule = Schema({
+    bakbak_id: String,
+    rule: String
+ });
+
 var PageLevelMouseTrack = Schema({
     url: String,
     clickTrack:Boolean,
@@ -28,7 +33,9 @@ var ApplicationSchema = Schema({
     agentIds: Array,
     displayName: String,
     mouseTracking: [PageLevelMouseTrack],
-    offlineForm: { type:[BakBak], default:[]}
+    offlineForm: { type:[BakBak], default:[]},
+    bakbaks: { type:[BakBak], default:[]},
+    bakbak_rule: { type:[BakBakRule], default:[]}
 });
 
 ApplicationSchema.methods.upsertMouseTracking = function(data,cb) {
@@ -70,6 +77,30 @@ ApplicationSchema.methods.upsertOfflineForm = function(data,cb) {
         console.log("Creating new offlineForm");
         console.log(set);
         this.offlineForm.push(set);
+        this.save(cb)
+    }
+}
+
+ApplicationSchema.methods.upsertBakBak = function(data,cb) {
+    if(data._id && (data._id != null && data._id != 'null' && data._id != 'undefined')) {
+        console.log("Updating offlineForm");
+        console.log(data);
+        var set = {};
+        set['bakbaks.$.name'] = data['name'];
+        set['bakbaks.$.type'] = data['type'];
+        set['bakbaks.$.data'] = data['data'][+data['type']];
+        this.model('ApplicationModel').update({_id:this._id,'offlineForm._id':data._id},
+            {$set: set},cb);
+    } else {
+        console.log(data);
+        delete data['_id'];
+        var set = {};
+        set['name'] = data['name'];
+        set['type'] = data['type'];
+        set['data'] = data['data'][data['type']];
+        console.log("Creating new offlineForm");
+        console.log(set);
+        this.bakbaks.push(set);
         this.save(cb)
     }
 }

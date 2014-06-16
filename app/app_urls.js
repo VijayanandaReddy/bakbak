@@ -4,7 +4,8 @@ var index = require(__dirname + '/controllers/index')
     , user = require(__dirname + '/controllers/user')
     , application = require(__dirname + '/controllers/application')
     , mousetrack = require(__dirname + '/controllers/mousetrack')
-    , bakbakjs = require(__dirname + '/controllers/bakbakjs');
+    , bakbakjs = require(__dirname + '/controllers/bakbakjs')
+    , bakbaks = require(__dirname + '/controllers/bakbaks');
 
 module.exports = function(app) {
 	app.get('/', index.index);
@@ -22,5 +23,7 @@ module.exports = function(app) {
 	app.get('/mousetrack/count',mousetrack.getCountLog);	
 	app.get('/js/bakbak.js',bakbakjs.index);
 	app.get('/application/mousetrack',user.authenticated,mousetrack.getSettings);
-	app.post('/application/mousetrack/upsert',user.authenticated,mousetrack.setSettings);	
+	app.post('/application/mousetrack/upsert',user.authenticated,mousetrack.setSettings);
+	app.get('/application/bakbaks',user.authenticated,bakbaks.index);
+	app.post('/application/bakbaks',user.authenticated,bakbaks.upsert);	
 }

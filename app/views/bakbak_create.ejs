@@ -1,0 +1,207 @@
+<% include layouts/headOpen %>
+<script src="/js/lib/ejs.js"></script>
+<% include layouts/headClose %>
+<% include layouts/internalHeader %>
+<% include layouts/containerFluidOpen %>
+<%if(!createOrEdit){%>
+<% include layouts/sidebar %>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<% } %>
+	<%if(typeof error_message !== 'undefined'){%>
+	<p class='bg-error'><%= error_message%></p>
+	<%} else if(typeof success_message !== 'undefined') { %>
+	<p class='bg-info'><%= success_message%></p>
+	<%} %>
+	<%if(create){%>
+	<p class='bg-info'>Create a new Application.</p>
+	<%} else if(createOrEdit) { %>
+	<p class='bg-info'>Create a new Application.</p>
+	<%} %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">BakBak Form</h3>
+  </div>
+  <div class="panel-body">
+	  <form class="form-horizontal" action="/application/bakbak" method="post">
+<fieldset>
+
+<div class="control-group">
+  <label class="control-label" for="formName">Name</label>
+  <div class="controls">
+    <input id="formName" name="name" type="text" placeholder="" class="form-control">
+    <p class="help-block">Please enter your form name to recognize them while setting bakbak rule.</p>
+  </div>
+</div>
+
+<!-- Multiple Radios -->
+<div class="control-group">
+  <label class="control-label" for="radios">Type</label>
+  <div class="controls">
+    <% if(application.offlineForm && application.offlineForm.length > 0) {%>
+    <input type='hidden' name='_id' value='<%= application.offlineForm[0].id %>' />
+    <% } %>
+    <label class="radio" for="radios-0">
+      <input type="radio" name="type" id="radios-0" value="0" checked="checked" onchange="$('#defaultForm').show();$('#googleForm').hide();$('#embedForm').hide();">
+      Default Form
+    </label>
+    <label class="radio" for="radios-1">
+      <input type="radio" name="type" id="radios-1" value="1" onchange="$('#defaultForm').hide();$('#googleForm').show();$('#embedForm').hide();">
+      Form Url
+    </label>
+    <label class="radio" for="radios-2">
+      <input type="radio" name="type" id="radios-2" value="2" onchange="$('#defaultForm').hide();$('#googleForm').hide();$('#embedForm').show();">
+      Embed Form
+    </label>
+  </div>
+</div>
+
+<div id='defaultForm'>
+<br/><br/>
+<!-- Textarea -->
+<div class="control-group">
+  <label class="control-label" for="Message">Contact Us Message</label>
+  <div class="controls">                     
+    <textarea id="defaultForm_message" name="data" rows="3" class="form-control">Hi, 
+Currrently we are offline. Please drop us a message and we would get back to you. </textarea>
+  </div>
+</div>
+<!-- Button -->
+<div class="control-group">
+  <label class="control-label" for="Customize Embed Code"></label>
+  <div class="controls">
+    <button id="preview" name="preview_emed" class="btn btn-info btn-xs" onClick="defaultFormPreview();return false;">Preview</button>
+  </div>
+</div>
+</div>
+
+<div id='googleForm'>
+<br/><br/>
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label" for="googleFormUrl">Form Url</label>
+  <div class="controls">
+    <input id="googleFormUrl" name="data" type="text" placeholder="" class="form-control">
+    <p class="help-block">Please enter your form url and press preview below.</p>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="control-group">
+  <label class="control-label" for="googleFormButton"></label>
+  <div class="controls">
+    <button id="googleFormButton" name="googleFormButton" class="btn btn-info btn-xs" onClick="googleFormPreview();return false;">Preview</button>
+  </div>
+</div>
+</div>
+
+<div id="embedForm">
+<!-- Textarea -->
+<br/><br/>
+<div class="control-group">
+  <label class="control-label" for="embedCode">Embed Code to embed your form</label>
+  <div class="controls">                     
+    <textarea id="embedCode" name="data" rows="3" class="form-control">Use embed code for your wufoo form or design your bootstrap from at http://bootsnipp.com/forms and render it here.</textarea>
+    <p class="help-block">Please enter your embed form url to customize it below.Use embed code for your wufoo form or design your bootstrap from at http://bootsnipp.com/forms and render it here.</p>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="control-group">
+  <label class="control-label" for="Customize Embed Code"></label>
+  <div class="controls">
+    <button id="preview" name="preview_emed" class="btn btn-info btn-xs" onClick="embedCodePreview();return false;">Preview</button>
+  </div>
+</div>
+</div>
+<!-- Button (Double) -->
+<div class="control-group">
+  <label class="control-label" for="preview"></label>
+  <div class="controls">
+    <button id="save" name="save" type="submit" class="btn btn-success btn-lg btn-primary">Save</button>
+  </div>
+</div>
+</fieldset>
+</form>
+
+	</div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Preview</h3>
+  </div>
+  <div class="panel-body">
+    <div id='previewArea'></div>
+	
+	</pre>
+  </div>
+</div>
+<% include layouts/containerFluidClose %>
+<% include layouts/footer %>
+
+<script>
+populateValues = function(type,data) {
+  console.log(type);
+  console.log(decodeURI(data));
+  if(type == '0') {
+    console.log('Deault');
+    $('#radios-0').attr('checked','checked');
+    $('#defaultForm_message').val(decodeURI(data));
+    $('#defaultForm').show();
+    $('#googleForm').hide();
+    $('#embedForm').hide();
+  } else 
+  if(type == '1') {
+    $('#radios-1').attr('checked','checked');
+    $('#googleFormUrl').val(decodeURI(data));
+    $('#defaultForm').hide();
+    $('#googleForm').show();
+    $('#embedForm').hide();
+  } else {
+    $('#radios-2').attr('checked','checked');
+    $('#embedCode').val(decodeURI(data));
+    $('#defaultForm').hide();
+    $('#googleForm').hide();
+    $('#embedForm').show();
+  }
+}
+
+<% if(application.offlineForm && application.offlineForm.length > 0) { %>
+  populateValues('<%= application.offlineForm[0].type%>','<%= encodeURI(application.offlineForm[0].data)%>');
+<% } else {%>
+  $(document).ready(function() {
+    $('#defaultForm').show();
+    $('#googleForm').hide();
+    $('#embedForm').hide();
+    });
+  <% } %>
+
+//Use bootstrap 2 here or move frontend to bootstrap 3.
+defaultFormPreview = function() {
+	$("#previewArea").html("Loading...");
+	var msg = $('#defaultForm_message').val();
+	var html = new EJS({url: '/js/tpl/defaultForm.ejs'}).render({displayMsg:msg});
+	$('#previewArea').html(html);
+	return false;
+}
+
+
+googleFormPreview = function() {
+	var url = $('#googleFormUrl').val();
+	$("#previewArea").html("Loading...");
+	$.get(url, {}, function(content) {
+   					$("#previewArea").html(content);
+   					return false;
+				},
+		 "text");
+	return false;
+}
+
+embedCodePreview = function() {
+	$("#previewArea").html("Loading...");
+	var code = $('#embedCode').val();
+	$("#previewArea").html(code);
+	return false;
+}	
+
+</script>
