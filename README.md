@@ -12,4 +12,4 @@ Technology Stack:
 Node.js, Express, Mongoose, MongoDB, Socket.io, etc
 
 Entry point:
-signaler.js
+signaler.js : This file intiates nodejs server and starts a socket to listen for events from UI.
