@@ -127,7 +127,7 @@ exports.create = function(req,res) {
                         res.render('schedule',{errors: err.message});
                     } else {
                         console.log(responseStatus.message);
-                        res.render('schedule',{success_msg: "Successfully Created!"});
+                        res.render('schedule',{success_msg: "Successfully Created!", withEmail:params.main_email});
                     }
                 });
 }
