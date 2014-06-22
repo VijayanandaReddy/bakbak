@@ -55,7 +55,7 @@ function createIcal(params,uid) {
   org_email = "donateoldspectacles@gmail.com";
   subject = params.subject;
   agenda = params.agenda;
-  url = 'http://www.bakbak.io/meeting/parts?users='+main_email+','+part_email;
+  url = 'http://www.bakbak.io/schedule/meeting/parts?users='+main_email+','+part_email;
   escaped_url = ' <'+url+'>';
   return 'BEGIN:VCALENDAR\r\n'
           +'PRODID:-//Bakbak//BakBak Scheduler Calendar 1.0//EN\r\n'
@@ -92,7 +92,7 @@ function createText(params,uid) {
   org_email = "donateoldspectacles@gmail.com";
   subject = params.subject;
   agenda = params.agenda;
-  url = 'http://www.bakbak.io/meeting/parts?users='+main_email+','+part_email;
+  url = 'http://www.bakbak.io/schedule/meeting/parts?users='+main_email+','+part_email;
   escaped_url = ' <'+url+'>';
   return 'Start Time: '+start+'\r\n'
           +'End Time: '+end+'\r\n'
