@@ -5,7 +5,9 @@ var index = require(__dirname + '/controllers/index')
     , application = require(__dirname + '/controllers/application')
     , mousetrack = require(__dirname + '/controllers/mousetrack')
     , bakbakjs = require(__dirname + '/controllers/bakbakjs')
-    , bakbaks = require(__dirname + '/controllers/bakbaks');
+    , bakbaks = require(__dirname + '/controllers/bakbaks')
+    , videojs = require(__dirname + '/controllers/video')
+    , schedulejs = require(__dirname + '/controllers/schedule');
 
 module.exports = function(app) {
 	app.get('/', index.index);
@@ -25,5 +27,11 @@ module.exports = function(app) {
 	app.get('/application/mousetrack',user.authenticated,mousetrack.getSettings);
 	app.post('/application/mousetrack/upsert',user.authenticated,mousetrack.setSettings);
 	app.get('/application/bakbaks',user.authenticated,bakbaks.index);
-	app.post('/application/bakbaks',user.authenticated,bakbaks.upsert);	
+	app.post('/application/bakbaks',user.authenticated,bakbaks.upsert);
+	app.get('/video/auth',videojs.index);
+	app.get('/schedule/simple',schedulejs.index);
+	app.post('/schedule/simple',schedulejs.create);	
+	app.get('/schedule/meeting',schedulejs.meeting);
+	app.get('/schedule/meeting/parts',schedulejs.meetingSelect);	
+	app.post('/schedule/meeting',schedulejs.meeting);
 }

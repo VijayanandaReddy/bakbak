@@ -16,6 +16,9 @@ require.config({
         },
         'html2canvas' : {
           exports: 'html2canvas'
+        },
+        'vline': {
+          exports: 'vline'
         } 
     },
     waitSeconds: 0
@@ -32,8 +35,8 @@ function loadCss(url) {
 
 requirejs(['jquery','webrtcsupport','socketio','app/call','app/utils','app/visitor','validator','html2canvas',
   'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0','ejs','app/mouseTracker','webgl-heatmap',
-  'jquery.balloon.min'],
-  function($,webrtc,socketio,call,util,visitor,validator,html2canvas,embedly,placeholder,phono,tenhands,ejs,mouseTracker,heatmap,balloon) {
+  'jquery.balloon.min','vline','app/videoconf'],
+  function($,webrtc,socketio,call,util,visitor,validator,html2canvas,embedly,placeholder,phono,tenhands,ejs,mouseTracker,heatmap,balloon,vline,videoconf) {
   		console.log('lib is loaded');
       var src = $('#bakbakscript').attr('src');
   		var customerId = src.substring(src.indexOf('=')+1);
@@ -42,6 +45,8 @@ requirejs(['jquery','webrtcsupport','socketio','app/call','app/utils','app/visit
 		  visitor.init();
       var mouseTracker = new MouseTracker(customerId);
       mouseTracker.init();
+      var videoConf = new VideoConf(customerId);
+      videoConf.init();
 		//Cannot afford bootstrap css need to use custom css. Remove it post demo
 		loadCss('css/bakbak_bootstrap_min.css');
 		//loadCss('css/bootstrap-responsive.css');

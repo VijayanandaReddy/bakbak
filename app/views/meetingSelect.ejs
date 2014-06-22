@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Sticky Footer Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/bootstrap-switch.css" rel="stylesheet">
+
+    <script src="/js/lib/jquery-2.0.3.min.js"></script>
+	<script src="/js/lib/bootstrap-switch.js"></script>
+	<style>
+	html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+}
+.container .text-muted {
+  margin: 20px 0;
+}
+	</style>
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Begin page content -->
+    <div class="container">
+     <form id="meetingForm" class="form-signin" role="form" action="/schedule/meeting" method="post">
+        <h3 class="form-signin-heading">Join as</h3>
+        <%if (typeof success_msg != 'undefined') { %>
+        <p class='bg-success'><%= success_msg %></p>
+        <% }%>
+        <%if (typeof errors != 'undefined') { %>
+        <p class='bg-danger'><%= errors %></p>
+        <% }%>
+            <input type="checkbox" id='userSelect' class="form-control" autofocus="" data-on-text="<%= user1 %>" data-off-text="<%= user2 %>" data-size="large" data-label-text="Click to toggle" data-off-color="primary" checked>
+            <input type='hidden' name='local' value='' id='localId' />
+            <input type='hidden' name='remote' value='' id='remoteId'/>
+        <button class="btn btn-sm btn-primary" type="submit">Join</button>
+	</form>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="text-muted">Powered by http://www.bakbak.io/</p>
+      </div>
+    </div>
+
+    <script>
+	$("#userSelect").bootstrapSwitch();
+	$("#meetingForm").submit(function() {
+        if($("#userSelect").bootstrapSwitch('state')) {
+        	$("#localId").val('<%= user1 %>');
+        	$("#remoteId").val('<%= user2 %>');
+        } else {
+        	$("#localId").val('<%= user2 %>');
+        	$("#remoteId").val('<%= user1 %>');
+        }
+    });
+	</script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+</html>

@@ -186,6 +186,7 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 			}
 			console.log("Showing chat bar!");
 			$('#bakbakchat').append("<div id='chatPanel' class='chatPanel'> \
+			<div id='bakbakVideoPanel' /> \
 			<div id='chatMsgBox' class='chatMessages maxHeight100 scrollbar'></div> \
 			<div class='chatText input-append' style='margin:0;width:100%'> \
   				<input class='input-block-level' id='chatMsg' type='text' placeholder='Chat'> \
