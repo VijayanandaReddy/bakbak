@@ -6,12 +6,36 @@
   <!-- Always force latest IE rendering engine or request Chrome Frame -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-  <title>vLine Room Example</title>
+  <title>BakBak Scheduled Call</title>
   <script src="https://static.vline.com/vline.js"></script>
+  <script src="/js/lib/spin.js"></script>
+
 </head>
-<body>
+<body id='mainBody'>
+<h3 id="waitMessage">Waiting for the far end participant to join.</h3>
 
 <script>
+var opts = {
+  lines: 13, // The number of lines to draw
+  length: 20, // The length of each line
+  width: 10, // The line thickness
+  radius: 30, // The radius of the inner circle
+  corners: 1, // Corner roundness (0..1)
+  rotate: 0, // The rotation offset
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: '#000', // #rgb or #rrggbb or array of colors
+  speed: 1, // Rounds per second
+  trail: 60, // Afterglow percentage
+  shadow: false, // Whether to render a shadow
+  hwaccel: false, // Whether to use hardware acceleration
+  className: 'spinner', // The CSS class to assign to the spinner
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  top: '50%', // Top position relative to parent
+  left: '50%' // Left position relative to parent
+};
+  var target = document.getElementById('mainBody');
+  var spinner = new Spinner(opts).spin(target);
+
   (function () {
     // Your server should generate a profile for the local user
     LOCAL_USER_PROFILE = {
@@ -30,6 +54,8 @@
     client.on('add:mediaSession', onMediaSession, this);
 
     function onMediaSession(e) {
+      $("waitMessage").hide();
+      spinner.stop();
       var mediaSession = e.target;
       mediaSession.on('enterState:incoming', onIncomingMedia);
       mediaSession.on('enterState:closed', function(e) {
