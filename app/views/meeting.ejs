@@ -2,20 +2,20 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="Description" content="vLine Example">
+  <meta name="Description" content="BakBak Scheduled Video Meeting.">
   <!-- Always force latest IE rendering engine or request Chrome Frame -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
   <title>BakBak Scheduled Call</title>
-  <script src="https://static.vline.com/vline.js"></script>
+  <script src="https://static.vline.com/vline.js?t=1231"></script>
   <script src="/js/lib/spin.js"></script>
 
 </head>
-<body id='mainBody'>
+<body>
 <h3 id="waitMessage">Waiting for the far end participant to join.</h3>
 
 <script>
-var opts = {
+var spin_opts = {
   lines: 13, // The number of lines to draw
   length: 20, // The length of each line
   width: 10, // The line thickness
@@ -33,8 +33,7 @@ var opts = {
   top: '50%', // Top position relative to parent
   left: '50%' // Left position relative to parent
 };
-  var target = document.getElementById('mainBody');
-  var spinner = new Spinner(opts).spin(target);
+  var load_spinner = new Spinner(spin_opts).spin(document.getElementById('waitMessage'));
 
   (function () {
     // Your server should generate a profile for the local user
@@ -54,8 +53,7 @@ var opts = {
     client.on('add:mediaSession', onMediaSession, this);
 
     function onMediaSession(e) {
-      $("waitMessage").hide();
-      spinner.stop();
+      load_spinner.stop();
       var mediaSession = e.target;
       mediaSession.on('enterState:incoming', onIncomingMedia);
       mediaSession.on('enterState:closed', function(e) {
@@ -106,6 +104,7 @@ var opts = {
         client.getLocalStream().done(function(s) {
           localStream = s;
           console.log('Local stream: ' + s.getId());
+          localStream.createVideoElement();
           // NOTE: If you want to layout the video elements in a custom manner, you can use
           // stream.createVideoElement() to create a video element here:
           // https://vline.com/developer/docs/vline.js/vline.MediaStream#createVideoElement
