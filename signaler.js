@@ -14,7 +14,8 @@ var appPath = __dirname + '/app'
     , cons = require('consolidate')
     , mongoose = require('mongoose')
     , fs = require('fs')
-    , everyauth = require('everyauth');
+    , everyauth = require('everyauth')
+    , proxyServer = require('http-route-proxy');
 
 var port = process.env.PORT || 5000;
 var db_string = 'mongodb://biplav:biplav3403@ds033097.mongolab.com:33097/heroku_app18693040';
@@ -89,7 +90,7 @@ app.configure(function() {
     app.use('/js',express.static(path.join(__dirname, 'static/js')));
     app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
     app.use('/sounds',express.static(path.join(__dirname, 'static/sounds')));
-     app.use('/home_files',express.static(path.join(__dirname, 'home_files')));
+    app.use('/home_files',express.static(path.join(__dirname, 'home_files')));
     app.use(everyauth.middleware(app));
     app.use(everyauth.middleware(app)); // important to call this AFTER session!
     //app.use(app.router);
@@ -471,6 +472,7 @@ app.post('/email', function(req, resp) {
     }
     });
 });
+
 
 require(appPath + '/app_urls')(app);
 

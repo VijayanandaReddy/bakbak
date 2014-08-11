@@ -1,13 +1,11 @@
-define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','html2canvas',
-  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0','ejs'],
-  function($,webrtc,socketio,call,util,validator,html2canvas,embedly,placeholder,phono,tenhands,ejs) {
-  	console.log(html2canvas);
+define(['jquery','webrtcsupport','socketio','app/utils','validator','html2canvas',
+  'jquery.embedly-3.1.1.min','jquery.placeholder',/*'jquery.phono.min',*/'tenhands.loader.v2.0','ejs','app/xmpp_chat'],
+  function($,webrtc,socketio,util,validator,html2canvas,embedly,placeholder,/*phono,*/tenhands,ejs,xmpp) {
  	window.Visitor = function(customerId) { //CustomerId is the admin with whom this guy is connected to.
 		var self = this;
 		//Extract a method
 		this.visitorName = readCookie('bakbakchatVisitorName') ? readCookie('bakbakchatVisitorName') : 'Unknown';
 		this.adminOnline = false;
-		this.lastOnline = 0;
 		this.adminId = null;
 		this.customerId = customerId;
 		this.webrtc = null;
@@ -15,43 +13,13 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 		this.adminSocketId=null;
 		this.current_url = window.location.toString();
 		this.gAData = null;
-		this.id = sessionId; //socketid will be stored here.
-		this.call = new Call(customerId);
+		this.id = sessionId; 
 		this.visitorId = sessionId;
+		
 		this.presenceIndicator = function () {
-			if(self.first_time == undefined) {
-				self.first_time = true;
-			}
 			heartbeat(self);
-			self.first_time = false;
 		}
 		
-		function setAdminStatus(status) {
-			if(status) {
-				if(!self.adminOnline) {
-					heartbeat(self);
-					self.adminOnline = true;
-					addOnlineLabel();
-				}
-				createCookie('bakbakchatOnline',self.adminSocketId,0,CUSTOMER_HEARTBEAT+5000);
-			}else {
-				if(self.adminOnline) {
-					self.adminOnline = false;
-					addOfflineLabel();
-				}
-			}
-		}
-		this.adminMonitor = function() {
-					var now = new Date().getTime();
-					var timeDiff = now - self.lastOnline;
-					if(timeDiff > CUSTOMER_MONITOR) {
-						console.log("Customer is offline at " + now);
-						setAdminStatus(false);
-					} else {
-						setAdminStatus(true);
-					}
-					setTimeout(self.adminMonitor, CUSTOMER_MONITOR);
-		};
 		this.init = function() {
 			$('#chatPanel').hide();
 			$('#offlineIndicator').show();
@@ -64,9 +32,8 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 			initializeSocket(self);
 			heartbeat(self);
 			initializeByeBye(self);
-			intializePhono(self);
-			//self.adminMonitor();
-			//console.log(self.navigator);
+			initializeXmpp();
+			//intializePhono(self);
 			//initialize_calling();
 			$(document).ready(function(){
 				var bodyHeight = $("body").height();
@@ -77,15 +44,27 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 			});
 		}
 
+		initializeXmpp = function () {
+			console.log('Event fired to connect to xmpp!');
+			var xmpp = new xmmppChatClient(false,'test');
+			$(document).trigger('bakbak_chat_connect',{});
+			$(document).bind('bakbak_chat_online',function() {
+				addOnlineLabel();
+			});
+			$(document).bind('bakbak_chat_offline',function() {
+				addOfflineLabel();
+			});
+			$(document).bind('bakbak_chat_msg_recvd',function(ev,data) {
+				self.onChat(data.from,data.msg);
+			});
+		}
+
 		initializeStatusUi = function() {
 			$("body").append("<div id ='bakbakchat_container' class='bakbak_bootstrap'><footer id='bakbakchat' style='z-index:99999;margin:0;position:fixed;bottom:0px' class='table-bordered backgroundGray'></footer></div>");
 			var adminId = readCookie('bakbakchatOnline');
+			addOfflineLabel(false);
 			if(adminId) {
-				//addOnlineLabel();
-				setAdminStatus(true);
 				self.adminId = adminId;
-			} else {
-				addOfflineLabel(false);
 			}
 		};
 
@@ -177,10 +156,6 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 					$('#chatPanel').show();
 					$('#chatMsg').focus();
 					$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
-					console.log('Admin socket id is ' + self.adminSocketId);
-					if(!self.adminSocketId) {
-						disableChatBar();
-					}
 				}
 				return;
 			}
@@ -203,9 +178,6 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 			});
 			$('#bakbakchat').removeClass('chatMinimize').addClass('chatMaximize');
 			$('#chatMsg').focus();
-			if(!self.adminSocketId) {
-				disableChatBar();		
-			}
 		}
 
 		addOnlineLabel = function() {
@@ -227,8 +199,6 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 			$('#onlineConfirmImg').attr('src',bakbakUrl+'img/avatars/avatar-green-talking20x20.png');
 			$('#bakbakCallHangup').remove();
 			$('#bakbakchat').removeClass('extraImage');
-			//$('#onlineConfirmImg').height(20);
-			//$('#onlineConfirmImg').width(20);
 		}
 
 		addCallRingingLabel = function() {
@@ -268,47 +238,15 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 			console.log("Customer Id is " + self.customerId + " while sender is " + message.sender + " socketid is " + message.data.id);
 			if(message.sender == self.customerId) {
 				console.log(message);
-				if(!message.data.state) {
-					console.log("Will add offline label");
-					setAdminStatus(false);
-				} else {
-					self.lastOnline = new Date().getTime();
-					console.log("Customer is online " + self.lastOnline);
-					self.adminSocketId = message.data.id;
-					setAdminStatus(true);
-					enableChatBar();
-				}
+				self.adminSocketId = message.data.id;
+				heartbeat(self);
 			}
 		};
 
-		this.onMessage = function (message) {
-			console.log(message);
-		};	
-
-		this.onChat = function(message) {
-			//console.log(message);
-			addOnlineLabel();
-			enableChatBar();
+		this.onChat = function(from,message) {
 			showChatBar(true);
 			console.log(message);
-			if(message.sender == self.visitorId) {
-				if(message.senderId != socket.socket.sessionid) {
-					addToChatMessageBox(null,'me',message.message);
-				} else {
-					console.log("Wont add!");
-					return;
-				}
-			} else {
-				//Got message from admin.
-				//self.adminSocketId = message.senderId;
-				enableChatBar();
-				console.log("Admin SOcket id is " + self.adminSocketId);
-				if(message.html && $('#chatMsgBox').html() == '' ) {
-					addToChatMessageBoxHtml(null,self.visitorId,message.message);
-				} else if(!message.html){
-					addToChatMessageBox(null,adminName,message.message);
-				}
-			}
+			addToChatMessageBox(null,from,message);
 		};
 
 		this.onCall = function(message) {
@@ -328,10 +266,9 @@ define(['jquery','webrtcsupport','socketio','app/call','app/utils','validator','
 
 		sendChatMessage = function(chatText) {
 			if(chatText == null || chatText == '') return;
-			socket.chat(chatText,self.adminSocketId);
+			$(document).trigger('bakbak_chat_msg_send',chatText);
 			$('#chatMsg').val('');
-			console.log('sending chat message to ' + self.adminSocketId +' with message ' + chatText);
-			addToChatMessageBox(null,'me',chatText);
+			console.log('sending chat message to xmpp with message ' + chatText);
 		}
 
 		sendContactUsForm = function(data) {

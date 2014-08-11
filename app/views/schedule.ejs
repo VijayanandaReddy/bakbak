@@ -15,6 +15,10 @@
             <input type="email" name='email' class="form-control" placeholder="Email address" required="" autofocus="">
             <span class="input-group-addon"><span class="glyphicon glyphicon-log-in"></span></span>
         </div>
+	<a class="cs_import">Add from Address Book</a>
+	<!-- This textarea will be populated with the contacts returned by CloudSponge -->
+	<textarea id="contact_list" style="width:450px;height:82px"></textarea>
+
         <div class="input-group input-append date form_datetime" id="datetimepicker" data-date-format="dd-mm-yyyy">
             <input id="startDate" class="form-control" size="16" type="text" placeholder="Start Time" name="start" required="">
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -41,7 +45,13 @@
     <script src="/js/lib/spin.js"></script>
     <script src="http://www.malot.fr/bootstrap-datetimepicker/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" ></script>
     <script src="/js/lib/jstz.js"></script>
+   <script type="text/javascript" src="//api.cloudsponge.com/address_books.js"></script>
 <script type="text/javascript">
+   var csPageOptions = {
+  	domain_key:'QSEQDECXYBBRS6KAF88X',
+  	textarea_id:"contact_list"
+	};
+
     dtp = $('#endDate').datetimepicker({
         format: "dd MM yyyy hh:ii",
         autoclose: true,

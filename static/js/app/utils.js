@@ -277,19 +277,6 @@ var socket;
             			data  : message
         		});
     		};
-    	//id should be the socketId to chat with
-		socket.chat = function(message,id,html) {
-			html = typeof html !== 'undefined' ? html : false;
-			var data = {};
-			data.type = 'chat';
-			data.message = message;
-			data.reciever = id;
-			data.sender = sender;
-			data.senderId = socket.socket.sessionid;
-			data.html = html;
-			console.log('Sending chat to ' +  id);
-			socket.emit('chat',data);
-		};
 
 		socket.setCookie = function(cookieName,cookieValue,id) {
 			var data = {};
@@ -342,9 +329,8 @@ var socket;
 				});
 		};
 
-   		socket.on('message', config.onMessage);
+   	socket.on('message', config.onMessage);
 		socket.on('presence',config.onPresence);
-		socket.on('chat',config.onChat);
 		socket.on('call',config.onCall);
 		socket.on('setCookie',config.setCookie);
 		socket.on('screenshot',config.onScreenshot);
@@ -495,7 +481,7 @@ var socket;
 	}
 
 	intializePhono = function(self) {
-		if(self.webrtc && !self.webrtc.support) {
+		/*if(self.webrtc && !self.webrtc.support) {
 			return false;
 		}
 		var phono = $.phono({
@@ -540,6 +526,7 @@ var socket;
   			}
 		});
 		self.phono = phono;
+    */
 	}
 
 	initializeTenHands = function() {

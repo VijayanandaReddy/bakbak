@@ -1,0 +1,102 @@
+<% include layouts/headOpen %>
+ <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
+ <link href="http://www.malot.fr/bootstrap-datetimepicker/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<% include layouts/headClose %>
+ <div class="container">
+<form id="schedulerForm" class="form-signin" role="form" action="/schedule/simple" method="post">
+        <h3 class="form-signin-heading">Schedule a video call</h3>
+        <%if (typeof success_msg != 'undefined') { %>
+        <p class='bg-success'><%= success_msg %></p>
+        <% }%>
+        <%if (typeof errors != 'undefined') { %>
+        <p class='bg-danger'><%= errors %></p>
+        <% }%>
+        <div class="input-group input-append">
+            <input type="email" name='email' class="form-control" placeholder="Email address" required="" autofocus="">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-log-in"></span></span>
+        </div>
+        <div class="input-group input-append date form_datetime" id="datetimepicker" data-date-format="dd-mm-yyyy">
+            <input id="startDate" class="form-control" size="16" type="text" placeholder="Start Time" name="start" required="">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        <div class="input-group input-append date form_datetime" id="datetimepicker" data-date-format="dd-mm-yyyy">
+            <input id="endDate" class="form-control" size="16" type="text" placeholder="End Time" name="end" required="">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        <div class="input-group input-append">
+            <input type="text" name='subject' class="form-control" placeholder="Subject" required="" autofocus="" />
+            <textarea name='agenda' class="form-control" placeholder="Agenda" required="" autofocus=""></textarea>
+        </div>
+        <input type="hidden" id="timezone" name="timezone" />
+        <input type="hidden" name='main_email' class="form-control" placeholder="Email address" value="<%= withEmail %>" required="" autofocus="">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Schedule</button>
+</form>	 
+ </div>
+ <script src="/js/lib/jquery-2.0.3.min.js"></script>
+    <script src="/js/lib/bootstrap.min.js"></script>
+    <script src="/js/lib/docs.min.js"></script>
+    <script src="/js/lib/validator.js"></script>
+    <script src="/js/lib/spin.js"></script>
+    <script src="http://www.malot.fr/bootstrap-datetimepicker/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" ></script>
+    <script src="/js/lib/jstz.js"></script>
+<script type="text/javascript">
+    dtp = $('#endDate').datetimepicker({
+        format: "dd MM yyyy hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        startDate: Date(),
+        minuteStep: 5
+    });
+    $("#startDate").datetimepicker({
+        format: "dd MM yyyy hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        startDate: new Date(),
+        minuteStep: 5
+    }).on('hide', function(){
+        
+    });
+    $('#startDate').change(function() {
+        onStartDateChange();
+    });
+
+    function onStartDateChange() {
+        var d = new Date($('#startDate').val());
+        var diff = 60;
+        var newDateObj = new Date(d.getTime() + diff*60000);
+        $('#endDate').datetimepicker('update',newDateObj); 
+        $('#endDate').datetimepicker('setStartDate',d); 
+    }
+
+    $("#timezone").attr("value",jstz.determine().name());
+    $("#schedulerForm").submit(function() {
+        var start = $('#startDate').val();
+        $('#startDate').val(Date(start));
+        var end = $('#endDate').val();
+        $('#endDate').val(Date(end));
+        var opts = {
+                lines: 17, // The number of lines to draw
+                length: 20, // The length of each line
+                width: 10, // The line thickness
+                radius: 30, // The radius of the inner circle
+                corners: 1, // Corner roundness (0..1)
+                rotate: 0, // The rotation offset
+                direction: 1, // 1: clockwise, -1: counterclockwise
+                color: '#000', // #rgb or #rrggbb or array of colors
+                speed: 1, // Rounds per second
+                trail: 60, // Afterglow percentage
+                shadow: false, // Whether to render a shadow
+                hwaccel: false, // Whether to use hardware acceleration
+                className: 'spinner', // The CSS class to assign to the spinner
+                zIndex: 2e9, // The z-index (defaults to 2000000000)
+                top: '50%', // Top position relative to parent
+                left: '50%' // Left position relative to parent
+        };
+        var target = document.getElementById('schedulerForm');
+        var spinner = new Spinner(opts).spin(target);
+    });
+</script> 
+</body>
+</html>

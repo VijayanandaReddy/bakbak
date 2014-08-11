@@ -19,7 +19,10 @@ require.config({
         },
         'vline': {
           exports: 'vline'
-        } 
+        },
+        'strophe': {
+          exports: 'Strophe'
+        }  
     },
     waitSeconds: 0
 });
@@ -33,10 +36,10 @@ function loadCss(url) {
 }
 
 
-requirejs(['jquery','webrtcsupport','socketio','app/call','app/utils','app/visitor','validator','html2canvas',
-  'jquery.embedly-3.1.1.min','jquery.placeholder','jquery.phono.min','tenhands.loader.v2.0','ejs','app/mouseTracker','webgl-heatmap',
-  'jquery.balloon.min','vline','app/videoconf'],
-  function($,webrtc,socketio,call,util,visitor,validator,html2canvas,embedly,placeholder,phono,tenhands,ejs,mouseTracker,heatmap,balloon,vline,videoconf) {
+requirejs(['jquery','webrtcsupport','socketio','app/utils','app/visitor','validator',
+  'jquery.embedly-3.1.1.min','jquery.placeholder',/*'jquery.phono.min',*/'tenhands.loader.v2.0','ejs','app/mouseTracker','webgl-heatmap',
+  'jquery.balloon.min','app/videoconf'],
+  function($,webrtc,socketio,util,visitor,validator,embedly,placeholder,/*phono,*/tenhands,ejs,mouseTracker,heatmap,balloon,videoconf) {
   		console.log('lib is loaded');
       var src = $('#bakbakscript').attr('src');
   		var customerId = src.substring(src.indexOf('=')+1);

@@ -1,4 +1,5 @@
 define(['jquery','vline'],function($,vline) {
+	window.VideoConf = function(customerId) {};
 	window.VideoConf = function(customerId) {
 		 this.client = vline.Client.create({
     		serviceId: 'bakbak',
@@ -28,7 +29,7 @@ define(['jquery','vline'],function($,vline) {
 		 	self.session=session;
 		 	window.videoSession = session;
 		 	self.person=session.getLocalPerson();
-		 	self.person.autoRelease();
+		 	//self.person.autoRelease();
 		 }
 	};
 

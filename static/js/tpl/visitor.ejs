@@ -105,10 +105,10 @@
 		</td>
 		<td>
 						<div class='chatPanel'>
-							<div id='chatMsgBox<%=visitorId%>' class='chatMessages maxHeight100 scrollbar backgroundWhite'></div>
+							<div id='chatMsgBox<%=visitorId.toLowerCase()%>' class='chatMessages maxHeight100 scrollbar backgroundWhite'></div>
 							<div class='alert'>
-							<div id='chatSendBox<%=visitorId%>'class='chatText input-append'>
-  								<input id='chatMsg<%=visitorId%>' class="input-block-level" id="chatMsg<%=visitorId%>" type="text" placeholder="Chat" onkeydown="if (event.keyCode == 13) customer.sendChatMessage('<%=id%>','<%=visitorId%>',$('#chatMsg<%=visitorId%>').val());">
+							<div id='chatSendBox<%=visitorId.toLowerCase()%>'class='chatText input-append'>
+  								<input id='chatMsg<%=visitorId.toLowerCase()%>' class="input-block-level" id="chatMsg<%=visitorId.toLowerCase()%>" type="text" placeholder="Chat" onkeydown="if (event.keyCode == 13) customer.sendChatMessage('<%=id%>','<%=visitorId.toLowerCase()%>',$('#chatMsg<%=visitorId.toLowerCase()%>').val());">
 							<%if(webrtc.support) {%>
 								<%if(webrtc.webAudio && typeof 	phonoId != 'undefined') {%>
 								<img id='callButton<%=phonoId%>' class='imageIconMedium marginLeft' src='/img/actions/png/audio.png' title='Call' onClick=customer.audioCall('<%=phonoId%>',this)></img>

@@ -10,20 +10,15 @@ var bakbakUrl ='';
 		
 		this.presenceIndicator = function() {
 			heartbeat(self);
-			//setTimeout(self.presenceIndicator,CUSTOMER_HEARTBEAT);
 		}
-		this.onMessage = function(message) {
-			console.log(message);
-		};
-
+		
 		this.onChat = function(message) {
-			console.log(message);
 			addToChatMessageBox(message.sender,message.sender,message.message);
 		};
 
 		disableChat = function(visitorId) {
 			console.log('Disabling Chat!');
-			$('#chatMsg'+visitorId).attr('disabled', 'disabled');
+			$('#chatMsg'+visitorId.toLowerCase()).attr('disabled', 'disabled');
 			$('#chatSendInput'+visitorId).attr('disabled', 'disabled');
 		}
 
@@ -99,7 +94,8 @@ var bakbakUrl ='';
 					return;
 				}
 			}
-			console.log("Adding new user!");
+			console.log("Adding new user and firing event!");
+			$(document).trigger('bakbak_chat_join_muc',presenceUser.visitorId);
 			presenceUser.lastOnline = new Date().getTime();
 			presenceUser.online = true;
 			self.users.push(presenceUser);
@@ -111,24 +107,15 @@ var bakbakUrl ='';
 				$('#chatMsg'+presenceUser.visitorId).attr('disabled', 'disabled');
 				$('#chatSendInput'+presenceUser.visitorId).attr('disabled', 'disabled');
 			}
-			playNewUser();
-			setTimeout(function() {
-				console.log("First time message!");
-				customer.sendChatMessage(presenceUser.id,presenceUser.visitorId,"Good Morning! Please like our Facebook Page. \
-					<iframe src='//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.donateoldspectacles.org%2F&amp;width&amp;layout=button&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=35&amp;appId=163796550478024' \
-					 scrolling='no' frameborder='0' style='border:none; overflow:hidden; height:35px;' allowTransparency='true'></iframe> \
-					");
-				customer.screenshot(presenceUser.id,presenceUser.visitorId);
-			},3000);
-			 
+			playNewUser(); 
 		};
 
 		updateVisitorUi = function(i,presenceUser) {
 			self.users[i].id = presenceUser.id;
-			var text = $('#chatMsgBox'+self.users[i].visitorId).html();
+			var text = $('#chatMsgBox'+self.users[i].visitorId.toLowerCase()).html();
 			console.log("Chat text is " +text);
 			updateVisitorRow(self.users[i]);
-			$('#chatMsgBox'+self.users[i].visitorId).html(text);
+			$('#chatMsgBox'+self.users[i].visitorId.toLowerCase()).html(text);
 			return text;
 		}
 
@@ -148,13 +135,9 @@ var bakbakUrl ='';
 
 		this.sendChatMessage = function(id,visitorId, chatText,shouldAdd) {
 			if(chatText == null || chatText == '') return;
-			shouldAdd = typeof shouldAdd !== 'undefined' ? shouldAdd : true;
-			socket.chat(chatText,id,!shouldAdd);
 			console.log('sending chat message to ' + visitorId +' with message ' + chatText);
 			$('#chatMsg'+visitorId).val('');
-			if(shouldAdd) {
-				addToChatMessageBox(visitorId,customerId,chatText);
-			}
+			$(document).trigger('bakbak_chat_msg_send',{mucId:visitorId, message:chatText});
 		};
 
 		this.screenshot =function(id,visitorId) {
@@ -176,9 +159,27 @@ var bakbakUrl ='';
 			//initialize_calling();
 			initializeByeBye(self);
 			intializeSoundManager();
-			intializePhono(self);
-			self.phonoId = '1';
+			//intializePhono(self);
+			//self.phonoId = '1';
+			initializeXmpp();
 		}
+
+		initializeXmpp = function() {
+			var xmpp = xmppChatAdmin(false,'test');
+			$(function() {
+				$(document).trigger('bakbak_chat_connect',{});
+				$(document).bind('bakbak_chat_msg_recvd',function(ev,data) {
+					console.log(data);
+					addToChatMessageBox(data.room,data.from,data.msg);
+					});
+				$(document).bind('bakbak_chat_connected',function(ev,data) {
+					for(var i in self.users) {
+						$(document).trigger('bakbak_chat_join_muc',self.users[i].visitorId);
+					}
+				});
+			});
+		}
+
 		this.visitorMonitor = function() {
 			console.log('VISITOR MONITOR');
 			for(i in self.users) {
