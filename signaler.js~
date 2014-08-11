@@ -14,7 +14,8 @@ var appPath = __dirname + '/app'
     , cons = require('consolidate')
     , mongoose = require('mongoose')
     , fs = require('fs')
-    , everyauth = require('everyauth');
+    , everyauth = require('everyauth')
+    , proxyServer = require('http-route-proxy');
 
 var port = process.env.PORT || 5000;
 var db_string = 'mongodb://biplav:biplav3403@ds033097.mongolab.com:33097/heroku_app18693040';
@@ -35,6 +36,7 @@ fs.readdirSync(models_path).forEach(function (file) {
 var UserModel = mongoose.model('UserModel');
 require(appPath + '/authenticate')(app,everyauth);
 var user = require(appPath + '/controllers/user');
+var mousetrack = require(appPath + '/controllers/mousetrack');
 
 
 // ----------------------------------socket.io
@@ -70,16 +72,6 @@ app.configure(function() {
     app.use(app.router);
     app.enable('trust proxy');
     app.use(express.compress());
-    app.use('/img',express.static(path.join(__dirname, 'static/img')));
-    app.use('/css',express.static(path.join(__dirname, 'static/css')));
-    app.use('/js',express.static(path.join(__dirname, 'static/js')));
-    app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
-    app.use('/sounds',express.static(path.join(__dirname, 'static/sounds')));
-     app.use('/home_files',express.static(path.join(__dirname, 'home_files')));
-    app.use(everyauth.middleware(app));
-    app.use(everyauth.middleware(app)); // important to call this AFTER session!
-    app.use(app.router);
-
     app.use(function (req, res, next) {
         // Website you wish to allow to connect
         res.setHeader('Access-Control-Allow-Origin', '*');
@@ -93,6 +85,16 @@ app.configure(function() {
         // Pass to next layer of middleware
         next();
     });
+    app.use('/img',express.static(path.join(__dirname, 'static/img')));
+    app.use('/css',express.static(path.join(__dirname, 'static/css')));
+    app.use('/js',express.static(path.join(__dirname, 'static/js')));
+    app.use('/tmp',express.static(path.join(__dirname, 'static/tmp')));
+    app.use('/sounds',express.static(path.join(__dirname, 'static/sounds')));
+    app.use('/home_files',express.static(path.join(__dirname, 'home_files')));
+    app.use(everyauth.middleware(app));
+    app.use(everyauth.middleware(app)); // important to call this AFTER session!
+    //app.use(app.router);
+
 });
 
 app.configure('development', function(){
@@ -131,6 +133,7 @@ io.configure(function () {
                                 console.log('Admin already connected please wait for the previous session to disconnect!');
                                 accept('Admin already logged in with a different session',false);
                             } else {
+                                console.log("Adding admin to the list!");    
                                 active_admins[user.userId] = user.userId;
                             }
                         }
@@ -145,7 +148,6 @@ io.configure(function () {
 });
 
 io.sockets.on('connection', function (socket) {
-   new require('xmpp-ftw').Xmpp(socket); 
     var initiatorChannel = '';
     if (!io.isConnected)
         io.isConnected = true;
@@ -262,6 +264,17 @@ function onNewNamespace(channel, sender) {
           }
        });
 
+        socket.on('mouseTrack',function (data) {
+          console.log('GOT MouseTrack for for ' + data.reciever + ' for id ' +socketid);
+          socketId = data.reciever;
+          data.senderId = socketid;
+          //console.log("Data is");
+          //console.log(data);
+            if(data.sender == sender) {
+                mousetrack.updateLog(data.log);
+            }
+       });
+
         socket.on('disconnect', function (channel) {
             console.log('DISCONNECTED!!!!! ----> ' + socket.id);
             if(!active_sessions[socket.handshake.sidCookie]) {
@@ -334,6 +347,7 @@ app.get('/tour.js', function (req, res) {
 });
 
 app.get('/sessionid', function (req, res) {
+        res.header("Access-Control-Allow-Origin", "*");
         console.log("Fetching session id");
         var sidCookie = req.sessionID;
         console.log(sidCookie);
@@ -349,7 +363,7 @@ app.get('/location', function(req, res) {
     if(ip == '127.0.0.1') {
     	url = "http://www.geoplugin.net/json.gp";
     }
-    console.log("Making a request to fetch location data. for " + url);
+    //console.log("Making a request to fetch location data. for " + url);
     http.get(url, function(response) {
 	      	console.log("Got location response status code: " + response.statusCode);
 	      	res.setHeader('Content-Type','application/json');
@@ -458,6 +472,7 @@ app.post('/email', function(req, resp) {
     }
     });
 });
+
 
 require(appPath + '/app_urls')(app);
 

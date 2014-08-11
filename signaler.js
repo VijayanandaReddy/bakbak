@@ -14,8 +14,7 @@ var appPath = __dirname + '/app'
     , cons = require('consolidate')
     , mongoose = require('mongoose')
     , fs = require('fs')
-    , everyauth = require('everyauth')
-    , proxyServer = require('http-route-proxy');
+    , everyauth = require('everyauth');
 
 var port = process.env.PORT || 5000;
 var db_string = 'mongodb://biplav:biplav3403@ds033097.mongolab.com:33097/heroku_app18693040';
