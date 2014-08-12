@@ -49,7 +49,9 @@
 }
 
 
-
+footer#bakbakchat {
+	padding:0px;
+}
 .imageIconMedium {
 	width:20px;
 	height:20px;
