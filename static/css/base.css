@@ -15,6 +15,21 @@
 	min-height: 20px;
 }
 
+
+#bakbakFullPagePopUp_wrapper > form{
+	margin: 0 0 20px;
+	display: block;
+}
+
+#bakbakFullPagePopUp_wrapper {
+	margin: 0;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+	color: #333333;
+	background-color: #ffffff;
+}
+
 #bakbakFullPagePopUp,
 #bakbakFullPagePopUp_wrapper {
     -webkit-transition: all 0.3s ease-out;
