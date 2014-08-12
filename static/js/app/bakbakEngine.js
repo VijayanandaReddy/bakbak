@@ -31,19 +31,19 @@ define(['jquery','jquery-popup-overlay','app/utils'],function($,popup,utils) {
         this.showBakBak = function(bakbak) {
             var bakbakHtml = returnBakbakHtml(bakbak);
             if(bakbak.view_as == 'fullPagePopUp') {
-                showFullPagePopUp(bakbakHtml);
+                showFullPagePopUp(bakbakHtml,bakbak.name);
             } else {
                 console.log("Incorrect view_as");
             }
         }
 
-        showFullPagePopUp = function(html) {
+        showFullPagePopUp = function(html,subject) {
             console.log("Full page popup");
             $('body').append("<div id='bakbakFullPagePopUp' class='fullPagePopUp bakbak_bootstrap'><div class='bakbakFullPagePopUp_close'><img src='"+bakbakUrl+"img/actions/png/dnd.png' class='imageIconMedium rightAlignIcon'/></div> <div id='bakbakFullPagePopUpContainer'/></div>");
             $("#bakbakFullPagePopUpContainer").html(decodeURI(html));
             $("#bakbakFullPagePopUp").popup({closeelement: '.bakbakFullPagePopUp_close'});
             $("#bakbakFullPagePopUp").popup('show');
-            initializeEmailResponses();
+            initializeEmailResponses(subject);
         }
 
         returnBakbakHtml = function(bakbak) {
@@ -80,22 +80,22 @@ define(['jquery','jquery-popup-overlay','app/utils'],function($,popup,utils) {
             return html;
         }
 
-        initializeEmailResponses = function() {
+        initializeEmailResponses = function(subject) {
             $($('#bakbakFullPagePopUpContainer > form')[0]).on('submit',function(ev) {
                 ev.preventDefault();
-                self.sendContactUsForm($(this).serializeObject());
+                self.sendContactUsForm($(this).serializeObject(),subject);
                 return true;
             });
         };
 
-        this.sendContactUsForm = function(data) {
+        this.sendContactUsForm = function(data,subject) {
             $('#bakbakEmailButton').attr('disabled',true);
             console.log(data);
             toSend = {};
             toSend['email'] = adminEmail;
             toSend['template'] = 'bakbakEmail';
             toSend['data'] = data;
-            toSend['image'] = '';
+            toSend['subject'] = subject;
             $.post( bakbakUrl + "email",toSend,'json')
                             .done(function(response) {
                                 console.log("Attempted to send email");

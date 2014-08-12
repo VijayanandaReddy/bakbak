@@ -423,6 +423,8 @@ app.post('/email', function(req, resp) {
         });
 
         var templateName = visitor['template'];
+        var subject = visitor['subject'];
+        subject = typeof subject === 'undefined' ? "Chat Script" : subject;
          var buf = undefined;
 
         var attachmentObj = [];
@@ -452,7 +454,7 @@ app.post('/email', function(req, resp) {
                 transport.sendMail({
                     from: 'BakBak.io <biplav.sarf@gmail.com>',
                     to: locals.email,
-                    subject: 'Chat Script',
+                    subject: subject,
                     html: html,
                     // generateTextFromHTML: true,
                     text: text,

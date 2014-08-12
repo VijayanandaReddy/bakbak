@@ -16,6 +16,7 @@ var adminEmail = '<%= application.email %>';
 
 <% if(application.bakbaks && application.bakbaks.length > 0) { %>
 	var bakbaks= {};
+	bakbaks['name'] = '<%= application.bakbaks[0].name %>';
 	bakbaks['type'] = '<%= application.bakbaks[0].type %>';
 	bakbaks['data'] = '<%= encodeURI(application.bakbaks[0].data) %>';
 	bakbaks['view_as'] = '<%= encodeURI(application.bakbaks[0].view_as) %>';
