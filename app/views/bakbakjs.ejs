@@ -13,6 +13,15 @@ var adminEmail = '<%= application.email %>';
 	offlineForm['type'] = '<%= application.offlineForm[0].type %>';
 	offlineForm['data'] = '<%= encodeURI(application.offlineForm[0].data) %>';
 <% } %>
+
+<% if(application.bakbaks && application.bakbaks.length > 0) { %>
+	var bakbaks= {};
+	bakbaks['type'] = '<%= application.bakbaks[0].type %>';
+	bakbaks['data'] = '<%= encodeURI(application.bakbaks[0].data) %>';
+	bakbaks['view_as'] = '<%= encodeURI(application.bakbaks[0].view_as) %>';
+	bakbaks['bakbak_rule'] = '<%= encodeURI(application.bakbaks[0].bakbak_rule) %>';
+<% } %>
+
 <% if(application.mouseTracking && application.mouseTracking.length > 0) { %>
 	var clickTrackUrls = {};
 	clickTrackUrls['<%= application.mouseTracking[0].url %>'] ='<%= application.mouseTracking[0]._id %>' ;

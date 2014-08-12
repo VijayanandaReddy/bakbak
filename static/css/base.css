@@ -1,3 +1,41 @@
+#bakbakFullPagePopUp_background {
+    -webkit-transition: all 0.3s;
+       -moz-transition: all 0.3s;
+            transition: all 0.3s;
+	}
+
+.fullPagePopUp {
+	box-sizing: border-box;
+	box-shadow: 0 0 10px rgba(0,0,0,0.3);
+	margin: 1em;
+	border: 1px solid #e3e3e3;
+	border-radius: 4px;
+	background-color: #f5f5f5;
+	padding:19px;
+	min-height: 20px;
+}
+
+#bakbakFullPagePopUp,
+#bakbakFullPagePopUp_wrapper {
+    -webkit-transition: all 0.3s ease-out;
+       -moz-transition: all 0.3s ease-out;
+            transition: all 0.3s ease-out;
+}
+#bakbakFullPagePopUp {
+    -webkit-transform: translateX(0) translateY(-40%);
+       -moz-transform: translateX(0) translateY(-40%);
+        -ms-transform: translateX(0) translateY(-40%);
+            transform: translateX(0) translateY(-40%);
+}
+.popup_visible #bakbakFullPagePopUp {
+    -webkit-transform: translateX(0) translateY(0);
+       -moz-transform: translateX(0) translateY(0);
+        -ms-transform: translateX(0) translateY(0);
+            transform: translateX(0) translateY(0);
+}
+
+
+
 .imageIconMedium {
 	width:20px;
 	height:20px;
@@ -200,8 +238,6 @@ only screen and (max-width: 760px),
 	table.responsiveTable td:nth-of-type(1):before { content: "Details"; }
 	table.responsiveTable td:nth-of-type(2):before { content: "Analytics"; }
 	table.responsiveTable td:nth-of-type(3):before { content: "Actions"; }
-	
-
 }
 
 

@@ -440,7 +440,7 @@ app.post('/email', function(req, resp) {
             }
         }
 
-        console.log(attachmentObj.length);
+       // console.log(attachmentObj.length);
         // Send a single email
         template(templateName, locals, function(err, html, text) {
             if (err) {

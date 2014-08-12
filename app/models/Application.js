@@ -7,7 +7,9 @@ var mongoose = require('mongoose'),
  var BakBak = Schema({
     name: String, 
     type: String,
-    data: String
+    data: String,
+    view_as: String,
+    bakbak_rule:String
 });
 
  var BakBakRule = Schema({
@@ -35,7 +37,7 @@ var ApplicationSchema = Schema({
     mouseTracking: [PageLevelMouseTrack],
     offlineForm: { type:[BakBak], default:[]},
     bakbaks: { type:[BakBak], default:[]},
-    bakbak_rule: { type:[BakBakRule], default:[]}
+    //bakbak_rule: { type:[BakBakRule], default:[]}
 });
 
 ApplicationSchema.methods.upsertMouseTracking = function(data,cb) {
@@ -83,13 +85,15 @@ ApplicationSchema.methods.upsertOfflineForm = function(data,cb) {
 
 ApplicationSchema.methods.upsertBakBak = function(data,cb) {
     if(data._id && (data._id != null && data._id != 'null' && data._id != 'undefined')) {
-        console.log("Updating offlineForm");
+        console.log("Updating bakbak");
         console.log(data);
         var set = {};
         set['bakbaks.$.name'] = data['name'];
         set['bakbaks.$.type'] = data['type'];
         set['bakbaks.$.data'] = data['data'][+data['type']];
-        this.model('ApplicationModel').update({_id:this._id,'offlineForm._id':data._id},
+        set['bakbaks.$.view_as'] = data['view_as'];
+        set['bakbaks.$.bakbak_rule'] = data['bakbak_rule'];
+        this.model('ApplicationModel').update({_id:this._id,'bakbaks._id':data._id},
             {$set: set},cb);
     } else {
         console.log(data);
@@ -98,7 +102,10 @@ ApplicationSchema.methods.upsertBakBak = function(data,cb) {
         set['name'] = data['name'];
         set['type'] = data['type'];
         set['data'] = data['data'][data['type']];
-        console.log("Creating new offlineForm");
+        set['view_as'] = data['view_as'];
+        set['bakbak_rule'] = data['bakbak_rule'];
+
+        console.log("Creating new bakbak");
         console.log(set);
         this.bakbaks.push(set);
         this.save(cb)

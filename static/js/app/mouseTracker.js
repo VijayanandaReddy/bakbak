@@ -24,6 +24,9 @@ define(['jquery','webgl-heatmap',
 		function isValidUrl() {
 			self.url = self.url.replace("?bakbakClickMap=map","");
 			self.url = self.url.replace("?bakbakClickMap=count","");
+			if(typeof clickTrackUrls === 'undefined') {
+				return false;
+			}
 			for(url in clickTrackUrls) {
 				console.log("MOUSETRACKER:: " +url);	
 				if(url == self.url) {

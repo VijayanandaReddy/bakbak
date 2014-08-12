@@ -31,7 +31,7 @@ exports.upsert = function(req, res){
 			if(err || application == null) {
 				res.redirect('/application/create');
 			} else {
-				application.upsert(req.body,function(err,cb){
+				application.upsertBakBak(req.body,function(err,cb){
 					if(err) {
 						res.render('bakbak_create', {user:user,
 							create:false,
@@ -41,7 +41,7 @@ exports.upsert = function(req, res){
 							current:'bakbak'
 						});	
 					} else {
-						
+						res.redirect('/application/create');
 					}
 				});	
 			}
