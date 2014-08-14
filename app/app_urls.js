@@ -27,6 +27,7 @@ module.exports = function(app) {
 	app.get('/application/mousetrack',user.authenticated,mousetrack.getSettings);
 	app.post('/application/mousetrack/upsert',user.authenticated,mousetrack.setSettings);
 	app.get('/application/bakbaks',user.authenticated,bakbaks.index);
+	app.get('/application/bakbaks/create',user.authenticated,bakbaks.create);
 	app.post('/application/bakbaks',user.authenticated,bakbaks.upsert);
 	app.get('/video/auth',videojs.index);
 	app.get('/schedule/simple',schedulejs.index);
@@ -34,4 +35,11 @@ module.exports = function(app) {
 	app.get('/schedule/meeting',schedulejs.meeting);
 	app.get('/schedule/meeting/parts',schedulejs.meetingSelect);	
 	app.post('/schedule/meeting',schedulejs.meeting);
+	
+	//Locals are defined for Express 3.
+	app.locals.checkVal = function(obj) {
+		console.log(obj);
+		if(typeof obj === 'undefined') return '';
+		return obj;
+	}
 }

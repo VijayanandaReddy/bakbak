@@ -3,19 +3,12 @@
 <% include layouts/headClose %>
 <% include layouts/internalHeader %>
 <% include layouts/containerFluidOpen %>
-<%if(!createOrEdit){%>
 <% include layouts/sidebar %>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-<% } %>
 	<%if(typeof error_message !== 'undefined'){%>
 	<p class='bg-error'><%= error_message%></p>
 	<%} else if(typeof success_message !== 'undefined') { %>
 	<p class='bg-info'><%= success_message%></p>
-	<%} %>
-	<%if(create){%>
-	<p class='bg-info'>Create a new Application.</p>
-	<%} else if(createOrEdit) { %>
-	<p class='bg-info'>Create a new Application.</p>
 	<%} %>
 
 <div class="panel panel-default">
@@ -29,7 +22,7 @@
 <div class="control-group">
   <label class="control-label" for="formName">Name</label>
   <div class="controls">
-    <input id="formName" name="name" type="text" placeholder="" class="form-control">
+    <input id="formName" name="name" type="text" placeholder="" class="form-control" value="<%= checkVal(bakbak.name) %>">
     <p class="help-block">Please enter your form name to recognize them while setting bakbak rule.</p>
   </div>
 </div>
@@ -37,7 +30,7 @@
 <div class="control-group">
   <label class="control-label" for="formName">View As</label>
   <div class="controls">
-    <input id="bakbak_view_as" name="view_as" type="text" placeholder="" class="form-control">
+    <input id="bakbak_view_as" name="view_as" type="text" placeholder="" class="form-control" value="<%= checkVal(bakbak.view_as) %>">
     <p class="help-block">Please enter how you would like to view this bakbak.</p>
   </div>
 </div>
@@ -45,7 +38,7 @@
 <div class="control-group">
   <label class="control-label" for="formName">Rule</label>
   <div class="controls">
-    <input id="bakbak_rule" name="bakbak_rule" type="text" placeholder="" class="form-control">
+    <input id="bakbak_rule" name="bakbak_rule" type="text" placeholder="" class="form-control" value="<%= checkVal(bakbak.bakbak_rule) %>">
     <p class="help-block">Please enter the rule this bakbak should follow.</p>
   </div>
 </div>
@@ -54,9 +47,7 @@
 <div class="control-group">
   <label class="control-label" for="radios">Type</label>
   <div class="controls">
-    <% if(application.bakbaks && application.bakbaks.length > 0) {%>
-    <input type='hidden' name='_id' value='<%= application.bakbaks[0].id %>' />
-    <% } %>
+    <input type='hidden' name='_id' value="<%= checkVal(bakbak.id) %>" />
     <label class="radio" for="radios-0">
       <input type="radio" name="type" id="radios-0" value="0" checked="checked" onchange="$('#defaultForm').show();$('#googleForm').hide();$('#embedForm').hide();">
       Default Form
@@ -182,8 +173,8 @@ populateValues = function(type,data) {
   }
 }
 
-<% if(application.offlineForm && application.offlineForm.length > 0) { %>
-  populateValues('<%= application.offlineForm[0].type%>','<%= encodeURI(application.offlineForm[0].data)%>');
+<% if(bakbak.id) { %>
+  populateValues('<%= bakbak.type%>','<%= encodeURI(bakbak.data)%>');
 <% } else {%>
   $(document).ready(function() {
     $('#defaultForm').show();
