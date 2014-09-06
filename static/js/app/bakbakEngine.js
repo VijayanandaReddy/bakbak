@@ -39,7 +39,7 @@ define(['jquery','jquery-popup-overlay','app/utils'],function($,popup,utils) {
 
         showFullPagePopUp = function(html,subject) {
             console.log("Full page popup");
-            $('body').append("<div id='bakbakFullPagePopUp' class='fullPagePopUp bakbak_bootstrap'><div class='bakbakFullPagePopUp_close'><img src='"+bakbakUrl+"img/actions/png/dnd.png' class='imageIconMedium rightAlignIcon'/></div> <div id='bakbakFullPagePopUpContainer'/></div>");
+            $('body').append("<div id='bakbakFullPagePopUp' class='fullPagePopUp bakbak_bootstrap'><div class='bakbakFullPagePopUp_close'><img src='"+bakbakUrl+"img/actions/png/dnd.png' class='imageIconMedium rightAlignIcon' style='z-index: 999999;'/></div> <div id='bakbakFullPagePopUpContainer'/></div>");
             $("#bakbakFullPagePopUpContainer").html(decodeURI(html));
             $("#bakbakFullPagePopUp").popup({closeelement: '.bakbakFullPagePopUp_close'});
             $("#bakbakFullPagePopUp").popup('show');
