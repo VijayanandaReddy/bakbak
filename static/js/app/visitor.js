@@ -231,7 +231,7 @@ define(['jquery','webrtcsupport','socketio','app/utils','validator','html2canvas
 			$('#bakbakchat').empty();
 			$('#offlineConfirm').unbind('click');
 			$('#bakbakchat').removeClass('extraImage');
-			$('#bakbakchat').append("<div id='offlineConfirm' class='alert alert-danger' style='margin:0px'><span class='chatHeaderText'>Feedback</span><img src='"+bakbakUrl+"img/avatars/avatar-red-talking20x20.png'></img></div>");
+			$('#bakbakchat').append("<div id='offlineConfirm' class='alert alert-danger' style='margin:0px'><span class='chatHeaderText'>"+ offlineForm.name +"</span><img src='"+bakbakUrl+"img/avatars/avatar-red-talking20x20.png'></img></div>");
 			$('#bakbakchat').removeClass('chatMaximize').addClass('chatMinimize');
 			$('#offlineConfirm').click(function(event) {
 				showContactUsBar();

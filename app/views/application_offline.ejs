@@ -28,8 +28,15 @@
 
 <!-- Form Name 
 <legend></legend> -->
-
+<div class="control-group">
+<label class="control-label" for="radios">Name</label>
+<div class="controls">
+  <input type='text' name='name' value='<%= application.offlineForm[0].name %>' class="form-control"/>
+  <p class="help-block">Please enter the label for offline form.</p>
+</div>
+</div>
 <!-- Multiple Radios -->
+
 <div class="control-group">
   <label class="control-label" for="radios">Type</label>
   <div class="controls">

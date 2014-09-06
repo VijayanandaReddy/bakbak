@@ -64,7 +64,7 @@ ApplicationSchema.methods.upsertOfflineForm = function(data,cb) {
         console.log("Updating offlineForm");
         console.log(data);
         var set = {};
-        set['offlineForm.$.name'] = 'OfflineForm';
+        set['offlineForm.$.name'] = data['name'];
         set['offlineForm.$.type'] = data['type'];
         set['offlineForm.$.data'] = data['data'][+data['type']];
         this.model('ApplicationModel').update({_id:this._id,'offlineForm._id':data._id},

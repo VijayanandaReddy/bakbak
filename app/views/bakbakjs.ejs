@@ -10,6 +10,7 @@ var adminName = '<%= application.displayName %>';
 var adminEmail = '<%= application.email %>';
 <% if(application.offlineForm && application.offlineForm.length > 0) { %>
 	var offlineForm= {};
+	offlineForm['name'] = '<%= application.offlineForm[0].name %>';
 	offlineForm['type'] = '<%= application.offlineForm[0].type %>';
 	offlineForm['data'] = '<%= encodeURI(application.offlineForm[0].data) %>';
 <% } %>
