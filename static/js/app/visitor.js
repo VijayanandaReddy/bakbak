@@ -52,6 +52,8 @@ define(['jquery','webrtcsupport','socketio','app/utils','validator','html2canvas
 		};
 
 		initializeBakBakReprtingEngine = function() {
+			//test
+			window.ga=function() {console.log("GA called!");};
 			var bakbakReprotingEngine = new BakbakReportingEngine(true,self);
 		};
 

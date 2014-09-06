@@ -13,13 +13,22 @@ define(['jquery','app/utils'],function($,utils) {
             for(var i in customReportingEvent) {
                 console.log("Subscrining to " + customReportingEvent[i])
                 $(document).on(customReportingEvent[i],function(ev,data) {
-                    console.log(ev);
-                    console.log(data);
-                    ga('send', 'event', 'bakbak_report', ev, data);
+                    report(ev,data);
                     return true;
                 }) ;  
             }
             
+        }
+
+        report = function(ev,data) {
+            console.log(ev);
+            console.log(data);
+            if(typeof ga !== 'undefined') {
+                ga('send', 'event', 'bakbak_report', ev.type, data);
+            }
+            if(typeof _trackEvent !== 'undefined') {
+            _trackEvent(ev.type, ev.data);
+            }
         }
         init();
 
