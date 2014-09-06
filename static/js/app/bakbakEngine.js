@@ -43,6 +43,7 @@ define(['jquery','jquery-popup-overlay','app/utils'],function($,popup,utils) {
             $("#bakbakFullPagePopUpContainer").html(decodeURI(html));
             $("#bakbakFullPagePopUp").popup({closeelement: '.bakbakFullPagePopUp_close'});
             $("#bakbakFullPagePopUp").popup('show');
+            $(document).trigger('bakbak_reporting_bakbak_show',subject);
             initializeEmailResponses(subject);
         }
 

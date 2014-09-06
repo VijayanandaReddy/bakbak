@@ -1,6 +1,6 @@
 define(['jquery','webrtcsupport','socketio','app/utils','validator','html2canvas',
-  'jquery.embedly-3.1.1.min','jquery.placeholder',/*'jquery.phono.min',*/'tenhands.loader.v2.0','ejs','app/xmpp_chat','app/bakbakEngine'],
-  function($,webrtc,socketio,util,validator,html2canvas,embedly,placeholder,/*phono,*/tenhands,ejs,xmpp,bakbakEngine) {
+  'jquery.embedly-3.1.1.min','jquery.placeholder',/*'jquery.phono.min',*/'tenhands.loader.v2.0','ejs','app/xmpp_chat','app/bakbakEngine','app/bakbakReportingEngine'],
+  function($,webrtc,socketio,util,validator,html2canvas,embedly,placeholder,/*phono,*/tenhands,ejs,xmpp,bakbakEngine,bakbakReportingEngine) {
  	window.Visitor = function(customerId) { //CustomerId is the admin with whom this guy is connected to.
 		var self = this;
 		//Extract a method
@@ -23,6 +23,7 @@ define(['jquery','webrtcsupport','socketio','app/utils','validator','html2canvas
 		this.init = function() {
 			$('#chatPanel').hide();
 			$('#offlineIndicator').show();
+			initializeBakBakReprtingEngine();
 			initializeRefererData(self);
 			initializeUserAgentData(self);
 			initializeLocationData(self);
@@ -34,6 +35,7 @@ define(['jquery','webrtcsupport','socketio','app/utils','validator','html2canvas
 			initializeByeBye(self);
 			initializeXmpp();
 			initializeBakBakEngine();
+			
 			//intializePhono(self);
 			//initialize_calling();
 			$(document).ready(function(){
@@ -47,6 +49,10 @@ define(['jquery','webrtcsupport','socketio','app/utils','validator','html2canvas
 
 		initializeBakBakEngine = function() {
 			var bakbakEngine = new BakbakEngine(true,self);
+		};
+
+		initializeBakBakReprtingEngine = function() {
+			var bakbakReprotingEngine = new BakbakReportingEngine(true,self);
 		};
 
 		initializeXmpp = function () {
