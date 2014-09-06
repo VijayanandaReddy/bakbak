@@ -147,13 +147,15 @@ exports.meeting = function(req,res) {
   console.log(req.body);
   var local;
   var remote;
-  if(req.body) {
+  if(req.method != 'GET') {
     local = req.body.local;
     remote = req.body.remote;
   } else {
     local = req.query.local;
     remote = req.query.remote;
   }
+
+  console.log("Local:"+local+" Remote:"+remote);
   
   var token = videojs.getToken(local);
   res.render('meeting',{local:local,remote:remote,token:token}); 
