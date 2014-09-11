@@ -1,4 +1,4 @@
-define(['jquery','jquery-popup-overlay','app/utils'],function($,popup,utils) {
+define(['jquery','jquery-popup-overlay','app/utils','bootstrap.min'],function($,popup,utils) {
 
     $.fn.serializeObject = function() {
         var o = {};
@@ -88,6 +88,10 @@ define(['jquery','jquery-popup-overlay','app/utils'],function($,popup,utils) {
                 return true;
             });
         };
+
+        initializeBootStrapTabs = function() {
+            $('#bakbak_tabs').tab();
+        }
 
         this.sendContactUsForm = function(data,subject) {
             $('#bakbakEmailButton').attr('disabled',true);
