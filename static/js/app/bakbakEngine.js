@@ -82,12 +82,14 @@ define(['jquery','jquery-popup-overlay','app/utils','bootstrap.min'],function($,
         }
 
         initializeEmailResponses = function(subject) {
-            $($('#bakbakFullPagePopUpContainer > form')[0]).on('submit',function(ev) {
+            $('#bakbakFullPagePopUpContainer form').each(function() {
+                $(this).on('submit',function(ev) {
                 ev.preventDefault();
                 self.sendContactUsForm($(this).serializeObject(),subject);
                 return true;
             });
-        };
+        });
+        }
 
         initializeBootStrapTabs = function() {
             $('#bakbak_tabs').tab();
