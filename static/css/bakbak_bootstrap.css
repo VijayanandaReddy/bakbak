@@ -4,6 +4,96 @@ div.bakbak_bootstrap {
   */
   color: #3e454c;
   text-align: left;
+
+  div.bakbak_bootstrap * { 
+/* add in your default preferences in here - color, list styles, font family etc.. */ 
+position: static !important; 
+z-index: auto !important;
+color: #000 !important; 
+background: transparent none repeat scroll 0 0 !important;
+
+float: none !important; 
+clear: none !important;
+
+padding: 0 !important; 
+margin: 0 !important; 
+border: 0 solid #000 !important;
+
+min-height: 0 !important; 
+max-height: none !important; 
+height: auto !important;
+
+min-width: 0 !important; 
+max-width: none !important; 
+width: auto !important;
+
+font: normal normal normal 11px/1.5 arial, verdana, sans-serif !important; 
+list-style: disc outside none !important; 
+letter-spacing: normal !important; 
+text-align: left !important; 
+text-decoration: none !important; 
+text-indent: 0 !important; 
+text-transform: none !important; 
+white-space: normal !important; 
+word-spacing: normal !important; 
+vertical-align: baseline !important;
+
+unicode-bidi: normal !important; 
+direction: ltr !important;
+
+clip: auto !important; 
+overflow: visible !important; 
+visibility: visible !important; 
+outline: invert none medium !important;
+
+/** odditites which will need specified separately for each property that it goes against **/ 
+display: inline !important; 
+cursor: auto !important;
+
+/* if any of the elements are to be draggable you cannot set these 
+you should however take care and set all four even if auto in the individual positioned elements 
+top: auto !important; 
+right: auto !important; 
+bottom: auto !important; 
+left: auto !important; 
+*/ 
+}
+
+/* 
+absolute containers needs a width 
+or a min and max width 
+or at least the parent one does.. 
+*/
+
+/* extension specific general resets */
+
+div.bakbak_bootstrap div, 
+div.bakbak_bootstrap ul, 
+div.bakbak_bootstrap dl, 
+div.bakbak_bootstrap dt, 
+div.bakbak_bootstrap dd, 
+div.bakbak_bootstrap h2, 
+div.bakbak_bootstrap h3, 
+div.bakbak_bootstrap { 
+display: block !important; 
+} 
+
+div.bakbak_bootstrap li { 
+display: list-item !important; 
+}
+
+/* table display properties would need to go in here if tables are used in your DHTML */
+
+div.bakbak_bootstrap b, 
+div.bakbak_bootstrap strong {font-weight: bold !important;}
+
+div.bakbak_bootstrap i, 
+div.bakbak_bootstrap em {font-style: italic !important;}
+
+div.bakbak_bootstrap h2, 
+div.bakbak_bootstrap h3 { 
+font-weight: bold !important; 
+}
   	/*!
    * Bootstrap v2.3.2
    *
