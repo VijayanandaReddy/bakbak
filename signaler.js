@@ -397,6 +397,17 @@ app.post('/ua', function(req, resp) {
     resp.send(info);
 });
 
+
+// ## Send a single email
+// Prepare nodemailer transport object
+var transport = nodemailer.createTransport("SMTP", {
+    service: "Gmail",
+    auth: {
+        user: "biplav.saraf@gmail.com",
+        pass: "www.biplav.in"
+    }
+});
+
 app.post('/email', function(req, resp) {
     resp.header("Access-Control-Allow-Origin", "*");
     var visitor = req.body;
@@ -412,16 +423,7 @@ app.post('/email', function(req, resp) {
         resp.send(err.message);
     } else {
 
-        // ## Send a single email
-        // Prepare nodemailer transport object
-        var transport = nodemailer.createTransport("SMTP", {
-            service: "Gmail",
-            auth: {
-                user: "biplav.saraf@gmail.com",
-                pass: "www.biplav.in"
-            }
-        });
-
+        
         var templateName = visitor['template'];
         var subject = visitor['subject'];
         subject = typeof subject === 'undefined' ? "Chat Script" : subject;
