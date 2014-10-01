@@ -400,13 +400,16 @@ app.post('/ua', function(req, resp) {
 
 // ## Send a single email
 // Prepare nodemailer transport object
-var transport = nodemailer.createTransport("SMTP", {
-    service: "Gmail",
+var transport = nodemailer.createTransport("SMTP",{
+    host: 'smtp.gmail.com',
+    port: 587,
     auth: {
-        user: "biplav.saraf@gmail.com",
-        pass: "www.biplav.in"
+        user: 'biplav.saraf@gmail.com',
+        pass: 'www.biplav.in'
     }
 });
+
+console.log(transport);
 
 app.post('/email', function(req, resp) {
     resp.header("Access-Control-Allow-Origin", "*");
@@ -454,7 +457,7 @@ app.post('/email', function(req, resp) {
                 console.log(html);
                 console.log(text);
                 transport.sendMail({
-                    from: 'BakBak.io <biplav.sarf@gmail.com>',
+                    from: 'BakBak.io <biplav.saraf@gmail.com>',
                     to: locals.email,
                     subject: subject,
                     html: html,
