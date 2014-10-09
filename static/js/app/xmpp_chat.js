@@ -74,8 +74,8 @@ define(['jquery','strophe'],function($,Strophe) {
             var from = $(presence).attr('from');
             var jid = $(presence).find('item').attr('jid');
             id = jid_to_id(jid)
-            console.log(id);
-            if(id != customerId) { //No need to process presence of anyone other then admin
+            
+            if(from.indexOf('admin') < 0) { //No need to process presence of anyone other then admin
                 return true;
             }
 
