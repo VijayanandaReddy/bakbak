@@ -15,7 +15,9 @@
     "ejs": "0.8.5",
     "nodetime": "0.8.15",
     "green-jwt":"",
-    "nodemailer-wellknown":"0.1.2"
+    "nodemailer-wellknown":"0.1.2",
+    "postmark":"0.2.6",
+    "json-buffer":"2.0.9"
   },
   "engines": {
     "node": "0.10.x",

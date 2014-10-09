@@ -14,13 +14,16 @@ var appPath = __dirname + '/app'
     , cons = require('consolidate')
     , mongoose = require('mongoose')
     , fs = require('fs')
-    , everyauth = require('everyauth');
+    , everyauth = require('everyauth')
+    , JSONB = require('json-buffer');
 
 var port = process.env.PORT || 5000;
 var db_string = 'mongodb://biplav:biplav3403@ds033097.mongolab.com:33097/heroku_app18693040';
 if(port == 5000) {
     db_string='mongodb://127.0.0.1/mymongodb';
 }
+var POSTMARK_KEY = "f7c613db-496f-481b-895e-6917729eefba";
+var postmark = require("postmark")(POSTMARK_KEY);
 //in future would use a persistent store for these.
 var active_sessions = {}; 
 var active_admins = {};
@@ -397,20 +400,6 @@ app.post('/ua', function(req, resp) {
     resp.send(info);
 });
 
-
-// ## Send a single email
-// Prepare nodemailer transport object
-var transport = nodemailer.createTransport("SMTP",{
-    host: 'smtp.gmail.com',
-    port: 587,
-    auth: {
-        user: 'donateoldspectacles@gmail.com',
-        pass: 'biplav3403'
-    }
-});
-
-console.log(transport);
-
 app.post('/email', function(req, resp) {
     resp.header("Access-Control-Allow-Origin", "*");
     var visitor = req.body;
@@ -430,25 +419,24 @@ app.post('/email', function(req, resp) {
         var templateName = visitor['template'];
         var subject = visitor['subject'];
         subject = typeof subject === 'undefined' ? "Chat Script" : subject;
-         var buf = undefined;
+        var buf = undefined;
 
         var attachmentObj = [];
         if(visitor['image']) {
             var b64string = visitor['image'];
             b64string = b64string.replace('data:image/png;base64,','');
-            buf = new Buffer(b64string, 'base64');
-            attachmentObj =[{'filename' : 'screenshot.jpg' , 'contents' : buf}];
+            attachmentObj.push({'Name' : 'screenshot.jpg' , 'Content' : b64string , 'ContentType' : 'image/jpeg'});
         } else if (visitor['images']) {
             for(i in visitor['images']) {
                 var b64string = visitor['images'][i];
                 b64string = b64string.replace('data:image/png;base64,','');
-                buf = new Buffer(b64string, 'base64');
-                attachmentObj.push({'filename' : 'screenshot.jpg' , 'contents' : buf});
+                attachmentObj.push({'Name' : 'screenshot.jpg' , 'Content' : b64string , 'ContentType' : 'image/jpeg'});
             }
         }
 
        // console.log(attachmentObj.length);
         // Send a single email
+
         template(templateName, locals, function(err, html, text) {
             if (err) {
                 console.log(err);
@@ -456,22 +444,26 @@ app.post('/email', function(req, resp) {
             } else {
                 console.log(html);
                 console.log(text);
-                transport.sendMail({
-                    from: 'BakBak.io <biplav.saraf@gmail.com>',
-                    to: locals.email,
-                    subject: subject,
-                    html: html,
-                    // generateTextFromHTML: true,
-                    text: text,
-                    attachments : attachmentObj
-                    }, function(err, responseStatus) {
-                    if (err) {
-                        console.log(err);
-                        resp.send(err.message);
-                    } else {
-                        console.log(responseStatus.message);
-                        resp.send("OK");
+                console.log(JSON.stringify(attachmentObj));
+                postmark.send({
+                    "From": 'BakBak.io <email@bakbak.io>',
+                    "To": locals.email,
+                    "Subject": subject,
+                    "TextBody": text,
+                    "HtmlBody": html,
+                    "Tag": "BakBak",
+                    "Attachments": attachmentObj
+                }, function(error, success) {
+                    if(error) {
+                        console.error("Unable to send via postmark: " + error.message);
+                        console.log(error);
+                        resp.send(error.message);
+                        return;
                     }
+                    console.info("Sent to postmark for delivery");
+                    console.log(success.message);
+                    resp.send("OK");
+                    return;
                 });
             }
         });
