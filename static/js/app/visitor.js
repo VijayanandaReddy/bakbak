@@ -298,6 +298,7 @@ define(['jquery','webrtcsupport','socketio','app/utils','validator','html2canvas
     					toSend['template'] = 'contactUs';
     					toSend['image'] = imageDataUrl;
     					toSend['contactUs'] = data;
+    					toSend['subject'] = offlineForm.name;
     					$.post( bakbakUrl + "email",toSend,'json')
     						.done(function(response) {
     							console.log("Attempted to send email");

@@ -7,7 +7,7 @@ var appPath = __dirname + '/app'
     , path           = require('path')
     , templatesDir   = path.resolve(__dirname, 'templates')
     , emailTemplates = require('email-templates')
-    , nodemailer     = require('nodemailer')
+    , nodemailer     = require('nodemailer') //this is not needed remove.
     , Referer = require('referer-parser')
     , ua = require('ua-parser')
     , MemoryStore = express.session.MemoryStore
@@ -15,7 +15,7 @@ var appPath = __dirname + '/app'
     , mongoose = require('mongoose')
     , fs = require('fs')
     , everyauth = require('everyauth')
-    , JSONB = require('json-buffer');
+    , JSONB = require('json-buffer'); //this is not needed remove
 
 var port = process.env.PORT || 5000;
 var db_string = 'mongodb://biplav:biplav3403@ds033097.mongolab.com:33097/heroku_app18693040';
@@ -461,7 +461,7 @@ app.post('/email', function(req, resp) {
                         return;
                     }
                     console.info("Sent to postmark for delivery");
-                    console.log(success.message);
+                    //console.log(success.message);
                     resp.send("OK");
                     return;
                 });
