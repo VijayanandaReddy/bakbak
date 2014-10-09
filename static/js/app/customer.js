@@ -165,7 +165,7 @@ var bakbakUrl ='';
 		}
 
 		initializeXmpp = function() {
-			var xmpp = xmppChatAdmin(false,'test');
+			var xmpp = xmppChatAdmin(false,customerId);
 			$(function() {
 				$(document).trigger('bakbak_chat_connect',{});
 				$(document).bind('bakbak_chat_msg_recvd',function(ev,data) {
