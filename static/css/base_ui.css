@@ -1,0 +1,238 @@
+#bakbakFullPagePopUp_background {
+    -webkit-transition: all 0.3s;
+       -moz-transition: all 0.3s;
+            transition: all 0.3s;
+	}
+
+.fullPagePopUp {
+	box-sizing: border-box;
+	box-shadow: 0 0 10px rgba(0,0,0,0.3);
+	margin: 1em;
+	border: 1px solid #e3e3e3;
+	border-radius: 4px;
+	background-color: #f5f5f5;
+	padding:19px;
+	min-height: 20px;
+}
+
+
+#bakbakFullPagePopUp_wrapper > form{
+	margin: 0 0 20px;
+	display: block;
+}
+
+#bakbakFullPagePopUp_wrapper {
+	margin: 0;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+	color: #333333;
+}
+
+#bakbakFullPagePopUp,
+#bakbakFullPagePopUp_wrapper {
+    -webkit-transition: all 0.3s ease-out;
+       -moz-transition: all 0.3s ease-out;
+            transition: all 0.3s ease-out;
+}
+#bakbakFullPagePopUp {
+    -webkit-transform: translateX(0) translateY(-40%);
+       -moz-transform: translateX(0) translateY(-40%);
+        -ms-transform: translateX(0) translateY(-40%);
+            transform: translateX(0) translateY(-40%);
+}
+.popup_visible #bakbakFullPagePopUp {
+    -webkit-transform: translateX(0) translateY(0);
+       -moz-transform: translateX(0) translateY(0);
+        -ms-transform: translateX(0) translateY(0);
+            transform: translateX(0) translateY(0);
+}
+
+
+footer#bakbakchat {
+	padding:0px;
+}
+.imageIconMedium {
+	width:20px;
+	height:20px;
+}
+
+.imageIconLarge {
+	width:40px;
+	height:40px;
+}
+
+
+.marginLeft {
+	margin-left: 5px;
+}
+
+.maxHeight100 {
+	max-height:234px;
+ 	height:auto !important;
+  	height:234px;
+  	min-height:234px;
+}
+
+.googleAnalytics {
+	max-width:400px;
+	margin-left: 20px
+}
+
+.backgroundWhite {
+	background: #ffffff;
+}
+
+.backgroundGray {
+	background: #edeff4;
+}
+
+.scrollbar {
+	display:block;
+    padding:5px;
+    margin-top:5px;
+    overflow:scroll;
+}
+
+.chatMessages {
+
+}
+
+.contactUsPanel {
+	margin-left:5px;
+	margin-top:5px;
+	font-color:black;
+}
+
+
+.rightAlignIcon {
+	position: absolute;
+	right: 20px;
+}
+
+/*
+Stylin chat bar
+*/
+.chatMinimize {
+	width:150px;
+}
+
+.chatMaximize {
+	width:260px;
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+
+	.chatMinimize  .chatHeaderText {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	.extraImage.chatMinimize {
+		width:100px !important;
+	}
+
+	.chatMinimize {
+		width:50px;
+	}
+
+	.chatMaximize {
+		width:90%;
+		height:90%;
+	}
+
+	.chatPanel {
+		height:90%;
+	}
+
+	#chatMsg {
+		width: 100% !important;
+	}
+
+	.maxHeight100 {
+		height: 80% !important;
+		max-height: 80%;
+		min-height: 200px !important;
+	}
+
+}
+
+
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+
+	.googleAnalytics {
+		margin-left: 0px !important;
+	}
+	/* Force table to not be like tables anymore */
+	table.responsiveTable { 
+		display: block; 
+	}
+
+	table.responsiveTable tbody {
+		display: block;
+	}
+
+	table.responsiveTable thead {
+		display: block;
+	}
+
+	table.responsiveTable th {
+		display: block;
+	}
+
+	table.responsiveTable td {
+		display: block;
+	}
+
+	table.responsiveTable tr {
+		display: block;
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	table.responsiveTable thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	table.responsiveTable tr { border: 2px solid #ccc; }
+	
+	table.responsiveTable td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 25%; 
+	}
+	
+	table.responsiveTable td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 20%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	
+	
+	/*Label the data */
+	
+	table.responsiveTable td:nth-of-type(1):before { content: "Details"; }
+	table.responsiveTable td:nth-of-type(2):before { content: "Analytics"; }
+	table.responsiveTable td:nth-of-type(3):before { content: "Actions"; }
+}
+
+
