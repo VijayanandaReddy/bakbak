@@ -31,7 +31,13 @@
 <div class="control-group">
 <label class="control-label" for="radios">Name</label>
 <div class="controls">
+  <% if(application.offlineForm && application.offlineForm.length > 0) {%>
+    <input type='hidden' name='_id' value='<%= application.offlineForm[0].id %>' />
+    <% } %>
   <input type='text' name='name' value='<%= application.offlineForm[0].name %>' class="form-control"/>
+  <% else { %>
+    <input type='text' name='name' value='Contact Us' class="form-control"/>
+  <% } %>
   <p class="help-block">Please enter the label for offline form.</p>
 </div>
 </div>
